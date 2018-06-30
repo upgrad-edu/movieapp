@@ -1,0 +1,21 @@
+server:
+  servlet:
+    port: 8080
+    contextPath: /api
+
+spring:
+
+  application:
+    name: proman-api
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres@123
+
+  jpa:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect

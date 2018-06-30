@@ -1,0 +1,835 @@
+swagger: '2.0'
+info:
+  title: User Administration API
+  version: 1.0.0
+  description: >
+    ## API of User Administration Services
+
+
+    This specification describes the endpoints, request/response model of the User Administration API.
+    This API provides REST resources to manage users of Movies application.
+
+
+    The resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:
+
+
+    ```
+      https://movies.io/api/v1/
+    ```
+
+
+    ## API usage guidelines
+
+
+    This section describes general rules and guidelines for using REST based
+    services offered by Movies.
+
+      * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.
+      * Movies Application reserves the right to add new parameters without further notice (in request and response).
+      * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.
+      * Movies Application reserves the right to enhance enumerations by new values.
+      * Movies Application reserves the right to increase the "maxItem" settings of arrays without further notice.
+      
+    Each consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))
+
+
+    ## Business definitions
+
+    User Administration APIs can only be called by authorized users who have administrator rights. These APIs can be used to create new user, modify an
+    existing user, deactivate an active user, activate registered or inactive user and lock user. The users once created will have an access to Movies
+    application provided they are being permitted so through proper access-level permissions.
+
+    ## Release Notes 
+
+    ### 1.0.0
+
+    * Initial version
+
+host: movies.io
+schemes:
+  - http
+  - https
+basePath: /api/v1/users
+tags:
+  - name: 'API#003 Users'
+    description: >-
+      All operations marked with 'API#003 Users' are relevant to user administration use case
+
+paths:
+  /users:
+    post:
+      operationId: createUser
+      tags:
+        - 'API#003 Users'
+      security:
+        - Authorization: []
+      summary: User Administration - Create new User
+      description: >
+        API to create new user in Movies application
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/ClientId'
+        - $ref: '#/parameters/Authorization'
+        - in: body
+          name: CreateUserRequest
+          description: Request containing new user details
+          required: true
+          schema:
+            $ref: '#/definitions/CreateUserRequest'
+      responses:
+        '201':
+          description: CREATED - User has been created successfully
+          headers:
+            request-id:
+              type: string
+              description: Used as correlation id while tracing for the request in the backend
+            location:
+              type: string
+              description: Location of the new resource which was created by this request
+          schema:
+            $ref: '#/definitions/CreateUserResponse'
+        '400':
+          description: >-
+            BAD REQUEST - server cannot or will not process the request due to
+            something that is perceived to be a client error (e.g., malformed
+            request syntax, mandatory elements are missing)
+          headers:
+            request-id:
+              type: string
+              description: Used as correlation id while tracing for the request in the backend
+        '401':
+          description: UNAUTHORIZED - user has provided wrong credentials
+          headers:
+            request-id:
+              type: string
+              description: Used as correlation id while tracing for the request in the backend
+        '403':
+          description: >-
+            FORBIDDEN - request has not been applied because client application
+            has no permission to perform action
+          headers:
+            request-id:
+              type: string
+              description: Used as correlation id while tracing for the request in the backend
+        '422':
+          description: >-
+            UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
+          headers:
+            request-id:
+              type: string
+              description: Used as correlation id while tracing for the request in the backend
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: >-
+            INTERNAL SERVER ERROR - server encountered an unexpected condition
+            that prevented it from fulfilling the request.
+          headers:
+            request-id:
+              type: string
+              description: Used as correlation id while tracing for the request in the backend
+
+    get:
+       operationId: getUsers
+       tags:
+         - 'API#003 Users'
+       security:
+         - Authorization: []
+       summary: User Administration - Get all Users
+       description: >
+         API to get all users of Movies application
+       produces:
+         - application/json
+       parameters:
+         - $ref: '#/parameters/ClientId'
+         - $ref: '#/parameters/Authorization'
+         - in: query
+           name: page
+           type: integer
+           required: false
+           description: query to set the position of the records to be fetched from
+         - in: query
+           name: limit
+           type: integer
+           required: false
+           description: query to limit the number of records per fetch
+         - in: query
+           name: role
+           type: integer
+           required: false
+           description: query to filter the results based on specified role
+         - in: query
+           name: status
+           type: string
+           enum: [REGISTERED, ACTIVE, INACTIVE, LOCKED]
+           required: false
+           description: query to filter the results based on specified status
+       responses:
+         '200':
+           description: OK - Fetched all users
+           headers:
+             request-id:
+               type: string
+               description: Used as correlation id while tracing for the request in the backend
+           schema:
+              $ref: '#/definitions/UsersSummaryResponse'
+         '400':
+            description: >-
+              BAD REQUEST - server cannot or will not process the request due to something that is perceived to be a
+              client error (e.g., malformed request syntax, mandatory elements are missing)
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+         '401':
+            description: UNAUTHORIZED - user has provided wrong credentials
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+         '403':
+            description: >-
+              FORBIDDEN - request has not been applied because client application has no permission to perform action
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+         '404':
+            description: >-
+              NOT FOUND -  User (resource) does not exist
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+         '422':
+            description: >-
+              UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+            schema:
+              $ref: '#/definitions/ErrorResponse'
+         '500':
+            description: >-
+              INTERNAL SERVER ERROR - server encountered an unexpected condition that prevented it from fulfilling the request.
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+
+  /users/{id}:
+     get:
+        operationId: getUser
+        tags:
+          - 'API#003 Users'
+        security:
+          - Authorization: []
+        summary: User Administration - Get an existing User
+        description: >
+            API to get an existing user of Movies application
+        produces:
+          - application/json
+        parameters:
+         - $ref: '#/parameters/UserId'
+         - $ref: '#/parameters/ClientId'
+         - $ref: '#/parameters/Authorization'
+        responses:
+         '200':
+           description: OK - Fetched user details
+           headers:
+             request-id:
+               type: string
+               description: Used as correlation id while tracing for the request in the backend
+           schema:
+              $ref: '#/definitions/UserDetailsResponse'
+         '400':
+           description: >-
+             BAD REQUEST - server cannot or will not process the request due to
+             something that is perceived to be a client error (e.g., malformed
+             request syntax, mandatory elements are missing)
+           headers:
+             request-id:
+               type: string
+               description: Used as correlation id while tracing for the request in the backend
+         '401':
+           description: UNAUTHORIZED - user has provided wrong credentials
+           headers:
+             request-id:
+               type: string
+               description: Used as correlation id while tracing for the request in the backend
+         '403':
+           description: >-
+             FORBIDDEN - request has not been applied because client application
+             has no permission to perform action
+           headers:
+             request-id:
+               type: string
+               description: Used as correlation id while tracing for the request in the backend
+         '404':
+           description: >-
+             NOT FOUND - User (resource) does not exist
+           headers:
+             request-id:
+               type: string
+               description: Used as correlation id while tracing for the request in the backend
+         '500':
+           description: >-
+             INTERNAL SERVER ERROR - server encountered an unexpected condition
+             that prevented it from fulfilling the request.
+           headers:
+             request-id:
+               type: string
+               description: Used as correlation id while tracing for the request in the backend
+     put:
+        operationId: updateUser
+        tags:
+          - 'API#003 Users'
+        security:
+          - Authorization: []
+        summary: User Administration - Update an existing User
+        description: >
+            API to update an existing user in Movies application
+        consumes:
+          - application/json
+        produces:
+          - application/json
+        parameters:
+          - $ref: '#/parameters/UserId'
+          - $ref: '#/parameters/ClientId'
+          - $ref: '#/parameters/Authorization'
+          - in: body
+            name: UpdateUserRequest
+            description: Request containing modified user details
+            required: true
+            schema:
+              $ref: '#/definitions/UpdateUserRequest'
+        responses:
+          '200':
+            description: OK - User has been updated successfully
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '400':
+            description: >-
+              BAD REQUEST - server cannot or will not process the request due to
+              something that is perceived to be a client error (e.g., malformed
+              request syntax, mandatory elements are missing)
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '401':
+            description: UNAUTHORIZED - user has provided wrong credentials
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '403':
+            description: >-
+              FORBIDDEN - request has not been applied because client application
+              has no permission to perform action
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '404':
+            description: >-
+              NOT FOUND -  User (resource) does not exist
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '422':
+            description: >-
+              UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+            schema:
+              $ref: '#/definitions/ErrorResponse'
+          '500':
+            description: >-
+              INTERNAL SERVER ERROR - server encountered an unexpected condition
+              that prevented it from fulfilling the request.
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+     patch:
+        operationId: patchUser
+        tags:
+          - 'API#003 Users'
+        security:
+          - Authorization: []
+        summary: User Administration - Partial update of an existing user
+        description: >
+            API to partial update of an existing user of Movies application
+        consumes:
+          - application/json
+        produces:
+          - application/json
+        parameters:
+          - $ref: '#/parameters/UserId'
+          - $ref: '#/parameters/ClientId'
+          - $ref: '#/parameters/Authorization'
+          - in: body
+            name: UserOperationsRequest
+            description: Request containing modified status of user
+            required: true
+            schema:
+              $ref: '#/definitions/UserOperationsRequest'
+        responses:
+          '200':
+            description: OK - Partial update of User is successful
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '400':
+            description: >-
+              BAD REQUEST - server cannot or will not process the request due to
+              something that is perceived to be a client error (e.g., malformed
+              request syntax, mandatory elements are missing)
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '401':
+            description: UNAUTHORIZED - user has provided wrong credentials
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '404':
+            description: >-
+              NOT FOUND -  User (resource) does not exist
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '403':
+            description: >-
+              FORBIDDEN - request has not been applied because client application
+              has no permission to perform action
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '422':
+            description: >-
+              UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '500':
+            description: >-
+              INTERNAL SERVER ERROR - server encountered an unexpected condition
+              that prevented it from fulfilling the request.
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+
+     delete:
+        operationId: deleteUser
+        tags:
+          - 'API#003 Users'
+        security:
+          - Authorization: []
+        summary: User Administration - Remove an existing user
+        description: >
+            API to remove an existing user
+        consumes:
+          - application/json
+        produces:
+          - application/json
+        parameters:
+          - $ref: '#/parameters/UserId'
+          - $ref: '#/parameters/ClientId'
+          - $ref: '#/parameters/Authorization'
+        responses:
+          '200':
+            description: OK - User status has been set to DELETED
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '400':
+            description: >-
+              BAD REQUEST - server cannot or will not process the request due to
+              something that is perceived to be a client error (e.g., malformed
+              request syntax, mandatory elements are missing)
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '401':
+            description: UNAUTHORIZED - user has provided wrong credentials
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '403':
+            description: >-
+              FORBIDDEN - request has not been applied because client application
+              has no permission to perform action
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '404':
+            description: >-
+              NOT FOUND - User (resource) does not exist
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '500':
+            description: >-
+              INTERNAL SERVER ERROR - server encountered an unexpected condition
+              that prevented it from fulfilling the request.
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+
+parameters:
+  ClientId:
+    name: client-id
+    type: string
+    in: header
+    required: true
+    description: >-
+      Mandatory request header about the caller of this API. Only an authorized clients are allowed to this API.
+  Authorization:
+    name: authorization
+    type: string
+    in: header
+    required: true
+    description: >-
+      Mandatory user credentials in bearer http authentication scheme format. Refer to the #/securityDefinitions
+      for more information on this header.
+  UserId:
+    name: id
+    type: string
+    in: path
+    required: true
+    description: >-
+      Unique identifier of User in a standard UUID format
+
+securityDefinitions:
+  Authorization:
+    type: basic
+    description: >
+      Bearer authentication (also called token authentication) is an HTTP authentication scheme that involves
+      security tokens called bearer tokens. The name “Bearer authentication” can be understood as “give access
+      to the bearer of this token.”
+
+      The bearer token is a cryptic string, usually generated by the server in response to a login request. The
+      client must send this token in the Authorization header when making requests to protected resources:
+
+      ```
+      Authorization: Bearer <token>
+
+      ```
+
+      Similarly to Basic authentication, Bearer authentication should only be used over HTTPS (SSL).
+
+      Read https://jwt.io/introduction/ for more information on JWT standard.
+
+definitions:
+
+  UsersSummaryResponse:
+    type: object
+    properties:
+      page:
+        type: integer
+        description: page or position of the fetched users
+      limit:
+        type: integer
+        description: number of users fetched per this request
+      total_count:
+        type: integer
+        description: total number of users for the specified input
+      users:
+        type: array
+        items:
+          $ref: '#/definitions/UserSummaryType'
+        description: List of users
+    required:
+      - page
+      - limit
+      - total_count
+      - users
+    example:
+
+  UserSummaryType:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique identifier of the user in a standard UUID format
+      first_name:
+        type: string
+        description: First name of the user
+      last_name:
+        type: string
+        description: Last name of the user
+      email_address:
+        type: string
+        description: Email address of the user
+      status:
+        $ref: '#/definitions/UserStatusType'
+      role:
+        $ref: '#/definitions/RoleType'
+    required:
+      - id
+      - first_name
+      - last_name
+      - email_address
+      - status
+      - role
+    example:
+      id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+      first_name: Movies
+      last_name: Administrator
+      email_address: movies.admin@movies.io
+      status: ACTIVE
+      role:
+        id: 100
+        name: Administrator
+
+  UserDetailsResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique identifier of the user in a standard UUID format
+      first_name:
+        type: string
+        description: First name of the user
+      last_name:
+        type: string
+        description: Last name of the user
+      email_address:
+        type: string
+        description: Email address of the user
+      mobile_number:
+        type: string
+        description: Mobile number of the user
+      status:
+        $ref: '#/definitions/UserStatusType'
+      role:
+        $ref: '#/definitions/RoleDetailsType'
+    required:
+      - id
+      - first_name
+      - last_name
+      - email_address
+      - status
+      - role
+    example:
+      id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+      first_name: Movies
+      last_name: Administrator
+      email_address: movies.admin@movies.io
+      mobile_number: +91 1234567890
+      status: ACTIVE
+      role:
+        id: 100
+        name: Administrator
+        permissions:
+          - id: 121
+            name: Create User
+          - id: 122
+            name: Update User
+
+  RoleType:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Role id of the user
+      name:
+        type: string
+        description: Role name of the user
+    required:
+      - id
+      - name
+
+  RoleDetailsType:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Role id of the user
+      name:
+        type: string
+        description: Role name of the user
+      permissions:
+        type: array
+        items:
+          $ref: '#/definitions/PermissionsType'
+        description: Permissions assigned to the user
+    required:
+      - id
+      - name
+      - permissions
+
+  PermissionsType:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Permission id of the user
+      name:
+        type: string
+        description: Permission name of the user
+    required:
+      - id
+      - name
+
+  CreateUserRequest:
+    type: object
+    properties:
+      first_name:
+        type: string
+        description: First name of the new user
+      last_name:
+        type: string
+        description: Last name of the new user
+      email_address:
+        type: string
+        description: Email address of the new user
+      mobile_number:
+        type: string
+        description: Mobile number of the new user
+      role:
+        $ref: '#/definitions/RoleRequest'
+    required:
+      - first_name
+      - last_name
+      - email_address
+      - mobile_number
+      - role
+    example:
+      first_name: Movies
+      last_name: Administrator
+      email_address: movies.admin@movies.io
+      mobile_number: +91 1234567890
+      role:
+        id: 100
+        permissions: [121,122,142]
+
+  RoleRequest:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Role id to be mapped to the user
+      permissions:
+        type: array
+        items:
+          type: integer
+        description: List of permission ids to be mapped to the new user
+    required:
+      - id
+
+  CreateUserResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique identifier in a standard UUID format generated by API backend
+      status:
+        $ref: '#/definitions/UserStatusType'
+    required:
+      - id
+      - status
+    example:
+      id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+      status: ACTIVE
+
+  UpdateUserRequest:
+    type: object
+    properties:
+      first_name:
+        type: string
+        description: Modified first name of an existing user
+      last_name:
+        type: string
+        description: Modified last name of an existing user
+      email_address:
+        type: string
+        description: Modified email address of an existing user
+      mobile_number:
+        type: string
+        description: Modified mobile number of an existing user
+      role:
+        $ref: '#/definitions/RoleRequest'
+    example:
+      first_name: Movies
+      last_name: Administrator
+      email_address: movies.admin@movies.io
+      mobile_number: +91 1234567890
+      role:
+        id: 100
+        permissions: [121,122,142]
+
+  UserOperationsRequest:
+    type: array
+    items:
+      $ref: '#/definitions/UserOperationRequest'
+
+  UserOperationRequest:
+    type: object
+    properties:
+      op:
+        type: string
+        description: Type of operation
+        enum: [replace, add, remove]
+      path:
+        type: string
+        description: Resource path whose state to be modified
+        enum: [status, role, permissions]
+      value:
+        type: string
+        description: New state value to be updated to the resource
+    example:
+      - op: replace
+        path: status
+        value: ACTIVE
+      - op: add
+        path: permissions
+        value: 100
+
+  UserStatusType:
+    type: string
+    enum: [REGISTERED, ACTIVE, INACTIVE, LOCKED, DELETED]
+    description: Status of the User
+
+  ErrorResponse:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Application specific standard error code
+      message:
+        type: string
+        description: Error message stating the reason
+      root_cause:
+        type: string
+        description: Root cause of the Error
+    required:
+      - code
+      - message
+    example:
+      code: USR-009
+      message: User with email address [abc@xyz.com] already exist
