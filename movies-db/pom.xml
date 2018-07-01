@@ -125,6 +125,7 @@
                 						<srcFile>${sql.path}/db-setup.sql</srcFile>
 										<srcFile>${sql.path}/db-setup-roles.sql</srcFile>
 										<srcFile>${sql.path}/db-setup-users.sql</srcFile>
+										<srcFile>${sql.path}/db-setup-movies.sql</srcFile>
               						</srcFiles>
 		                        </configuration>
 		                    </execution>

@@ -6,21 +6,10 @@
 -- Author: Thribhuvan Krishnamurthy
 
 -- # Step 1 - Drop the existing database and users
-REASSIGN OWNED BY proman_dba TO postgres;
-DROP OWNED BY proman_dba;
 
-DROP SCHEMA IF EXISTS proman CASCADE;
-DROP USER IF EXISTS proman_dba;
-DROP USER IF EXISTS proman_dev;
-
--- # Step 2 - Create users
-
-CREATE USER proman_dba WITH ENCRYPTED PASSWORD 'promandba@123';
-CREATE USER proman_dev WITH ENCRYPTED PASSWORD 'promandev@123';
-
--- # Step 3 - Create database
-CREATE SCHEMA proman AUTHORIZATION proman_dba;
-GRANT ALL PRIVILEGES ON SCHEMA proman TO proman_dba;
+DROP SCHEMA IF EXISTS movieapp CASCADE;
+CREATE SCHEMA movieapp AUTHORIZATION postgres;
+GRANT ALL PRIVILEGES ON SCHEMA movieapp TO postgres;
 
 --CREATE DATABASE proman
 --       WITH OWNER = 'proman_dba'
