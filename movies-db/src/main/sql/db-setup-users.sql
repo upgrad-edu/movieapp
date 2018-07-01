@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS movieapp.USERS (
     FIRST_NAME VARCHAR(50) NOT NULL,
     LAST_NAME VARCHAR(50) NOT NULL,
     MOBILE_PHONE VARCHAR(50) NULL,
-    STATUS SMALLINT NOT NULL,
+    STATUS VARCHAR(30) NOT NULL,
     FAILED_LOGIN_COUNT SMALLINT,
     LAST_PASSWORD_CHANGE_AT TIMESTAMP,
     LAST_LOGIN_AT TIMESTAMP NULL,
@@ -39,7 +39,7 @@ COMMENT ON COLUMN movieapp.USERS.SALT IS 'Generated salt for strong encryption o
 COMMENT ON COLUMN movieapp.USERS.FIRST_NAME IS 'First name of the user';
 COMMENT ON COLUMN movieapp.USERS.LAST_NAME IS 'Last name of the user';
 COMMENT ON COLUMN movieapp.USERS.MOBILE_PHONE IS 'Mobile phone coordinates of the user';
-COMMENT ON COLUMN movieapp.USERS.STATUS IS 'Status of the user - INACTIVE(0), ACTIVE (1), LOCKED(2)';
+COMMENT ON COLUMN movieapp.USERS.STATUS IS 'Status of the user - INACTIVE, ACTIVE, LOCKED';
 COMMENT ON COLUMN movieapp.USERS.FAILED_LOGIN_COUNT IS 'Count to keep track of failed login attempts by the user';
 COMMENT ON COLUMN movieapp.USERS.LAST_PASSWORD_CHANGE_AT IS 'Point in time when the user modified the password - as per password policy';
 COMMENT ON COLUMN movieapp.USERS.LAST_LOGIN_AT IS 'Point in time when the user log in';
@@ -62,7 +62,7 @@ CREATE TABLE movieapp.USER_AUTH_TOKENS(
 	EXPIRES_AT TIMESTAMP NOT NULL,
 	LOGIN_AT TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	LOGOUT_AT TIMESTAMP,
-	LOGOUT_ACTION SMALLINT,
+	LOGOUT_ACTION VARCHAR(20),
 	CREATED_BY VARCHAR(100) NOT NULL,
 	CREATED_AT TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	MODIFIED_BY VARCHAR(100),
@@ -76,7 +76,7 @@ COMMENT ON COLUMN movieapp.USER_AUTH_TOKENS.ACCESS_TOKEN IS 'Generated authentic
 COMMENT ON COLUMN movieapp.USER_AUTH_TOKENS.EXPIRES_AT IS 'Expiration time of the generated authentication token';
 COMMENT ON COLUMN movieapp.USER_AUTH_TOKENS.LOGIN_AT IS 'Login time of the logged-in user';
 COMMENT ON COLUMN movieapp.USER_AUTH_TOKENS.LOGOUT_AT IS 'Logout time of the previously logged-in user';
-COMMENT ON COLUMN movieapp.USER_AUTH_TOKENS.LOGOUT_ACTION IS 'Logout action of the logged-in user - USER(1), EXPIRED(2)';
+COMMENT ON COLUMN movieapp.USER_AUTH_TOKENS.LOGOUT_ACTION IS 'Logout action of the logged-in user - USER, EXPIRED';
 COMMENT ON COLUMN movieapp.USER_AUTH_TOKENS.CREATED_BY IS 'User who inserted this record';
 COMMENT ON COLUMN movieapp.USER_AUTH_TOKENS.CREATED_AT IS 'Point in time when this record was inserted';
 COMMENT ON COLUMN movieapp.USER_AUTH_TOKENS.MODIFIED_BY IS 'User who modified this record';
