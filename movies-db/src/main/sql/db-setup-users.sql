@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS movieapp.USERS (
     FAILED_LOGIN_COUNT SMALLINT,
     LAST_PASSWORD_CHANGE_AT TIMESTAMP,
     LAST_LOGIN_AT TIMESTAMP NULL,
+    SUBSCRIPTIONS_CONSENT BOOLEAN NOT NULL DEFAULT TRUE,
     CREATED_BY VARCHAR(100) NOT NULL ,
     CREATED_AT TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     MODIFIED_BY VARCHAR(100) NULL,
@@ -43,6 +44,7 @@ COMMENT ON COLUMN movieapp.USERS.STATUS IS 'Status of the user - INACTIVE, ACTIV
 COMMENT ON COLUMN movieapp.USERS.FAILED_LOGIN_COUNT IS 'Count to keep track of failed login attempts by the user';
 COMMENT ON COLUMN movieapp.USERS.LAST_PASSWORD_CHANGE_AT IS 'Point in time when the user modified the password - as per password policy';
 COMMENT ON COLUMN movieapp.USERS.LAST_LOGIN_AT IS 'Point in time when the user log in';
+COMMENT ON COLUMN movieapp.USERS.SUBSCRIPTIONS_CONSENT IS 'Subscriptions consent given by the user';
 COMMENT ON COLUMN movieapp.USERS.CREATED_BY IS 'User who inserted this record';
 COMMENT ON COLUMN movieapp.USERS.CREATED_AT IS 'Point in time when this record was inserted';
 COMMENT ON COLUMN movieapp.USERS.MODIFIED_BY IS 'User who modified this record';

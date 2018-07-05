@@ -1,6 +1,6 @@
 # Project Title
 
-Movies API serves backend needs for project management application used to manage projects, members and tasks. It has been built on Spring platform using spring-boot framework.
+Movies API serves backend services to manage movies, shows, artists and booking tickets. It has been built on Spring platform using spring-boot framework.
 
 ## Getting Started
 
@@ -35,13 +35,13 @@ A step by step guide that helps you get a development env running
    2. database.password in movies-db/src/main/config/localhost.properties
    ```
 4. Build the project using `mvn clean install -DskipTests`. First time build will consume time as it downloads all dependencies.
-5. Go to `movies-db` module and build the project using maven command `mvn install -Psetup,seed,test-data` to setup the database schema called movies, tables, privileges, seed data such as groups, roles and permissions.
+5. Go to `movies-db` module and build the project using maven command `mvn install -Psetup,test-data` to setup the database schema called movies, tables, privileges, seed data such as groups, roles and permissions.
 Following are the predefined roles:
    - Administrator (101)
    - Customer (102) - All signed up users are assigned with this role by default
 
     ```
-    Note: test-data profile is optional but this will setup an admin user with username as admin@movies.io and default password as movies@123
+    Note: test-data profile is optional but this will setup an admin user with username as admin@movieapp.com and default password as movieapp@123
     ```
 
 6. After the db setup, go to `movies-api` module and then run command `mvn spring-boot:run`. If everything is fine, then API backend

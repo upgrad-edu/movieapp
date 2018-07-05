@@ -24,7 +24,7 @@
     <properties>
         <swagger.codegen.version>2.3.1</swagger.codegen.version>
         <swagger.codegen.generators.version>1.0.0-rc0</swagger.codegen.generators.version>
-        <application.package>upgrad.movies.api</application.package>
+        <application.package>upgrad.movieapp.api</application.package>
         <endpoints.dir>${project.basedir}/src/main/resources/endpoints</endpoints.dir>
         <supported.language>spring</supported.language>
         <supported.library>spring-boot</supported.library>
