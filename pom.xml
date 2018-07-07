@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>upgrad</groupId>
-	<artifactId>movies</artifactId>
+	<artifactId>movieapp</artifactId>
 	<packaging>pom</packaging>
 	<version>1.0.0-SNAPSHOT</version>
 
@@ -33,9 +33,9 @@
 				<os><family>Linux</family></os>
 			</activation>
 			<modules>
-				<module>movies-db</module>
-				<module>movies-service</module>
-				<module>movies-api</module>
+				<module>movieapp-db</module>
+				<module>movieapp-service</module>
+				<module>movieapp-api</module>
 			</modules>
 		</profile>
 	</profiles>

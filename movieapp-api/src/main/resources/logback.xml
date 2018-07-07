@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} - [%-5level] - %logger{35} - %msg %n</Pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>DEBUG</level>
+		</filter>
+	</appender>
+
+  	<appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>/work/upgrad/logs/proman-api.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		    <!-- daily rollover -->
+			<FileNamePattern>proman-api.%d{yyyy-MM-dd}.log</FileNamePattern>
+
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>			
+		</rollingPolicy>
+
+		<encoder>
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} - [%-5level] - %logger{35} - %msg %n</Pattern>
+		</encoder> 
+  	</appender>
+  	
+  	<appender name="errorRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>/work/upgrad/logs/proman-api-error.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		    <!-- daily rollover -->
+			<FileNamePattern>proman-api-error.%d{yyyy-MM-dd}.log</FileNamePattern>
+
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>			
+		</rollingPolicy>
+
+		<encoder>
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] - [%-5level] - %logger{35} - %msg %n</Pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>ERROR</level>
+			<!--
+			<onMatch>ACCEPT</onMatch>
+        	<onMismatch>DENY</onMismatch>
+        	-->
+		</filter>  
+  	</appender>
+
+	<logger name="apps.proman" additivity="false">
+		<level value="DEBUG" />
+		<appender-ref ref="dailyRollingFileAppender"/>
+		<appender-ref ref="errorRollingFileAppender"/>
+		<appender-ref ref="consoleAppender" />
+	</logger>
+
+	<logger name="apps.proman" additivity="false">
+		<level value="ERROR" />
+		<appender-ref ref="errorRollingFileAppender"/>
+		<appender-ref ref="consoleAppender" />
+	</logger>
+
+	<root>
+		<level value="INFO" />
+		<appender-ref ref="consoleAppender" />
+	</root>
+	
+</configuration>
