@@ -170,6 +170,17 @@
                                 </configuration>
                             </execution>
 
+                            <execution>
+                                <id>moviemanagement</id>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <inputSpec>${endpoints.dir}/moviemanagement.json</inputSpec>
+                                    <language>${supported.language}</language>
+                                </configuration>
+                            </execution>
+
                         </executions>
 
                     </plugin>

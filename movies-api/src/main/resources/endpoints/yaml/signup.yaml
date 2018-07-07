@@ -1,20 +1,20 @@
 swagger: '2.0'
 info:
-  title: User Registration API
+  title: Customer Registration API
   version: 1.0.0
   description: >
     ## API of User Signup Service
 
 
     This specification describes the endpoints, request/response model of the
-    User Signup API. This API provides REST resources to register users in Movies application.
+    User Signup API. This API provides REST resources to register customers in Movies Application.
 
 
     The resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:
 
 
     ```
-      https://movies.io/api/v1/
+      https://movieapp.com/api/v1/
     ```
 
 
@@ -35,8 +35,8 @@ info:
 
     ## Business definitions
 
-    A user who is trying to register should provide the required inputs including email address in order to be registered successfully in Movies application.
-    After the signup, user will remain in REGISTERED status and cannot access Movies application. Once approved by an administrator, user will turn to
+    A customer who is trying to register should provide the required inputs including email address in order to be registered successfully in Movies application.
+    After the signup, customer will remain in REGISTERED status and cannot access Movies application. Once approved by an administrator, customer will turn to
     ACTIVE status and can start accessing Movies application.
 
 
@@ -57,7 +57,7 @@ info:
 
     * Initial version
 
-host: movies.io
+host: movieapp.com
 schemes:
   - http
   - https
@@ -82,7 +82,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - $ref: '#/parameters/ClientId'
         - in: body
           name: SignupUserRequest
           description: Request containing user signup information
@@ -140,15 +139,6 @@ paths:
               type: string
               description: Used as correlation id while tracing for the request in the backend
 
-parameters:
-  ClientId:
-    name: client-id
-    type: string
-    in: header
-    required: true
-    description: >-
-      Mandatory request header about the caller of this API. Only an authorized clients are allowed to this API.
-
 definitions:
   SignupUserRequest:
     type: object
@@ -179,7 +169,7 @@ definitions:
     example:
       first_name: Movies
       last_name: Administrator
-      email_address: movies.admin@movies.io
+      email_address: movies.admin@movieapp.com
       password: Pr0m@n@dm1nu$er
       mobile_number: +91 1234567890
 

@@ -1,11 +1,11 @@
 {
    "swagger": "2.0",
    "info": {
-      "title": "User Registration API",
+      "title": "Customer Registration API",
       "version": "1.0.0",
-      "description": "## API of User Signup Service\n\nThis specification describes the endpoints, request/response model of the User Signup API. This API provides REST resources to register users in Movies application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```  https://movies.io/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Movies.\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Movies Application reserves the right to add new parameters without further notice (in request and response).\n  * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Movies Application reserves the right to enhance enumerations by new values.\n  * Movies Application reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nA user who is trying to register should provide the required inputs including email address in order to be registered successfully in Movies application. After the signup, user will remain in REGISTERED status and cannot access Movies application. Once approved by an administrator, user will turn to ACTIVE status and can start accessing Movies application.\n\n### Note: Movies application supports HTTPS only scheme. All requests are sent in a secured and encrypted manner and hence the password is never sent in a text/plain format.\n### Password Policy:\n  * Minimum of 8 character length\n\n  * Should contain alphabets with at least one special character and one number\n\n  * Allowed special characters are # $ @ _ - !\n\n## Release Notes\n### 1.0.0\n* Initial version\n"
+      "description": "## API of User Signup Service\n\nThis specification describes the endpoints, request/response model of the User Signup API. This API provides REST resources to register customers in Movies Application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```\n  https://movieapp.com/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Movies.\n\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Movies Application reserves the right to add new parameters without further notice (in request and response).\n  * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Movies Application reserves the right to enhance enumerations by new values.\n  * Movies Application reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nA customer who is trying to register should provide the required inputs including email address in order to be registered successfully in Movies application. After the signup, customer will remain in REGISTERED status and cannot access Movies application. Once approved by an administrator, customer will turn to ACTIVE status and can start accessing Movies application.\n\n### Note: Movies application supports HTTPS only scheme. All requests are sent in a secured and encrypted manner and hence the password is never sent in a text/plain format.\n### Password Policy:\n\n  * Minimum of 8 character length\n\n  * Should contain alphabets with at least one special character and one number\n\n  * Allowed special characters are # $ @ _ - !\n\n## Release Notes \n### 1.0.0\n* Initial version\n"
    },
-   "host": "movies.io",
+   "host": "movieapp.com",
    "schemes": [
       "http",
       "https"
@@ -34,9 +34,6 @@
                "application/json"
             ],
             "parameters": [
-               {
-                  "$ref": "#/parameters/ClientId"
-               },
                {
                   "in": "body",
                   "name": "SignupUserRequest",
@@ -113,15 +110,6 @@
          }
       }
    },
-   "parameters": {
-      "ClientId": {
-         "name": "client-id",
-         "type": "string",
-         "in": "header",
-         "required": true,
-         "description": "Mandatory request header about the caller of this API. Only an authorized clients are allowed to this API."
-      }
-   },
    "definitions": {
       "SignupUserRequest": {
          "type": "object",
@@ -159,7 +147,7 @@
          "example": {
             "first_name": "Movies",
             "last_name": "Administrator",
-            "email_address": "movies.admin@movies.io",
+            "email_address": "movies.admin@movieapp.com",
             "password": "Pr0m@n@dm1nu$er",
             "mobile_number": "+91 1234567890"
          }

@@ -65,7 +65,7 @@ public class UserEntity extends MutableEntity implements Identifier<Long>, Unive
     private long id;
 
     @Column(name = "UUID")
-    @Size(max = 64)
+    @Size(max = 36)
     private String uuid;
 
     @ManyToOne

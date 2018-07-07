@@ -44,7 +44,7 @@ COMMENT ON COLUMN movieapp.MOVIES.RELEASE_AT IS 'Point in time when this movie w
 COMMENT ON COLUMN movieapp.MOVIES.CENSOR_BOARD_RATING IS 'Rating of the movie issued by Censor Board - U, A, UA';
 COMMENT ON COLUMN movieapp.MOVIES.CRITICS_RATING IS 'Average rating provided by the film critics for the movie';
 COMMENT ON COLUMN movieapp.MOVIES.USERS_RATING IS 'Average rating provided by the users for the movie';
-COMMENT ON COLUMN movieapp.MOVIES.STATUS IS 'Status of the movie - PUBLISHED, RELEASED, CLOSED';
+COMMENT ON COLUMN movieapp.MOVIES.STATUS IS 'Status of the movie - PUBLISHED, RELEASED, CLOSED, DELETED';
 COMMENT ON COLUMN movieapp.MOVIES.CREATED_BY IS 'User who inserted this record';
 COMMENT ON COLUMN movieapp.MOVIES.CREATED_AT IS 'Point in time when this record was inserted';
 COMMENT ON COLUMN movieapp.MOVIES.MODIFIED_BY IS 'User who modified this record';
@@ -60,6 +60,7 @@ CREATE TABLE movieapp.ARTISTS(
 	VERSION SERIAL NOT NULL,
     FIRST_NAME VARCHAR(50) NOT NULL,
     LAST_NAME VARCHAR(50) NOT NULL,
+    TYPE VARCHAR(50) NOT NULL,
     PROFILE_DESCRIPTION VARCHAR(500),
     PROFILE_PICTURE_URL VARCHAR(2000) NOT NULL,
     WIKI_URL VARCHAR(2000),
@@ -74,6 +75,7 @@ COMMENT ON COLUMN movieapp.ARTISTS.UUID IS 'Unique identifier used as reference 
 COMMENT ON COLUMN movieapp.ARTISTS.VERSION IS 'Versioning for optimistic locking';
 COMMENT ON COLUMN movieapp.ARTISTS.FIRST_NAME IS 'First name of an artist';
 COMMENT ON COLUMN movieapp.ARTISTS.LAST_NAME IS 'Last name of an artist';
+COMMENT ON COLUMN movieapp.ARTISTS.TYPE IS 'Type of an artist - DIRECTOR, PRODUCER, ACTOR, CINEMATOGRAPHER, MUSICIAN, STUNTMAN';
 COMMENT ON COLUMN movieapp.ARTISTS.PROFILE_DESCRIPTION IS 'Profile description of an artist';
 COMMENT ON COLUMN movieapp.ARTISTS.PROFILE_PICTURE_URL IS 'Profile picture url of an artist';
 COMMENT ON COLUMN movieapp.ARTISTS.WIKI_URL IS 'Wiki url of an artist';

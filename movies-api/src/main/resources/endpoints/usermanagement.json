@@ -3,9 +3,9 @@
   "info": {
     "title": "User Administration API",
     "version": "1.0.0",
-    "description": "## API of User Administration Services\n\nThis specification describes the endpoints, request/response model of the User Administration API. This API provides REST resources to manage users of Movies application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```  https://movies.io/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Movies.\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Movies Application reserves the right to add new parameters without further notice (in request and response).\n  * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Movies Application reserves the right to enhance enumerations by new values.\n  * Movies Application reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nUser Administration APIs can only be called by authorized users who have administrator rights. These APIs can be used to create new user, modify an existing user, deactivate an active user, activate registered or inactive user and lock user. The users once created will have an access to Movies application provided they are being permitted so through proper access-level permissions.\n## Release Notes\n### 1.0.0\n* Initial version\n"
+    "description": "## API of User Administration Services\n\nThis specification describes the endpoints, request/response model of the User Administration API. This API provides REST resources to manage users of Movies Application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```\n  https://movieapp.com/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Movies.\n\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Movies Application reserves the right to add new parameters without further notice (in request and response).\n  * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Movies Application reserves the right to enhance enumerations by new values.\n  * Movies Application reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nUser Administration APIs can only be called by authorized users who have administrator rights. These APIs can be used to create new user, modify an existing user, deactivate an active user, activate registered or inactive user and lock user. The users once created will have an access to Movies application provided they are being permitted so through proper access-level permissions.\n## Release Notes \n### 1.0.0\n* Initial version\n"
   },
-  "host": "movies.io",
+  "host": "movieapp.com",
   "schemes": [
     "http",
     "https"
@@ -26,7 +26,9 @@
         ],
         "security": [
           {
-            "Authorization": []
+            "Authorization": [
+
+            ]
           }
         ],
         "summary": "User Administration - Create new User",
@@ -38,9 +40,6 @@
           "application/json"
         ],
         "parameters": [
-          {
-            "$ref": "#/parameters/ClientId"
-          },
           {
             "$ref": "#/parameters/Authorization"
           },
@@ -128,7 +127,9 @@
         ],
         "security": [
           {
-            "Authorization": []
+            "Authorization": [
+
+            ]
           }
         ],
         "summary": "User Administration - Get all Users",
@@ -137,9 +138,6 @@
           "application/json"
         ],
         "parameters": [
-          {
-            "$ref": "#/parameters/ClientId"
-          },
           {
             "$ref": "#/parameters/Authorization"
           },
@@ -259,7 +257,9 @@
         ],
         "security": [
           {
-            "Authorization": []
+            "Authorization": [
+
+            ]
           }
         ],
         "summary": "User Administration - Get an existing User",
@@ -270,9 +270,6 @@
         "parameters": [
           {
             "$ref": "#/parameters/UserId"
-          },
-          {
-            "$ref": "#/parameters/ClientId"
           },
           {
             "$ref": "#/parameters/Authorization"
@@ -345,7 +342,9 @@
         ],
         "security": [
           {
-            "Authorization": []
+            "Authorization": [
+
+            ]
           }
         ],
         "summary": "User Administration - Update an existing User",
@@ -359,9 +358,6 @@
         "parameters": [
           {
             "$ref": "#/parameters/UserId"
-          },
-          {
-            "$ref": "#/parameters/ClientId"
           },
           {
             "$ref": "#/parameters/Authorization"
@@ -452,7 +448,9 @@
         ],
         "security": [
           {
-            "Authorization": []
+            "Authorization": [
+
+            ]
           }
         ],
         "summary": "User Administration - Partial update of an existing user",
@@ -466,9 +464,6 @@
         "parameters": [
           {
             "$ref": "#/parameters/UserId"
-          },
-          {
-            "$ref": "#/parameters/ClientId"
           },
           {
             "$ref": "#/parameters/Authorization"
@@ -511,8 +506,8 @@
               }
             }
           },
-          "403": {
-            "description": "FORBIDDEN - request has not been applied because client application has no permission to perform action",
+          "404": {
+            "description": "NOT FOUND -  User (resource) does not exist",
             "headers": {
               "request-id": {
                 "type": "string",
@@ -520,8 +515,8 @@
               }
             }
           },
-          "404": {
-            "description": "NOT FOUND -  User (resource) does not exist",
+          "403": {
+            "description": "FORBIDDEN - request has not been applied because client application has no permission to perform action",
             "headers": {
               "request-id": {
                 "type": "string",
@@ -556,7 +551,9 @@
         ],
         "security": [
           {
-            "Authorization": []
+            "Authorization": [
+
+            ]
           }
         ],
         "summary": "User Administration - Remove an existing user",
@@ -570,9 +567,6 @@
         "parameters": [
           {
             "$ref": "#/parameters/UserId"
-          },
-          {
-            "$ref": "#/parameters/ClientId"
           },
           {
             "$ref": "#/parameters/Authorization"
@@ -638,13 +632,6 @@
     }
   },
   "parameters": {
-    "ClientId": {
-      "name": "client-id",
-      "type": "string",
-      "in": "header",
-      "required": true,
-      "description": "Mandatory request header about the caller of this API. Only an authorized clients are allowed to this API."
-    },
     "Authorization": {
       "name": "authorization",
       "type": "string",
@@ -736,7 +723,7 @@
         "id": "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
         "first_name": "Movies",
         "last_name": "Administrator",
-        "email_address": "movies.admin@movies.io",
+        "email_address": "movies.admin@movieapp.com",
         "status": "ACTIVE",
         "role": {
           "id": 100,
@@ -786,7 +773,7 @@
         "id": "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
         "first_name": "Movies",
         "last_name": "Administrator",
-        "email_address": "movies.admin@movies.io",
+        "email_address": "movies.admin@movieapp.com",
         "mobile_number": "+91 1234567890",
         "status": "ACTIVE",
         "role": {
@@ -897,7 +884,7 @@
       "example": {
         "first_name": "Movies",
         "last_name": "Administrator",
-        "email_address": "movies.admin@movies.io",
+        "email_address": "movies.admin@movieapp.com",
         "mobile_number": "+91 1234567890",
         "role": {
           "id": 100,
@@ -974,7 +961,7 @@
       "example": {
         "first_name": "Movies",
         "last_name": "Administrator",
-        "email_address": "movies.admin@movies.io",
+        "email_address": "movies.admin@movieapp.com",
         "mobile_number": "+91 1234567890",
         "role": {
           "id": 100,
