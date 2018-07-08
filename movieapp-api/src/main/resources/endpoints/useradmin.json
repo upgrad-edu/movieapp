@@ -10,7 +10,7 @@
     "http",
     "https"
   ],
-  "basePath": "/api/v1/users",
+  "basePath": "/api/v1/admin/users",
   "tags": [
     {
       "name": "API#003 Users",

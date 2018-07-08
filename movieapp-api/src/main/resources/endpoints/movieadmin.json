@@ -1,20 +1,20 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Movies Management API",
+    "title": "Movies Administration API",
     "version": "1.0.0",
-    "description": "## API of Movies Management Services\n\nThis specification describes the endpoints, request/response model of the Movie Management API. This API provides REST resources to manage project movies of Movies application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```\n  https://movieapp.com/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Movies Application.\n\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Movies Application reserves the right to add new parameters without further notice (in request and response).\n  * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Movies Application reserves the right to enhance enumerations by new values.\n  * Movies Application reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nMovie Management APIs can only be called by authorized users who has rights with required permissions to manage movies. These APIs can be used to create new movie, modify an existing movie, map artists to the movie, mark movie as release, map theatres and shows.\n## Release Notes \n### 1.0.0\n* Initial version\n"
+    "description": "## API of Movies Administration Services\n\nThis specification describes the endpoints, request/response model of the Movie Administration API. This API provides REST resources to manage project movies of Movies application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```\n  https://movieapp.com/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Movies Application.\n\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Movies Application reserves the right to add new parameters without further notice (in request and response).\n  * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Movies Application reserves the right to enhance enumerations by new values.\n  * Movies Application reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nMovie Administration APIs can only be called by authorized users who has rights with required permissions to manage movies. These APIs can be used to create new movie, modify an existing movie, map artists to the movie, mark movie as release, map theatres and shows.\n## Release Notes \n### 1.0.0\n* Initial version\n"
   },
   "host": "movieapp.com",
   "schemes": [
     "http",
     "https"
   ],
-  "basePath": "/api/v1/movies",
+  "basePath": "/api/v1/admin/movies",
   "tags": [
     {
       "name": "API#004 Movies",
-      "description": "All operations marked with 'API#004 Movies' are relevant to movie management use case"
+      "description": "All operations marked with 'API#004 Movies' are relevant to movie Administration use case"
     }
   ],
   "paths": {
@@ -31,7 +31,7 @@
             ]
           }
         ],
-        "summary": "Movie Management - Create new Movie",
+        "summary": "Movie Administration - Create new Movie",
         "description": "API to create new movie in Movies application\n",
         "consumes": [
           "application/json"
@@ -132,7 +132,7 @@
             ]
           }
         ],
-        "summary": "Movie Management - Get all Movies",
+        "summary": "Movie Administration - Get all Movies",
         "description": "API to get all movies of Movies application\n",
         "produces": [
           "application/json"
@@ -253,7 +253,7 @@
             ]
           }
         ],
-        "summary": "Movie Management - Get an existing Movie",
+        "summary": "Movie Administration - Get an existing Movie",
         "description": "API to get an existing Movie detalis of Movies application\n",
         "produces": [
           "application/json"
@@ -338,7 +338,7 @@
             ]
           }
         ],
-        "summary": "Movie Management - Update an existing Movie",
+        "summary": "Movie Administration - Update an existing Movie",
         "description": "API to update an existing movie details in Movies application\n",
         "consumes": [
           "application/json"
@@ -441,7 +441,7 @@
             ]
           }
         ],
-        "summary": "Movie Management - Partial update of an existing Movie",
+        "summary": "Movie Administration - Partial update of an existing Movie",
         "description": "API to partial update of an existing movie in Movies application\n",
         "parameters": [
           {
@@ -541,7 +541,7 @@
             ]
           }
         ],
-        "summary": "Movie Management - Mark an existing Movie as DELETED",
+        "summary": "Movie Administration - Mark an existing Movie as DELETED",
         "description": "API to remove an existing Movie\n",
         "parameters": [
           {
@@ -622,7 +622,7 @@
             ]
           }
         ],
-        "summary": "Movie Management - List of artists belonging to the Movie",
+        "summary": "Movie Administration - List of artists belonging to the Movie",
         "description": "API to get an existing projects of the Movie\n",
         "produces": [
           "application/json"
@@ -700,7 +700,7 @@
             ]
           }
         ],
-        "summary": "Movie Management - Get an existing project details of the Movie",
+        "summary": "Movie Administration - Get an existing project details of the Movie",
         "description": "API to get an existing Projects detalis of the Movie\n",
         "produces": [
           "application/json"
@@ -861,6 +861,7 @@
               "Drama",
               "Romantic"
             ],
+            "duration": 120,
             "poster_url": "www.samplemovie.com/poster",
             "trailer_url": "www.samplemovie.com/trailer",
             "wiki_url": "www.wikipedia.com/samplemovie",
@@ -876,6 +877,7 @@
             "genres": [
               "Comedy"
             ],
+            "duration": 160,
             "poster_url": "www.anothersamplemovie.com/poster",
             "trailer_url": "www.anothersamplemovie.com/trailer",
             "wiki_url": "www.wikipedia.com/anothersamplemovie",
@@ -910,6 +912,10 @@
           },
           "description": "Genres of the movie"
         },
+        "duration": {
+          "type": "integer",
+          "description": "Duration (in minutes) of the movie"
+        },
         "poster_url": {
           "type": "string",
           "description": "Poster URL of the movie"
@@ -927,8 +933,7 @@
           "$ref": "#/definitions/FullDateType"
         },
         "censor_board_rating": {
-          "type": "string",
-          "description": "Censor Board Rating of the movie"
+          "$ref": "#/definitions/CensorBoardRatingType"
         },
         "critics_rating": {
           "type": "number",
@@ -939,13 +944,19 @@
           "$ref": "#/definitions/MovieStatusType"
         },
         "artists": {
-          "$ref": "#/definitions/ArtistType"
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/ArtistType"
+          },
+          "description": "List of artists"
         }
       },
       "required": [
         "title",
         "storyline",
         "genres",
+        "duration",
         "poster_url",
         "trailer_url",
         "release_date",
@@ -960,6 +971,7 @@
           "Drama",
           "Romantic"
         ],
+        "duration": 120,
         "poster_url": "www.samplemovie.com/poster",
         "trailer_url": "www.samplemovie.com/trailer",
         "wiki_url": "www.wikipedia.com/samplemovie",
@@ -1024,6 +1036,10 @@
           },
           "description": "Genres of the movie"
         },
+        "duration": {
+          "type": "integer",
+          "description": "Duration (in minutes) of the movie"
+        },
         "poster_url": {
           "type": "string",
           "description": "Poster URL of the movie"
@@ -1041,8 +1057,7 @@
           "$ref": "#/definitions/FullDateType"
         },
         "censor_board_rating": {
-          "type": "string",
-          "description": "Censor Board Rating of the movie"
+          "$ref": "#/definitions/CensorBoardRatingType"
         },
         "critics_rating": {
           "type": "number",
@@ -1060,6 +1075,7 @@
         "title",
         "storyline",
         "genres",
+        "duration",
         "poster_url",
         "trailer_url",
         "release_date",
@@ -1074,6 +1090,7 @@
           "Drama",
           "Romantic"
         ],
+        "duration": 120,
         "poster_url": "www.samplemovie.com/poster",
         "trailer_url": "www.samplemovie.com/trailer",
         "wiki_url": "www.wikipedia.com/samplemovie",
@@ -1125,6 +1142,10 @@
           },
           "description": "Updated genres of the movie"
         },
+        "duration": {
+          "type": "integer",
+          "description": "Updated duration (in minutes) of the movie"
+        },
         "poster_url": {
           "type": "string",
           "description": "Updated poster URL of the movie"
@@ -1142,8 +1163,7 @@
           "$ref": "#/definitions/FullDateType"
         },
         "censor_board_rating": {
-          "type": "string",
-          "description": "Updated censor Board Rating of the movie"
+          "$ref": "#/definitions/CensorBoardRatingType"
         },
         "critics_rating": {
           "type": "number",
@@ -1163,6 +1183,7 @@
         "genres": [
           "Drama"
         ],
+        "duration": 118,
         "poster_url": "www.samplemovie.com/poster",
         "trailer_url": "www.samplemovie.com/trailer",
         "wiki_url": "www.wikipedia.com/samplemovie",
@@ -1223,6 +1244,14 @@
     "ArtistsSummaryResponse": {
       "type": "object",
       "properties": {
+        "page": {
+          "type": "integer",
+          "description": "page or position of the fetched artists"
+        },
+        "limit": {
+          "type": "integer",
+          "description": "number of artists fetched per this request"
+        },
         "total_count": {
           "type": "integer",
           "description": "total number of artists in the movie"
@@ -1272,6 +1301,15 @@
       ],
       "description": "Status of the task"
     },
+    "CensorBoardRatingType": {
+      "type": "string",
+      "enum": [
+        "U",
+        "A",
+        "UA"
+      ],
+      "description": "Censor board rating"
+    },
     "ErrorResponse": {
       "type": "object",
       "properties": {
@@ -1293,8 +1331,8 @@
         "message"
       ],
       "example": {
-        "code": "BRD-001",
-        "message": "Movie with name already exist"
+        "code": "MVI-001",
+        "message": "Movie with identifier does not exist"
       }
     }
   }

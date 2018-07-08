@@ -9,9 +9,13 @@ import upgrad.movieapp.service.movie.model.MovieStatus;
 
 public interface MovieDao extends BaseDao<MovieEntity> {
 
-    SearchResult<MovieEntity> findMovies(int offset, int limit);
+    SearchResult<MovieEntity> findMovies(int page, int limit);
 
-    SearchResult<MovieEntity> findMovies(MovieStatus userStatus, int offset, int limit);
+    SearchResult<MovieEntity> findMovies(int page, int limit, MovieStatus userStatus);
+
+    SearchResult<MovieEntity> findMovies(int page, int limit, ZonedDateTime releaseAt);
+
+    SearchResult<MovieEntity> findMovies(int page, int limit, MovieStatus userStatus, ZonedDateTime releaseAt);
 
     SearchResult<MovieEntity> findMovies(MovieStatus userStatus, ZonedDateTime releaseDateOffset, int offset, int limit);
 

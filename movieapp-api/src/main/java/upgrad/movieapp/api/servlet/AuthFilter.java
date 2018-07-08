@@ -28,7 +28,7 @@ public class AuthFilter extends ApiFilter {
     public void doFilter(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
         final String pathInfo = servletRequest.getRequestURI();
-        if (!pathInfo.contains("signup") && !pathInfo.contains("swagger-ui") && !pathInfo.contains("v2/api-docs") && !pathInfo.contains("swagger-resources")) {
+        if (pathInfo.contains("admin") || pathInfo.contains("login") || pathInfo.contains("bookings")) {
             final String authorization = servletRequest.getHeader(HEADER_AUTHORIZATION);
             if (StringUtils.isEmpty(authorization)) {
                 throw new UnauthorizedException(RestErrorCode.ATH_001);

@@ -5,13 +5,17 @@ import static upgrad.movieapp.service.common.entity.Entity.SCHEMA;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -26,7 +30,18 @@ import upgrad.movieapp.service.common.entity.ext.EntityHashCodeBuilder;
 
 @Entity
 @Table(name = "MOVIES", schema = SCHEMA)
-public class MovieEntity extends MutableEntity implements Identifier<Integer>, UniversalUniqueIdentifier<Integer>, Serializable {
+@NamedQueries({
+        @NamedQuery(name = MovieEntity.COUNT_BY_ALL, query = "select count(m.id) from MovieEntity m"),
+        @NamedQuery(name = MovieEntity.BY_ALL, query = "select m from MovieEntity m"),
+        @NamedQuery(name = MovieEntity.COUNT_BY_STATUS, query = "select count(m.id) from MovieEntity m where m.status = :status"),
+        @NamedQuery(name = MovieEntity.BY_STATUS, query = "select m from MovieEntity m where m.status = :status")
+})
+public class MovieEntity extends MutableEntity implements Identifier<Integer>, UniversalUniqueIdentifier<String>, Serializable {
+
+    public static final String COUNT_BY_ALL = "MovieEntity.countByAll";
+    public static final String BY_ALL = "MovieEntity.byAll";
+    public static final String COUNT_BY_STATUS = "MovieEntity.countByStatus";
+    public static final String BY_STATUS = "MovieEntity.byStatus";
 
     @Id
     @Column(name = "ID")
@@ -35,9 +50,9 @@ public class MovieEntity extends MutableEntity implements Identifier<Integer>, U
 
     @Column(name = "UUID")
     @NotNull
-    private Integer uuid;
+    private String uuid;
 
-    @Column(name = "NAME")
+    @Column(name = "TITLE")
     @NotNull
     @Size(max = 100)
     private String title;
@@ -46,6 +61,10 @@ public class MovieEntity extends MutableEntity implements Identifier<Integer>, U
     @NotNull
     @Size(max = 2000)
     private String genres;
+
+    @Column(name = "DURATION")
+    @NotNull
+    private Integer duration;
 
     @Column(name = "STORYLINE")
     @NotNull
@@ -99,7 +118,7 @@ public class MovieEntity extends MutableEntity implements Identifier<Integer>, U
     }
 
     @Override
-    public Integer getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
@@ -117,6 +136,14 @@ public class MovieEntity extends MutableEntity implements Identifier<Integer>, U
 
     public void setGenres(String genres) {
         this.genres = genres;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
     }
 
     public String getStoryline() {
@@ -199,6 +226,14 @@ public class MovieEntity extends MutableEntity implements Identifier<Integer>, U
         this.status = status;
     }
 
+    public List<MovieArtistEntity> getArtists() {
+        return artists;
+    }
+
+    public void setArtists(List<MovieArtistEntity> artists) {
+        this.artists = artists;
+    }
+
     @Override
     public boolean equals(Object obj) {
         return new EntityEqualsBuilder<Integer>().equalsById(this, obj);
@@ -212,6 +247,12 @@ public class MovieEntity extends MutableEntity implements Identifier<Integer>, U
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.uuid = UUID.randomUUID().toString();
+        super.prePersist();
     }
 
 }

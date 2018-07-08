@@ -20,7 +20,7 @@
    "securityDefinitions": {
       "BasicAuthorization": {
          "type": "basic",
-         "description": "HTTP Basic Authentication is used for authentication. The server authentication credentials should be sent in the Authorization header.\nBasic authentication should only be used over HTTPS (SSL).\n\nThe Authorization header is constructed as follows:\n\n- The username and password are combined into a string separated by a colon, e.g.: username:password\n- The resulting string is encoded using the RFC2045-MIME variant of Base64, except not limited to 76 char/line.\n- The authorization method and a space i.e. \"Basic \" is then put before the encoded string.\n\n```\nPOST https://movieapp.com/api/v1/authentication HTTP/1.1\nAuthorization: Basic YW5kcmFwcF91czpqVEdhNUVKODR0\n```\n"
+         "description": "HTTP Basic Authentication is used for authentication. The server authentication credentials should be sent in the Authorization header.\nBasic authentication should only be used over HTTPS (SSL).\n\nThe Authorization header is constructed as follows:\n\n- The username and password are combined into a string separated by a colon, e.g.: username:password\n- The resulting string is encoded using the RFC2045-MIME variant of Base64, except not limited to 76 char/line.\n- The authorization method and a space i.e. \"Basic \" is then put before the encoded string.\n\n```\nPOST https://movieapp.com/api/v1/auth/login HTTP/1.1\nAuthorization: Basic YW5kcmFwcF91czpqVEdhNUVKODR0\n```\n"
       },
       "BearerAuthorization": {
          "type": "basic",

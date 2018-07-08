@@ -6,6 +6,7 @@ import upgrad.movieapp.service.common.exception.ApplicationException;
 import upgrad.movieapp.service.common.model.SearchResult;
 import upgrad.movieapp.service.movie.entity.MovieEntity;
 import upgrad.movieapp.service.movie.model.MovieStatus;
+import upgrad.movieapp.service.user.entity.UserEntity;
 
 public interface MovieService {
 
@@ -16,6 +17,8 @@ public interface MovieService {
     SearchResult<MovieEntity> findMovies(int page, int limit, int releaseDateOffset);
 
     SearchResult<MovieEntity> findMovies(int page, int limit, @NotNull MovieStatus movieStatus, int releaseDateOffset);
+
+    MovieEntity findMovieByUuid(@NotNull String movieUuid) throws ApplicationException;
 
     MovieEntity createMovie(@NotNull MovieEntity newMovie) throws ApplicationException;
 

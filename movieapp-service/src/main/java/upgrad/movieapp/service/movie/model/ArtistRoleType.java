@@ -1,6 +1,6 @@
 package upgrad.movieapp.service.movie.model;
 
-public enum ArtistType {
+public enum ArtistRoleType {
 
     DIRECTOR, PRODUCER, ACTOR, CINEMATOGRAPHER, MUSICIAN, STUNTMAN;
 

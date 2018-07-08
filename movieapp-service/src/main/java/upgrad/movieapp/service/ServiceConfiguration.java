@@ -6,6 +6,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ComponentScan("upgrad.movieapp.service")
-@EntityScan({"upgrad.movieapp.service.user.entity"})
+@EntityScan({"upgrad.movieapp.service.user.entity", "upgrad.movieapp.service.movie.entity"})
 public class ServiceConfiguration {
 }

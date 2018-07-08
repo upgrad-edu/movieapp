@@ -1,12 +1,12 @@
 swagger: '2.0'
 info:
-  title: Movies Management API
+  title: Movies Application API
   version: 1.0.0
   description: >
-    ## API of Movies Management Services
+    ## API of Movies Application
 
 
-    This specification describes the endpoints, request/response model of the Movie Management API.
+    This specification describes the endpoints, request/response model for Movie Application.
     This API provides REST resources to manage project movies of Movies application.
 
 
@@ -35,8 +35,7 @@ info:
 
     ## Business definitions
 
-    Movie Management APIs can only be called by authorized users who has rights with required permissions to manage movies. These APIs can be used to create new movie,
-    modify an existing movie, map artists to the movie, mark movie as release, map theatres and shows.
+    Movie APIs are called by an authorized application to view data on movies, artists, theatres, shows and bookings.
 
     ## Release Notes 
 
@@ -56,80 +55,6 @@ tags:
 
 paths:
   /movies:
-    post:
-      operationId: createMovie
-      tags:
-        - 'API#004 Movies'
-      security:
-        - Authorization: []
-      summary: Movie Management - Create new Movie
-      description: >
-        API to create new movie in Movies application
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - $ref: '#/parameters/Authorization'
-        - in: body
-          name: CreateMovieRequest
-          description: Request containing new movie details
-          required: true
-          schema:
-            $ref: '#/definitions/CreateMovieRequest'
-      responses:
-        '201':
-          description: CREATED - Movie has been created successfully
-          headers:
-            request-id:
-              type: string
-              description: Used as correlation id while tracing for the request in the backend
-            location:
-              type: string
-              description: Location of the new resource which was created by this request
-          schema:
-            $ref: '#/definitions/CreateMovieResponse'
-        '400':
-          description: >-
-            BAD REQUEST - server cannot or will not process the request due to
-            something that is perceived to be a client error (e.g., malformed
-            request syntax, mandatory elements are missing)
-          headers:
-            request-id:
-              type: string
-              description: Used as correlation id while tracing for the request in the backend
-        '401':
-          description: UNAUTHORIZED - user has provided wrong credentials
-          headers:
-            request-id:
-              type: string
-              description: Used as correlation id while tracing for the request in the backend
-        '403':
-          description: >-
-            FORBIDDEN - request has not been applied because client application
-            has no permission to perform action
-          headers:
-            request-id:
-              type: string
-              description: Used as correlation id while tracing for the request in the backend
-        '422':
-          description: >-
-            UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
-          headers:
-            request-id:
-              type: string
-              description: Used as correlation id while tracing for the request in the backend
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '500':
-          description: >-
-            INTERNAL SERVER ERROR - server encountered an unexpected condition
-            that prevented it from fulfilling the request.
-          headers:
-            request-id:
-              type: string
-              description: Used as correlation id while tracing for the request in the backend
-
     get:
        operationId: getMovies
        tags:
@@ -273,211 +198,6 @@ paths:
              request-id:
                type: string
                description: Used as correlation id while tracing for the request in the backend
-     put:
-        operationId: updateMovie
-        tags:
-          - 'API#004 Movies'
-        security:
-          - Authorization: []
-        summary: Movie Management - Update an existing Movie
-        description: >
-            API to update an existing movie details in Movies application
-        consumes:
-          - application/json
-        parameters:
-          - $ref: '#/parameters/MovieId'
-          - $ref: '#/parameters/Authorization'
-          - in: body
-            name: UpdateMovieRequest
-            description: Request containing modified movie details
-            required: true
-            schema:
-              $ref: '#/definitions/UpdateMovieRequest'
-        responses:
-          '200':
-            description: OK - Movie has been updated successfully
-            headers:
-              request-id:
-                type: string
-                description: Used as correlation id while tracing for the request in the backend
-          '400':
-            description: >-
-              BAD REQUEST - server cannot or will not process the request due to
-              something that is perceived to be a client error (e.g., malformed
-              request syntax, mandatory elements are missing)
-            headers:
-              request-id:
-                type: string
-                description: Used as correlation id while tracing for the request in the backend
-          '401':
-            description: UNAUTHORIZED - user has provided wrong credentials
-            headers:
-              request-id:
-                type: string
-                description: Used as correlation id while tracing for the request in the backend
-          '403':
-            description: >-
-              FORBIDDEN - request has not been applied because client application
-              has no permission to perform action
-            headers:
-              request-id:
-                type: string
-                description: Used as correlation id while tracing for the request in the backend
-          '404':
-            description: >-
-              NOT FOUND - Movie (resource) does not exist
-            headers:
-              request-id:
-                type: string
-                description: Used as correlation id while tracing for the request in the backend
-          '422':
-            description: >-
-              UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
-            headers:
-              request-id:
-                type: string
-                description: Used as correlation id while tracing for the request in the backend
-            schema:
-              $ref: '#/definitions/ErrorResponse'
-          '500':
-            description: >-
-              INTERNAL SERVER ERROR - server encountered an unexpected condition
-              that prevented it from fulfilling the request.
-            headers:
-              request-id:
-                type: string
-                description: Used as correlation id while tracing for the request in the backend
-
-     patch:
-        operationId: patchMovie
-        tags:
-          - 'API#004 Movies'
-        security:
-          - Authorization: []
-        summary: Movie Management - Partial update of an existing Movie
-        description: >
-            API to partial update of an existing movie in Movies application
-        parameters:
-          - $ref: '#/parameters/MovieId'
-          - $ref: '#/parameters/Authorization'
-          - in: body
-            name: MovieOperationsRequest
-            description: Request containing modified status of movie
-            required: true
-            schema:
-              $ref: '#/definitions/MovieOperationsRequest'
-        responses:
-          '200':
-            description: OK - Movie has been partially updated
-            headers:
-              request-id:
-                type: string
-                description: Used as correlation id while tracing for the request in the backend
-          '400':
-            description: >-
-              BAD REQUEST - server cannot or will not process the request due to
-              something that is perceived to be a client error (e.g., malformed
-              request syntax, mandatory elements are missing)
-            headers:
-              request-id:
-                type: string
-                description: Used as correlation id while tracing for the request in the backend
-          '401':
-            description: UNAUTHORIZED - user has provided wrong credentials
-            headers:
-              request-id:
-                type: string
-                description: Used as correlation id while tracing for the request in the backend
-          '403':
-            description: >-
-              FORBIDDEN - request has not been applied because client application
-              has no permission to perform action
-            headers:
-              request-id:
-                type: string
-                description: Used as correlation id while tracing for the request in the backend
-          '404':
-            description: >-
-              NOT FOUND - Movie (resource) does not exist
-            headers:
-              request-id:
-                type: string
-                description: Used as correlation id while tracing for the request in the backend
-          '422':
-            description: >-
-              UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
-            headers:
-              request-id:
-                type: string
-                description: Used as correlation id while tracing for the request in the backend
-            schema:
-              $ref: '#/definitions/ErrorResponse'
-          '500':
-            description: >-
-              INTERNAL SERVER ERROR - server encountered an unexpected condition
-              that prevented it from fulfilling the request.
-            headers:
-              request-id:
-                type: string
-                description: Used as correlation id while tracing for the request in the backend
-
-     delete:
-        operationId: deleteMovie
-        tags:
-          - 'API#004 Movies'
-        security:
-          - Authorization: []
-        summary: Movie Management - Mark an existing Movie as DELETED
-        description: >
-            API to remove an existing Movie
-        parameters:
-          - $ref: '#/parameters/MovieId'
-          - $ref: '#/parameters/Authorization'
-        responses:
-          '200':
-            description: OK - Movie status has been set to DELETED
-            headers:
-              request-id:
-                type: string
-                description: Used as correlation id while tracing for the request in the backend
-          '400':
-            description: >-
-              BAD REQUEST - server cannot or will not process the request due to
-              something that is perceived to be a client error (e.g., malformed
-              request syntax, mandatory elements are missing)
-            headers:
-              request-id:
-                type: string
-                description: Used as correlation id while tracing for the request in the backend
-          '401':
-            description: UNAUTHORIZED - user has provided wrong credentials
-            headers:
-              request-id:
-                type: string
-                description: Used as correlation id while tracing for the request in the backend
-          '403':
-            description: >-
-              FORBIDDEN - request has not been applied because client application
-              has no permission to perform action
-            headers:
-              request-id:
-                type: string
-                description: Used as correlation id while tracing for the request in the backend
-          '404':
-            description: >-
-              NOT FOUND - Movie (resource) does not exist
-            headers:
-              request-id:
-                type: string
-                description: Used as correlation id while tracing for the request in the backend
-          '500':
-            description: >-
-              INTERNAL SERVER ERROR - server encountered an unexpected condition
-              that prevented it from fulfilling the request.
-            headers:
-              request-id:
-                type: string
-                description: Used as correlation id while tracing for the request in the backend
 
   /movies/{movie_id}/artists:
 
@@ -690,6 +410,7 @@ definitions:
           genres:
             - Drama
             - Romantic
+          duration: 120
           poster_url: www.samplemovie.com/poster
           trailer_url: www.samplemovie.com/trailer
           wiki_url: www.wikipedia.com/samplemovie
@@ -703,6 +424,7 @@ definitions:
           storyline: This is another sample movie
           genres:
             - Comedy
+          duration: 160
           poster_url: www.anothersamplemovie.com/poster
           trailer_url: www.anothersamplemovie.com/trailer
           wiki_url: www.wikipedia.com/anothersamplemovie
@@ -729,6 +451,9 @@ definitions:
         items:
           type: string
         description: Genres of the movie
+      duration:
+        type: integer
+        description: Duration (in minutes) of the movie
       poster_url:
         type: string
         description: Poster URL of the movie
@@ -742,8 +467,7 @@ definitions:
         description: Release date of the project
         $ref: '#/definitions/FullDateType'
       censor_board_rating:
-        type: string
-        description: Censor Board Rating of the movie
+        $ref: '#/definitions/CensorBoardRatingType'
       critics_rating:
         type: number
         format: float
@@ -751,11 +475,16 @@ definitions:
       status:
         $ref: '#/definitions/MovieStatusType'
       artists:
-        $ref: '#/definitions/ArtistType'
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/ArtistType'
+        description: List of artists
     required:
       - title
       - storyline
       - genres
+      - duration
       - poster_url
       - trailer_url
       - release_date
@@ -768,6 +497,7 @@ definitions:
       genres:
         - Drama
         - Romantic
+      duration: 120
       poster_url: www.samplemovie.com/poster
       trailer_url: www.samplemovie.com/trailer
       wiki_url: www.wikipedia.com/samplemovie
@@ -775,163 +505,6 @@ definitions:
       censor_board_rating: U
       critics_rating: 4.0
       status: RELEASED
-
-  MovieOperationsRequest:
-    type: array
-    items:
-      $ref: '#/definitions/MovieOperationRequest'
-
-  MovieOperationRequest:
-    type: object
-    properties:
-      op:
-        type: string
-        description: Type of operation
-        enum: [replace]
-      path:
-        type: string
-        description: Resource path whose state to be modified
-        enum: [status, release_date]
-      value:
-        type: string
-        description: New state value to be updated to the resource
-    example:
-      - op: replace
-        path: status
-        value: CLOSED
-
-  CreateMovieRequest:
-    type: object
-    properties:
-      title:
-        type: string
-        description: Title of the movie
-      storyline:
-        type: string
-        description: Storyline of the movie
-      genres:
-        type: array
-        items:
-          type: string
-        description: Genres of the movie
-      poster_url:
-        type: string
-        description: Poster URL of the movie
-      trailer_url:
-        type: string
-        description: Trailer URL of the movie
-      wiki_url:
-        type: string
-        description: Wiki URL of the movie
-      release_date:
-        description: Release date of the project
-        $ref: '#/definitions/FullDateType'
-      censor_board_rating:
-        type: string
-        description: Censor Board Rating of the movie
-      critics_rating:
-        type: number
-        format: float
-        description: Critics Rating of the movie
-      artists:
-        type: array
-        items:
-          type: string
-
-    required:
-      - title
-      - storyline
-      - genres
-      - poster_url
-      - trailer_url
-      - release_date
-      - censor_board_rating
-      - critics_rating
-      - artists
-    example:
-      title: Sample Movie
-      storyline: This is a sample movie
-      genres:
-        - Drama
-        - Romantic
-      poster_url: www.samplemovie.com/poster
-      trailer_url: www.samplemovie.com/trailer
-      wiki_url: www.wikipedia.com/samplemovie
-      release_date: 2018-07-07
-      censor_board_rating: U
-      critics_rating: 4.0
-      artists:
-        - 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-        - 8d174a25-ca31-55a8-95b4-c06ffc9d5f8d
-
-  CreateMovieResponse:
-    type: object
-    properties:
-      id:
-        type: string
-        format: uuid
-        description: Unique identifier in a standard UUID format generated by API backend
-      status:
-        $ref: '#/definitions/MovieStatusType'
-    required:
-      - id
-      - status
-    example:
-      id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-      status: PUBLISHED
-
-  UpdateMovieRequest:
-    type: object
-    properties:
-      title:
-        type: string
-        description: Updated title of the movie
-      storyline:
-        type: string
-        description: Updated storyline of the movie
-      genres:
-        type: array
-        items:
-          type: string
-        description: Updated genres of the movie
-      poster_url:
-        type: string
-        description: Updated poster URL of the movie
-      trailer_url:
-        type: string
-        description: Updated trailer URL of the movie
-      wiki_url:
-        type: string
-        description: Updated wiki URL of the movie
-      release_date:
-        description: Updated release date of the project
-        $ref: '#/definitions/FullDateType'
-      censor_board_rating:
-        type: string
-        description: Updated censor Board Rating of the movie
-      critics_rating:
-        type: number
-        format: float
-        description: Updated critics Rating of the movie
-      artists:
-        type: array
-        items:
-          type: string
-
-    example:
-      title: Sample Movie Updated
-      storyline: This is a sample movie updated
-      genres:
-        - Drama
-      poster_url: www.samplemovie.com/poster
-      trailer_url: www.samplemovie.com/trailer
-      wiki_url: www.wikipedia.com/samplemovie
-      release_date: 2018-08-07
-      censor_board_rating: U
-      critics_rating: 3.0
-      artists:
-        - 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-        - 8d174a25-ca31-55a8-95b4-c06ffc9d5f8d
 
   MovieStatusType:
     type: string
@@ -968,6 +541,12 @@ definitions:
   ArtistsSummaryResponse:
     type: object
     properties:
+      page:
+        type: integer
+        description: page or position of the fetched artists
+      limit:
+        type: integer
+        description: number of artists fetched per this request
       total_count:
         type: integer
         description: total number of artists in the movie
@@ -1001,6 +580,11 @@ definitions:
     enum: [DIRECTOR, PRODUCER, ACTOR, CINEMATOGRAPHER, MUSICIAN, STUNTMAN]
     description: Status of the task
 
+  CensorBoardRatingType:
+    type: string
+    enum: [U,A,UA]
+    description: Censor board rating
+
   ErrorResponse:
     type: object
     properties:
@@ -1017,5 +601,5 @@ definitions:
       - code
       - message
     example:
-      code: BRD-001
-      message: Movie with name already exist
+      code: MVI-001
+      message: Movie with identifier does not exist

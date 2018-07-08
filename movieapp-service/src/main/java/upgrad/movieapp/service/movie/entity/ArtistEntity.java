@@ -28,7 +28,7 @@ import upgrad.movieapp.service.common.entity.MutableEntity;
 import upgrad.movieapp.service.common.entity.UniversalUniqueIdentifier;
 import upgrad.movieapp.service.common.entity.ext.EntityEqualsBuilder;
 import upgrad.movieapp.service.common.entity.ext.EntityHashCodeBuilder;
-import upgrad.movieapp.service.movie.model.ArtistType;
+import upgrad.movieapp.service.movie.model.ArtistRoleType;
 
 @Entity
 @Table(name = "ARTISTS", schema = SCHEMA)
@@ -58,7 +58,7 @@ public class ArtistEntity extends MutableEntity implements Identifier<Long>, Uni
     @Column(name = "TYPE")
     @NotNull
     @Size(max = 50)
-    private ArtistType type;
+    private String type;
 
     @Column(name = "PROFILE_DESCRIPTION")
     @Size(max = 500)
@@ -98,11 +98,11 @@ public class ArtistEntity extends MutableEntity implements Identifier<Long>, Uni
         this.lastName = lastName;
     }
 
-    public ArtistType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(ArtistType type) {
+    public void setType(String type) {
         this.type = type;
     }
 

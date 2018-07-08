@@ -160,23 +160,34 @@
                             </execution>
 
                             <execution>
-                                <id>usermanagement</id>
+                                <id>useradmin</id>
                                 <goals>
                                     <goal>generate</goal>
                                 </goals>
                                 <configuration>
-                                    <inputSpec>${endpoints.dir}/usermanagement.json</inputSpec>
+                                    <inputSpec>${endpoints.dir}/useradmin.json</inputSpec>
                                     <language>${supported.language}</language>
                                 </configuration>
                             </execution>
 
                             <execution>
-                                <id>moviemanagement</id>
+                                <id>movieadmin</id>
                                 <goals>
                                     <goal>generate</goal>
                                 </goals>
                                 <configuration>
-                                    <inputSpec>${endpoints.dir}/moviemanagement.json</inputSpec>
+                                    <inputSpec>${endpoints.dir}/movieadmin.json</inputSpec>
+                                    <language>${supported.language}</language>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>movieapp</id>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <inputSpec>${endpoints.dir}/movieapp.json</inputSpec>
                                     <language>${supported.language}</language>
                                 </configuration>
                             </execution>

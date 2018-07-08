@@ -3,7 +3,7 @@ package upgrad.movieapp.api.controller;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static upgrad.movieapp.api.controller.transformer.UserTransformer.*;
-import static upgrad.movieapp.api.data.ResourceConstants.BASE_URL;
+import static upgrad.movieapp.api.data.ResourceConstants.BASE_ADMIN_URL;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ import upgrad.movieapp.service.user.exception.UserErrorCode;
 import upgrad.movieapp.service.user.model.UserStatus;
 
 @RestController
-@RequestMapping(BASE_URL)
+@RequestMapping(BASE_ADMIN_URL)
 public class UserAdminController {
 
     @Autowired
