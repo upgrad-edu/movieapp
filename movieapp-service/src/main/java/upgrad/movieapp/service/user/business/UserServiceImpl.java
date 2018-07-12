@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
     public UserEntity createUser(final UserEntity newUser, final Integer roleUuid) throws ApplicationException {
 
         final UserEntity existingUser = userDao.findByEmail(newUser.getEmail());
-        if(existingUser != null) {
+        if (existingUser != null) {
             throw new ApplicationException(UserErrorCode.USR_009, newUser.getEmail());
         }
         encryptPassword(newUser);
@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
     public UserEntity createUser(final UserEntity newUser) throws ApplicationException {
 
         final UserEntity userEntity = userDao.findByEmail(newUser.getEmail());
-        if(userEntity != null) {
+        if (userEntity != null) {
             throw new ApplicationException(UserErrorCode.USR_009, newUser.getEmail());
         }
         encryptPassword(newUser);
@@ -106,27 +106,27 @@ public class UserServiceImpl implements UserService {
             throw new EntityNotFoundException(UserErrorCode.USR_001, userUuid);
         }
 
-        if(UserStatus.ACTIVE != UserStatus.valueOf(existingUser.getStatus())) {
-            throw new ApplicationException(UserErrorCode.USR_008, UserStatus.valueOf(existingUser.getStatus()));
+        if (UserStatus.DELETED == UserStatus.valueOf(existingUser.getStatus())) {
+            throw new ApplicationException(UserErrorCode.USR_012, userUuid);
         }
 
-        if(!existingUser.getEmail().equalsIgnoreCase(updatedUser.getEmail()) && userDao.findByEmail(updatedUser.getEmail()) != null) {
+        if (!existingUser.getEmail().equalsIgnoreCase(updatedUser.getEmail()) && userDao.findByEmail(updatedUser.getEmail()) != null) {
             throw new ApplicationException(UserErrorCode.USR_009, updatedUser.getEmail());
         }
 
-        if(StringUtils.isNotEmpty(updatedUser.getFirstName())) {
+        if (StringUtils.isNotEmpty(updatedUser.getFirstName())) {
             existingUser.setFirstName(updatedUser.getFirstName());
         }
-        if(StringUtils.isNotEmpty(updatedUser.getLastName())) {
+        if (StringUtils.isNotEmpty(updatedUser.getLastName())) {
             existingUser.setLastName(updatedUser.getLastName());
         }
-        if(StringUtils.isNotEmpty(updatedUser.getEmail())) {
+        if (StringUtils.isNotEmpty(updatedUser.getEmail())) {
             existingUser.setEmail(updatedUser.getEmail());
         }
-        if(StringUtils.isNotEmpty(updatedUser.getMobilePhone())) {
+        if (StringUtils.isNotEmpty(updatedUser.getMobilePhone())) {
             existingUser.setMobilePhone(updatedUser.getMobilePhone());
         }
-        if(updatedUser.getRole() != null) {
+        if (updatedUser.getRole() != null) {
             existingUser.setRole(updatedUser.getRole());
         }
 
@@ -142,7 +142,7 @@ public class UserServiceImpl implements UserService {
             throw new EntityNotFoundException(UserErrorCode.USR_001, userUuid);
         }
 
-        if(UserStatus.valueOf(existingUser.getStatus()) != newUserStatus) {
+        if (UserStatus.valueOf(existingUser.getStatus()) != newUserStatus) {
             existingUser.setStatus(newUserStatus.name());
             userDao.update(existingUser);
         }
@@ -152,7 +152,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(final String userUuid) throws ApplicationException {
 
         final UserEntity existingUser = userDao.findByUUID(userUuid);
-        if(existingUser == null) {
+        if (existingUser == null) {
             throw new EntityNotFoundException(UserErrorCode.USR_001, userUuid);
         }
 
@@ -163,7 +163,7 @@ public class UserServiceImpl implements UserService {
     private void encryptPassword(final UserEntity newUser) {
 
         String password = newUser.getPassword();
-        if(password == null) {
+        if (password == null) {
             password = "movieapp@123";
         }
 

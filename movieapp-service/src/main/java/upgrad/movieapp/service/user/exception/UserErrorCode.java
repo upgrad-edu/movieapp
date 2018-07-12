@@ -37,7 +37,9 @@ public enum UserErrorCode implements ErrorCode {
 
     USR_010("USR-010", "Not a valid user status. Supported statuses are [{0}]"),
 
-    USR_011("USR-011", "Role with identifier [{0}] does not exist")
+    USR_011("USR-011", "Role with identifier [{0}] does not exist"),
+
+    USR_012("USR-012", "User with identifier [{0}] cannot be updated as it is in DELETED status.")
     ;
 
     private static final Map<String, UserErrorCode> LOOKUP = new HashMap<String, UserErrorCode>();

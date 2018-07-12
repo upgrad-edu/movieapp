@@ -1,6 +1,9 @@
 package upgrad.movieapp.service.movie.business;
 
-import static upgrad.movieapp.service.movie.exception.MovieErrorCode.MVI_001;
+import static upgrad.movieapp.service.movie.exception.MovieErrorCode.*;
+
+import java.time.ZonedDateTime;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,38 +49,57 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public MovieEntity createMovie(MovieEntity newMovie) throws ApplicationException {
+        newMovie.setStatus(MovieStatus.PUBLISHED.name());
+        if (newMovie.getReleaseAt().isBefore(DateTimeProvider.currentProgramTime())) {
+            throw new ApplicationException(MVI_003);
+        }
         return movieDao.create(newMovie);
     }
 
     @Override
     public void updateMovie(String movieUuid, MovieEntity updatedMovie) throws ApplicationException {
 
+        final ZonedDateTime releaseAt = updatedMovie.getReleaseAt();
+        if (releaseAt != null && releaseAt.isBefore(DateTimeProvider.currentProgramTime())) {
+            throw new ApplicationException(MVI_003);
+        }
+
         final MovieEntity existingMovie = findExistingMovie(movieUuid);
-        if(StringUtils.isNotEmpty(updatedMovie.getTitle())) {
+        if (MovieStatus.DELETED == MovieStatus.valueOf(existingMovie.getStatus())) {
+            throw new ApplicationException(MVI_004, movieUuid);
+        }
+
+        if (StringUtils.isNotEmpty(updatedMovie.getTitle())) {
             existingMovie.setTitle(updatedMovie.getTitle());
         }
-        if(StringUtils.isNotEmpty(updatedMovie.getGenres())) {
+        if (StringUtils.isNotEmpty(updatedMovie.getGenres())) {
             existingMovie.setGenres(updatedMovie.getGenres());
         }
-        if(StringUtils.isNotEmpty(updatedMovie.getStoryline())) {
+        if (StringUtils.isNotEmpty(updatedMovie.getStoryline())) {
             existingMovie.setStoryline(updatedMovie.getStoryline());
         }
-        if(StringUtils.isNotEmpty(updatedMovie.getPosterUrl())) {
+        if (StringUtils.isNotEmpty(updatedMovie.getPosterUrl())) {
             existingMovie.setPosterUrl(updatedMovie.getPosterUrl());
         }
-        if(StringUtils.isNotEmpty(updatedMovie.getTrailerUrl())) {
+        if (StringUtils.isNotEmpty(updatedMovie.getTrailerUrl())) {
             existingMovie.setTrailerUrl(updatedMovie.getTrailerUrl());
         }
-        if(StringUtils.isNotEmpty(updatedMovie.getWikiUrl())) {
+        if (StringUtils.isNotEmpty(updatedMovie.getWikiUrl())) {
             existingMovie.setWikiUrl(updatedMovie.getWikiUrl());
         }
-        if(StringUtils.isNotEmpty(updatedMovie.getCensorBoardRating())) {
+        if (StringUtils.isNotEmpty(updatedMovie.getCensorBoardRating())) {
             existingMovie.setCensorBoardRating(updatedMovie.getCensorBoardRating());
         }
-        if(updatedMovie.getCriticsRating() != null) {
+        if (updatedMovie.getCriticsRating() != null) {
             existingMovie.setCriticsRating(updatedMovie.getCriticsRating());
         }
-        if(StringUtils.isNotEmpty(updatedMovie.getStatus())) {
+        if (updatedMovie.getDuration() != null) {
+            existingMovie.setDuration(updatedMovie.getDuration());
+        }
+        if (releaseAt != null) {
+            existingMovie.setReleaseAt(releaseAt);
+        }
+        if (StringUtils.isNotEmpty(updatedMovie.getStatus())) {
             existingMovie.setStatus(updatedMovie.getStatus());
         }
 
@@ -86,14 +108,36 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public void deleteMovie(String movieUuid) throws ApplicationException {
+
         final MovieEntity existingMovie = findExistingMovie(movieUuid);
+        if (MovieStatus.DELETED == MovieStatus.valueOf(existingMovie.getStatus())) {
+            throw new ApplicationException(MVI_004, movieUuid);
+        }
+
         existingMovie.setStatus(MovieStatus.DELETED.name());
         movieDao.update(existingMovie);
     }
 
+    @Override
+    public void updateStatus(final String movieUuid, final MovieStatus newStatus) throws ApplicationException {
+        final MovieEntity existingMovie = findExistingMovie(movieUuid);
+        if (newStatus != MovieStatus.valueOf(existingMovie.getStatus())) {
+            existingMovie.setStatus(newStatus.name());
+            movieDao.update(existingMovie);
+        }
+    }
+
+    @Override
+    public void updateReleaseDate(@NotNull String movieUuid, ZonedDateTime newReleaseAt) throws ApplicationException {
+        final MovieEntity existingMovie = findExistingMovie(movieUuid);
+        existingMovie.setReleaseAt(newReleaseAt);
+        movieDao.update(existingMovie);
+
+    }
+
     private MovieEntity findExistingMovie(final String movieUuid) throws EntityNotFoundException {
         final MovieEntity existingMovie = movieDao.findByUUID(movieUuid);
-        if(existingMovie == null) {
+        if (existingMovie == null) {
             throw new EntityNotFoundException(MVI_001, movieUuid);
         }
         return existingMovie;

@@ -3,7 +3,7 @@
   "info": {
     "title": "Movies Administration API",
     "version": "1.0.0",
-    "description": "## API of Movies Administration Services\n\nThis specification describes the endpoints, request/response model of the Movie Administration API. This API provides REST resources to manage project movies of Movies application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```\n  https://movieapp.com/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Movies Application.\n\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Movies Application reserves the right to add new parameters without further notice (in request and response).\n  * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Movies Application reserves the right to enhance enumerations by new values.\n  * Movies Application reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nMovie Administration APIs can only be called by authorized users who has rights with required permissions to manage movies. These APIs can be used to create new movie, modify an existing movie, map artists to the movie, mark movie as release, map theatres and shows.\n## Release Notes \n### 1.0.0\n* Initial version\n"
+    "description": "## API of Movies Administration Services\n\nThis specification describes the endpoints, request/response model of the Movie Administration API. This API provides REST resources to manage project movies of Movies application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```  https://movieapp.com/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Movies Application.\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Movies Application reserves the right to add new parameters without further notice (in request and response).\n  * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Movies Application reserves the right to enhance enumerations by new values.\n  * Movies Application reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nMovie Administration APIs can only be called by authorized users who has rights with required permissions to manage movies. These APIs can be used to create new movie, modify an existing movie, map artists to the movie, mark movie as release, map theatres and shows.\n## Release Notes\n### 1.0.0\n* Initial version\n"
   },
   "host": "movieapp.com",
   "schemes": [
@@ -26,9 +26,7 @@
         ],
         "security": [
           {
-            "Authorization": [
-
-            ]
+            "Authorization": []
           }
         ],
         "summary": "Movie Administration - Create new Movie",
@@ -55,7 +53,7 @@
         ],
         "responses": {
           "201": {
-            "description": "CREATED - Movie has been created successfully",
+            "description": "CREATED - Movie has been created successfully in PUBLISHED status",
             "headers": {
               "request-id": {
                 "type": "string",
@@ -127,9 +125,7 @@
         ],
         "security": [
           {
-            "Authorization": [
-
-            ]
+            "Authorization": []
           }
         ],
         "summary": "Movie Administration - Get all Movies",
@@ -248,9 +244,7 @@
         ],
         "security": [
           {
-            "Authorization": [
-
-            ]
+            "Authorization": []
           }
         ],
         "summary": "Movie Administration - Get an existing Movie",
@@ -333,9 +327,7 @@
         ],
         "security": [
           {
-            "Authorization": [
-
-            ]
+            "Authorization": []
           }
         ],
         "summary": "Movie Administration - Update an existing Movie",
@@ -436,9 +428,7 @@
         ],
         "security": [
           {
-            "Authorization": [
-
-            ]
+            "Authorization": []
           }
         ],
         "summary": "Movie Administration - Partial update of an existing Movie",
@@ -536,9 +526,7 @@
         ],
         "security": [
           {
-            "Authorization": [
-
-            ]
+            "Authorization": []
           }
         ],
         "summary": "Movie Administration - Mark an existing Movie as DELETED",
@@ -617,9 +605,7 @@
         ],
         "security": [
           {
-            "Authorization": [
-
-            ]
+            "Authorization": []
           }
         ],
         "summary": "Movie Administration - List of artists belonging to the Movie",
@@ -695,9 +681,7 @@
         ],
         "security": [
           {
-            "Authorization": [
-
-            ]
+            "Authorization": []
           }
         ],
         "summary": "Movie Administration - Get an existing project details of the Movie",
@@ -865,9 +849,9 @@
             "poster_url": "www.samplemovie.com/poster",
             "trailer_url": "www.samplemovie.com/trailer",
             "wiki_url": "www.wikipedia.com/samplemovie",
-            "release_date": "2018-07-07",
+            "release_date": "2018-07-07T00:00:00.000Z",
             "censor_board_rating": "U",
-            "critics_rating": 4.0,
+            "critics_rating": 4,
             "status": "RELEASED"
           },
           {
@@ -881,9 +865,9 @@
             "poster_url": "www.anothersamplemovie.com/poster",
             "trailer_url": "www.anothersamplemovie.com/trailer",
             "wiki_url": "www.wikipedia.com/anothersamplemovie",
-            "release_date": "2018-08-07",
+            "release_date": "2018-08-07T00:00:00.000Z",
             "censor_board_rating": "U",
-            "critics_rating": 3.0,
+            "critics_rating": 3,
             "status": "PUBLISHED"
           }
         ]
@@ -975,9 +959,9 @@
         "poster_url": "www.samplemovie.com/poster",
         "trailer_url": "www.samplemovie.com/trailer",
         "wiki_url": "www.wikipedia.com/samplemovie",
-        "release_date": "2018-07-07",
+        "release_date": "2018-07-07T00:00:00.000Z",
         "censor_board_rating": "U",
-        "critics_rating": 4.0,
+        "critics_rating": 4,
         "status": "RELEASED"
       }
     },
@@ -1063,12 +1047,6 @@
           "type": "number",
           "format": "float",
           "description": "Critics Rating of the movie"
-        },
-        "artists": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
         }
       },
       "required": [
@@ -1094,9 +1072,9 @@
         "poster_url": "www.samplemovie.com/poster",
         "trailer_url": "www.samplemovie.com/trailer",
         "wiki_url": "www.wikipedia.com/samplemovie",
-        "release_date": "2018-07-07",
+        "release_date": "2018-07-07T00:00:00.000Z",
         "censor_board_rating": "U",
-        "critics_rating": 4.0,
+        "critics_rating": 4,
         "artists": [
           "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
           "8d174a25-ca31-55a8-95b4-c06ffc9d5f8d"
@@ -1170,11 +1148,8 @@
           "format": "float",
           "description": "Updated critics Rating of the movie"
         },
-        "artists": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "status": {
+          "$ref": "#/definitions/MovieStatusType"
         }
       },
       "example": {
@@ -1187,9 +1162,9 @@
         "poster_url": "www.samplemovie.com/poster",
         "trailer_url": "www.samplemovie.com/trailer",
         "wiki_url": "www.wikipedia.com/samplemovie",
-        "release_date": "2018-08-07",
+        "release_date": "2018-08-07T00:00:00.000Z",
         "censor_board_rating": "U",
-        "critics_rating": 3.0,
+        "critics_rating": 3,
         "artists": [
           "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
           "8d174a25-ca31-55a8-95b4-c06ffc9d5f8d"

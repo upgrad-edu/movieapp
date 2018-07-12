@@ -83,7 +83,7 @@ public class MovieEntity extends MutableEntity implements Identifier<Integer>, U
 
     @Column(name = "OFFICIAL_WEBSITE_URL")
     @Size(max = 2000)
-    private String offocialWebsiteUrl;
+    private String websiteUrl;
 
     @Column(name = "WIKI_URL")
     @Size(max = 2000)
@@ -170,12 +170,12 @@ public class MovieEntity extends MutableEntity implements Identifier<Integer>, U
         this.trailerUrl = trailerUrl;
     }
 
-    public String getOffocialWebsiteUrl() {
-        return offocialWebsiteUrl;
+    public String getWebsiteUrl() {
+        return websiteUrl;
     }
 
-    public void setOffocialWebsiteUrl(String offocialWebsiteUrl) {
-        this.offocialWebsiteUrl = offocialWebsiteUrl;
+    public void setWebsiteUrl(String websiteUrl) {
+        this.websiteUrl = websiteUrl;
     }
 
     public String getWikiUrl() {

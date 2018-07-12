@@ -79,7 +79,7 @@ paths:
             $ref: '#/definitions/CreateMovieRequest'
       responses:
         '201':
-          description: CREATED - Movie has been created successfully
+          description: CREATED - Movie has been created successfully in PUBLISHED status
           headers:
             request-id:
               type: string
@@ -845,10 +845,6 @@ definitions:
         type: number
         format: float
         description: Critics Rating of the movie
-      artists:
-        type: array
-        items:
-          type: string
 
     required:
       - title
@@ -929,10 +925,8 @@ definitions:
         type: number
         format: float
         description: Updated critics Rating of the movie
-      artists:
-        type: array
-        items:
-          type: string
+      status:
+        $ref: '#/definitions/MovieStatusType'
 
     example:
       title: Sample Movie Updated

@@ -94,20 +94,20 @@ public class UserAdminController {
     }
 
     @RequestMapping(method = RequestMethod.PATCH, path = "/users/{id}", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity patchBoard(@RequestHeader("authorization") String accessToken,
-                                     @PathVariable("id") final String boardUuid,
+    public ResponseEntity patchUser(@RequestHeader("authorization") String accessToken,
+                                     @PathVariable("id") final String userUuid,
                                      @RequestBody final UserOperationsRequest userOperationsRequest) throws ApplicationException {
 
         for (UserOperationRequest userOperationRequest : userOperationsRequest) {
-            userService.changeUserStatus(boardUuid, UserStatus.valueOf(toEnum(userOperationRequest.getValue()).name()));
+            userService.changeUserStatus(userUuid, UserStatus.valueOf(toEnum(userOperationRequest.getValue()).name()));
         }
 
         return ResponseBuilder.ok().build();
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/users/{id}")
-    public ResponseEntity deleteBoard(@RequestHeader("authorization") String accessToken,
-                                      @PathVariable("id") final String userUuid) throws ApplicationException {
+    public ResponseEntity deleteUser(@RequestHeader("authorization") String accessToken,
+                                     @PathVariable("id") final String userUuid) throws ApplicationException {
         userService.deleteUser(userUuid);
         return ResponseBuilder.ok().build();
     }
