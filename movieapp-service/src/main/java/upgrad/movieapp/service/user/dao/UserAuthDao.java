@@ -7,6 +7,7 @@
  */
 package upgrad.movieapp.service.user.dao;
 
+import java.time.ZonedDateTime;
 import javax.validation.constraints.NotNull;
 
 import upgrad.movieapp.service.common.dao.BaseDao;
@@ -19,6 +20,6 @@ public interface UserAuthDao extends BaseDao<UserAuthTokenEntity> {
 
     UserAuthTokenEntity findToken(@NotNull String accessToken);
 
-    UserAuthTokenEntity findByUser(@NotNull long userId);
+    UserAuthTokenEntity findActiveTokenByUser(@NotNull long userId, @NotNull ZonedDateTime currentAt);
 
 }

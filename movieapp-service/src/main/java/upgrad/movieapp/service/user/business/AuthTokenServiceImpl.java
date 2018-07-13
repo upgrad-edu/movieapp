@@ -14,14 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import upgrad.movieapp.service.common.data.DateTimeProvider;
 import upgrad.movieapp.service.common.exception.AuthorizationFailedException;
+import upgrad.movieapp.service.user.dao.UserAuthDao;
 import upgrad.movieapp.service.user.dao.UserDao;
 import upgrad.movieapp.service.user.entity.UserAuthTokenEntity;
 import upgrad.movieapp.service.user.entity.UserEntity;
 import upgrad.movieapp.service.user.exception.UserErrorCode;
-import upgrad.movieapp.service.user.model.LogoutAction;
 import upgrad.movieapp.service.user.provider.token.JwtTokenProvider;
-import upgrad.movieapp.service.user.dao.UserAuthDao;
 
 /**
  * Implementation of {@link AuthTokenService}.
@@ -40,17 +40,16 @@ public class AuthTokenServiceImpl implements AuthTokenService {
     @Transactional(propagation = Propagation.MANDATORY)
     public UserAuthTokenEntity issueToken(final UserEntity userEntity) {
 
-        final UserAuthTokenEntity userAuthToken = userAuthDao.findByUser(userEntity.getId());
+        final ZonedDateTime now = DateTimeProvider.currentProgramTime();
+
+        final UserAuthTokenEntity userAuthToken = userAuthDao.findActiveTokenByUser(userEntity.getId(), now);
         final UserAuthTokenVerifier tokenVerifier = new UserAuthTokenVerifier(userAuthToken);
         if(tokenVerifier.isActive()) {
             return userAuthToken;
         }
 
         final JwtTokenProvider tokenProvider = new JwtTokenProvider(userEntity.getPassword());
-
-        final ZonedDateTime now = ZonedDateTime.now();
         final ZonedDateTime expiresAt = now.plusHours(8);
-
         final String authToken = tokenProvider.generateToken(userEntity.getUuid(), now, expiresAt);
 
         final UserAuthTokenEntity authTokenEntity = new UserAuthTokenEntity();
@@ -80,8 +79,7 @@ public class AuthTokenServiceImpl implements AuthTokenService {
             throw new AuthorizationFailedException(UserErrorCode.USR_006);
         }
 
-        userAuthToken.setLogoutAt(ZonedDateTime.now());
-        userAuthToken.setLogoutAction(LogoutAction.USER.getCode());
+        userAuthToken.setLogoutAt(DateTimeProvider.currentProgramTime());
         userAuthDao.update(userAuthToken);
     }
 

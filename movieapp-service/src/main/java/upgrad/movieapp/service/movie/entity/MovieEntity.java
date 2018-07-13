@@ -4,8 +4,12 @@ import static upgrad.movieapp.service.common.entity.Entity.SCHEMA;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,6 +21,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -31,10 +37,14 @@ import upgrad.movieapp.service.common.entity.ext.EntityHashCodeBuilder;
 @Entity
 @Table(name = "MOVIES", schema = SCHEMA)
 @NamedQueries({
-        @NamedQuery(name = MovieEntity.COUNT_BY_ALL, query = "select count(m.id) from MovieEntity m"),
-        @NamedQuery(name = MovieEntity.BY_ALL, query = "select m from MovieEntity m"),
-        @NamedQuery(name = MovieEntity.COUNT_BY_STATUS, query = "select count(m.id) from MovieEntity m where m.status = :status"),
-        @NamedQuery(name = MovieEntity.BY_STATUS, query = "select m from MovieEntity m where m.status = :status")
+        @NamedQuery(name = MovieEntity.COUNT_BY_ALL, query = "SELECT count(m.id) FROM MovieEntity m"),
+        @NamedQuery(name = MovieEntity.BY_ALL, query = "SELECT m FROM MovieEntity m"),
+        @NamedQuery(name = MovieEntity.COUNT_BY_STATUS, query = "SELECT count(m.id) FROM MovieEntity m WHERE m.status IN (:status)"),
+        @NamedQuery(name = MovieEntity.BY_STATUS, query = "SELECT m FROM MovieEntity m WHERE m.status IN (:status)"),
+        @NamedQuery(name = MovieEntity.COUNT_BY_RELEASE_AT, query = "SELECT count(m.id) FROM MovieEntity m WHERE m.releaseAt <= :releaseAt AND m.releaseAt >= :currentDate"),
+        @NamedQuery(name = MovieEntity.BY_RELEASE_AT, query = "SELECT m FROM MovieEntity m WHERE m.releaseAt <= :releaseAt AND m.releaseAt >= :currentDate"),
+        @NamedQuery(name = MovieEntity.COUNT_BY_STATUS_AND_RELEASE_AT, query = "SELECT count(m.id) FROM MovieEntity m WHERE m.status = :status AND m.releaseAt <= :releaseAt AND m.releaseAt >= :currentAt"),
+        @NamedQuery(name = MovieEntity.BY_STATUS_AND_RELEASE_AT, query = "SELECT m FROM MovieEntity m WHERE m.status = :status AND m.releaseAt <= :releaseAt AND m.releaseAt >= :currentAt")
 })
 public class MovieEntity extends MutableEntity implements Identifier<Integer>, UniversalUniqueIdentifier<String>, Serializable {
 
@@ -42,6 +52,10 @@ public class MovieEntity extends MutableEntity implements Identifier<Integer>, U
     public static final String BY_ALL = "MovieEntity.byAll";
     public static final String COUNT_BY_STATUS = "MovieEntity.countByStatus";
     public static final String BY_STATUS = "MovieEntity.byStatus";
+    public static final String COUNT_BY_RELEASE_AT = "MovieEntity.countByReleaseAt";
+    public static final String BY_RELEASE_AT = "MovieEntity.byReleaseAt";
+    public static final String COUNT_BY_STATUS_AND_RELEASE_AT = "MovieEntity.countByStatusAndReleaseAt";
+    public static final String BY_STATUS_AND_RELEASE_AT = "MovieEntity.byStatusAndReleaseAt";
 
     @Id
     @Column(name = "ID")
@@ -56,11 +70,6 @@ public class MovieEntity extends MutableEntity implements Identifier<Integer>, U
     @NotNull
     @Size(max = 100)
     private String title;
-
-    @Column(name = "GENRES")
-    @NotNull
-    @Size(max = 2000)
-    private String genres;
 
     @Column(name = "DURATION")
     @NotNull
@@ -97,20 +106,30 @@ public class MovieEntity extends MutableEntity implements Identifier<Integer>, U
     private String censorBoardRating;
 
     @Column(name = "CRITICS_RATING")
-    @Size(max = 3)
+    @Digits(integer = 2, fraction = 2)
     private Float criticsRating;
 
     @Column(name = "USERS_RATING")
-    @Size(max = 3)
+    @Digits(integer = 2, fraction = 2)
     private Float usersRating;
 
     @Column(name = "STATUS")
-    @Size(max = 3)
+    @Size(max = 30)
     private String status;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL})
     @JoinColumn(name = "MOVIE_ID")
-    private List<MovieArtistEntity> artists;
+    private List<MovieGenreEntity> genres = new ArrayList<>();
+
+    @OneToMany(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "MOVIE_ID")
+    private List<MovieArtistEntity> artists = new ArrayList<>();
+
+    @Transient
+    private final Set<String> genreUuids = new HashSet<>();
+
+    @Transient
+    private final Set<String> artistUuids = new HashSet<>();
 
     @Override
     public Integer getId() {
@@ -128,14 +147,6 @@ public class MovieEntity extends MutableEntity implements Identifier<Integer>, U
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getGenres() {
-        return genres;
-    }
-
-    public void setGenres(String genres) {
-        this.genres = genres;
     }
 
     public Integer getDuration() {
@@ -226,12 +237,28 @@ public class MovieEntity extends MutableEntity implements Identifier<Integer>, U
         this.status = status;
     }
 
+    public List<MovieGenreEntity> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(List<MovieGenreEntity> genres) {
+        this.genres = genres;
+    }
+
     public List<MovieArtistEntity> getArtists() {
         return artists;
     }
 
     public void setArtists(List<MovieArtistEntity> artists) {
         this.artists = artists;
+    }
+
+    public Set<String> getArtistUuids() {
+        return artistUuids;
+    }
+
+    public Set<String> getGenreUuids() {
+        return genreUuids;
     }
 
     @Override
@@ -253,6 +280,28 @@ public class MovieEntity extends MutableEntity implements Identifier<Integer>, U
     public void prePersist() {
         this.uuid = UUID.randomUUID().toString();
         super.prePersist();
+    }
+
+    public void addGenre(final GenreEntity genreEntity) {
+        final MovieGenreEntity movieGenreEntity = new MovieGenreEntity();
+        movieGenreEntity.setMovie(this);
+        movieGenreEntity.setGenre(genreEntity);
+        genres.add(movieGenreEntity);
+    }
+
+    public void addArtist(final ArtistEntity artistEntity) {
+        final MovieArtistEntity movieArtistEntity = new MovieArtistEntity();
+        movieArtistEntity.setMovie(this);
+        movieArtistEntity.setArtist(artistEntity);
+        artists.add(movieArtistEntity);
+    }
+
+    public void addGenreUuid(final String genreUuid) {
+        genreUuids.add(genreUuid);
+    }
+
+    public void addArtistUuid(final String artistUuid) {
+        artistUuids.add(artistUuid);
     }
 
 }

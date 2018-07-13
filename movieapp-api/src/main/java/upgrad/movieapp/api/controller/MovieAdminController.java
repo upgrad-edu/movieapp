@@ -2,10 +2,14 @@ package upgrad.movieapp.api.controller;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static upgrad.movieapp.api.controller.transformer.ArtistTransformer.toArtistType;
+import static upgrad.movieapp.api.controller.transformer.ArtistTransformer.toArtistsSummaryResponse;
 import static upgrad.movieapp.api.controller.transformer.MovieTransformer.*;
 import static upgrad.movieapp.api.data.ResourceConstants.BASE_ADMIN_URL;
 import static upgrad.movieapp.api.model.MovieOperationRequest.PathEnum.RELEASE_DATE;
 import static upgrad.movieapp.api.model.MovieOperationRequest.PathEnum.STATUS;
+
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import upgrad.movieapp.api.controller.ext.ResponseBuilder;
 import upgrad.movieapp.api.exception.RestException;
+import upgrad.movieapp.api.model.ArtistsSummaryResponse;
 import upgrad.movieapp.api.model.CreateMovieRequest;
 import upgrad.movieapp.api.model.CreateMovieResponse;
 import upgrad.movieapp.api.model.MovieOperationRequest;
@@ -30,7 +35,9 @@ import upgrad.movieapp.api.model.UserDetailsResponse;
 import upgrad.movieapp.service.common.data.DateTimeProvider;
 import upgrad.movieapp.service.common.exception.ApplicationException;
 import upgrad.movieapp.service.common.model.SearchResult;
+import upgrad.movieapp.service.movie.business.ArtistService;
 import upgrad.movieapp.service.movie.business.MovieService;
+import upgrad.movieapp.service.movie.entity.ArtistEntity;
 import upgrad.movieapp.service.movie.entity.MovieEntity;
 import upgrad.movieapp.service.movie.exception.MovieErrorCode;
 import upgrad.movieapp.service.movie.model.MovieStatus;
@@ -41,6 +48,9 @@ public class MovieAdminController {
 
     @Autowired
     private MovieService movieService;
+
+    @Autowired
+    private ArtistService artistService;
 
 
     @RequestMapping(method = GET, path = "/movies", produces = APPLICATION_JSON_UTF8_VALUE)
@@ -68,7 +78,7 @@ public class MovieAdminController {
     }
 
     @RequestMapping(method = POST, path = "/movies", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<CreateMovieResponse> createMove(@RequestHeader("authorization") String accessToken,
+    public ResponseEntity<CreateMovieResponse> createMovie(@RequestHeader("authorization") String accessToken,
                                                           @RequestBody final CreateMovieRequest newMovieRequest) throws ApplicationException {
 
         final MovieEntity newMovie = toEntity(newMovieRequest);
@@ -107,6 +117,35 @@ public class MovieAdminController {
                                      @PathVariable("id") final String movieUuid) throws ApplicationException {
         movieService.deleteMovie(movieUuid);
         return ResponseBuilder.ok().build();
+    }
+
+    @RequestMapping(method = POST, path = "/movies/{movieId}/artists", produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity addMovieArtists(@RequestHeader("authorization") String accessToken,
+                                          @PathVariable("movieId") final String movieUuid,
+                                          @RequestBody final Set<String> artistUuids)
+            throws ApplicationException {
+
+        SearchResult<ArtistEntity> movieArtists = artistService.findArtists(movieUuid);
+        return ResponseBuilder.ok().build();
+    }
+
+    @RequestMapping(method = GET, path = "/movies/{movieId}/artists", produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<ArtistsSummaryResponse> getMovieArtists(@RequestHeader("authorization") String accessToken,
+                                                                  @PathVariable("movieId") final String movieUuid)
+            throws ApplicationException {
+
+        SearchResult<ArtistEntity> movieArtists = artistService.findArtists(movieUuid);
+        return ResponseBuilder.ok().payload(toArtistsSummaryResponse(1, -1, movieArtists)).build();
+    }
+
+    @RequestMapping(method = GET, path = "/movies/{movieId}/artists/{artistId}", produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<ArtistsSummaryResponse> getMovieArtistDetails(@RequestHeader("authorization") String accessToken,
+                                                                        @PathVariable("movieId") final String movieUuid,
+                                                                        @PathVariable("artistId") final String artistUuid)
+            throws ApplicationException {
+
+        ArtistEntity movieArtist = artistService.findArtist(movieUuid, artistUuid);
+        return ResponseBuilder.ok().payload(toArtistType(movieArtist)).build();
     }
 
     private MovieStatus toMovieStatus(final String status) {

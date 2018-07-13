@@ -30,3 +30,23 @@ INSERT INTO movieapp.ROLE_PERMISSIONS (ROLE_ID, PERMISSION_ID, CREATED_BY)
 		(1,1, CURRENT_USER), (1,2, CURRENT_USER), (1,3, CURRENT_USER), (1,4, CURRENT_USER), (1,5, CURRENT_USER), (1,6, CURRENT_USER);
 
 -- ********** End of Roles and Permissions setup **********
+
+-- ********** Begin of GENRES setup **********
+INSERT INTO movieapp.GENRES (ID, UUID, GENRE, DESCRIPTION, CREATED_BY)
+            VALUES
+		    (nextval('movieapp.genres_id_seq'), '1d174a25-ba31-45a8-85b4-b06ffc9d5f8f', 'Drama', 'Drama', CURRENT_USER),
+		    (nextval('movieapp.genres_id_seq'), '2d174a25-ba31-45a8-85b4-b06ffc9d5f8f', 'Romance', 'Romance', CURRENT_USER),
+		    (nextval('movieapp.genres_id_seq'), '3d174a25-ba31-45a8-85b4-b06ffc9d5f8f', 'Horror', 'Horror', CURRENT_USER),
+		    (nextval('movieapp.genres_id_seq'), '4d174a25-ba31-45a8-85b4-b06ffc9d5f8f', 'Action', 'Action', CURRENT_USER),
+		    (nextval('movieapp.genres_id_seq'), '5d174a25-ba31-45a8-85b4-b06ffc9d5f8f', 'Animation', 'Animation', CURRENT_USER),
+		    (nextval('movieapp.genres_id_seq'), '6d174a25-ba31-45a8-85b4-b06ffc9d5f8f', 'Thriller', 'Thriller', CURRENT_USER),
+		    (nextval('movieapp.genres_id_seq'), '7d174a25-ba31-45a8-85b4-b06ffc9d5f8f', 'Political', 'Political', CURRENT_USER),
+		    (nextval('movieapp.genres_id_seq'), '8d174a25-ba31-45a8-85b4-b06ffc9d5f8f', 'Social', 'Social', CURRENT_USER),
+		    (nextval('movieapp.genres_id_seq'), '9d174a25-ba31-45a8-85b4-b06ffc9d5f8f', 'Fantasy', 'Fantasy', CURRENT_USER),
+		    (nextval('movieapp.genres_id_seq'), 'aa174a25-ba31-45a8-85b4-b06ffc9d5f8f', 'Satire', 'Satire', CURRENT_USER),
+		    (nextval('movieapp.genres_id_seq'), 'bb174a25-ba31-45a8-85b4-b06ffc9d5f8f', 'Adventure', 'Adventure', CURRENT_USER),
+		    (nextval('movieapp.genres_id_seq'), 'cc174a25-ba31-45a8-85b4-b06ffc9d5f8f', 'Comedy', 'Comedy', CURRENT_USER),
+		    (nextval('movieapp.genres_id_seq'), 'dd174a25-ba31-45a8-85b4-b06ffc9d5f8f', 'Scifi', 'Science Fiction', CURRENT_USER),
+		    (nextval('movieapp.genres_id_seq'), 'ee174a25-ba31-45a8-85b4-b06ffc9d5f8f', 'Historical', 'Historical', CURRENT_USER);
+
+-- ********** End of GENRES setup **********

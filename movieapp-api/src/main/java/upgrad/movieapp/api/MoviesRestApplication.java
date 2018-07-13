@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 import upgrad.movieapp.api.config.ApiConfiguration;
 import upgrad.movieapp.api.config.WebConfiguration;
-import upgrad.movieapp.service.ServiceConfiguration;
+import upgrad.movieapp.service.config.ServiceConfiguration;
 
 @SpringBootApplication
 @Import({ApiConfiguration.class, WebConfiguration.class, ServiceConfiguration.class})

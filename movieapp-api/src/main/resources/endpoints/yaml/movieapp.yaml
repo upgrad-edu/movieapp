@@ -580,6 +580,11 @@ definitions:
     enum: [DIRECTOR, PRODUCER, ACTOR, CINEMATOGRAPHER, MUSICIAN, STUNTMAN]
     description: Status of the task
 
+  ArtistStatusType:
+    type: string
+    enum: [ACTIVE, INACTIVE]
+    description: Status of an artist
+
   CensorBoardRatingType:
     type: string
     enum: [U,A,UA]

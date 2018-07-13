@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 import upgrad.movieapp.api.model.CensorBoardRatingType;
 import upgrad.movieapp.api.model.CreateMovieRequest;
@@ -32,7 +31,7 @@ public final class MovieTransformer {
     public static MovieSummaryType toMovieSummary(MovieEntity movieEntity) {
         final MovieSummaryType movieSummaryType = new MovieSummaryType().id(UUID.fromString(movieEntity.getUuid()))
                 .title(movieEntity.getTitle())
-                .genres(toGenres(movieEntity.getGenres()))
+                .genres(toGenres(movieEntity))
                 .duration(movieEntity.getDuration())
                 .storyline(movieEntity.getStoryline())
                 .posterUrl(movieEntity.getPosterUrl())
@@ -52,50 +51,51 @@ public final class MovieTransformer {
         MovieEntity movieEntity = new MovieEntity();
         movieEntity.setTitle(movieRequest.getTitle());
 
-        final List<String> genreList = movieRequest.getGenres();
-        final String genres = CollectionUtils.isEmpty(genreList) ? "-" : genreList.size() == 1 ? genreList.get(0) : StringUtils.join(genreList, ",");
-        movieEntity.setGenres(genres);
+        addGenres(movieEntity, movieRequest.getGenres());
 
         movieEntity.setStoryline(movieRequest.getStoryline());
         movieEntity.setPosterUrl(movieRequest.getPosterUrl());
         movieEntity.setTrailerUrl(movieRequest.getTrailerUrl());
         movieEntity.setWikiUrl(movieRequest.getWikiUrl());
-        if(movieRequest.getCensorBoardRating() != null) {
+        if (movieRequest.getCensorBoardRating() != null) {
             movieEntity.setCensorBoardRating(movieRequest.getCensorBoardRating().name());
         }
         movieEntity.setCriticsRating(movieRequest.getCriticsRating());
         movieEntity.setDuration(movieRequest.getDuration());
-        if(movieRequest.getReleaseDate() != null) {
+        if (movieRequest.getReleaseDate() != null) {
             movieEntity.setReleaseAt(DateTimeProvider.parse(movieRequest.getReleaseDate()));
         }
+
+        addArtists(movieEntity, movieRequest.getArtists());
 
         return movieEntity;
     }
 
     public static MovieEntity toEntity(UpdateMovieRequest movieRequest) {
-        MovieEntity movieEntity = new MovieEntity();
+
+        final MovieEntity movieEntity = new MovieEntity();
         movieEntity.setTitle(movieRequest.getTitle());
 
-        final List<String> genreList = movieRequest.getGenres();
-        final String genres = CollectionUtils.isEmpty(genreList) ? "-" : genreList.size() == 1 ? genreList.get(0) : StringUtils.join(genreList, ",");
-        movieEntity.setGenres(genres);
+        addGenres(movieEntity, movieRequest.getGenres());
 
         movieEntity.setStoryline(movieRequest.getStoryline());
         movieEntity.setPosterUrl(movieRequest.getPosterUrl());
         movieEntity.setTrailerUrl(movieRequest.getTrailerUrl());
         movieEntity.setWikiUrl(movieRequest.getWikiUrl());
-        if(movieRequest.getCensorBoardRating() != null) {
+        if (movieRequest.getCensorBoardRating() != null) {
             movieEntity.setCensorBoardRating(movieRequest.getCensorBoardRating().name());
         }
         movieEntity.setCriticsRating(movieRequest.getCriticsRating());
         movieEntity.setDuration(movieRequest.getDuration());
-        if(movieRequest.getReleaseDate() != null) {
+        if (movieRequest.getReleaseDate() != null) {
             movieEntity.setReleaseAt(DateTimeProvider.parse(movieRequest.getReleaseDate()));
         }
 
-        if(movieRequest.getStatus() != null) {
+        if (movieRequest.getStatus() != null) {
             movieEntity.setStatus(movieRequest.getStatus().name());
         }
+
+        addArtists(movieEntity, movieRequest.getArtists());
 
         return movieEntity;
     }
@@ -112,15 +112,28 @@ public final class MovieTransformer {
         return CensorBoardRatingType.valueOf(censorBoardRating);
     }
 
-    private static List<String> toGenres(final String genres) {
-        final List<String> splitGenreList = new ArrayList<>();
-        final String[] splitGenres = genres.split(",");
-        if (splitGenres != null && splitGenres.length > 0) {
-            for (String genre : splitGenres) {
-                splitGenreList.add(genre);
-            }
+    private static List<String> toGenres(final MovieEntity movieEntity) {
+        final List<String> genres = new ArrayList<>();
+        movieEntity.getGenres().forEach(movieGenreEntity -> {
+            genres.add(movieGenreEntity.getGenre().getGenre());
+        });
+        return genres;
+    }
+
+    private static void addGenres(final MovieEntity movieEntity, final List<String> genres) {
+        if (!CollectionUtils.isEmpty(genres)) {
+            genres.forEach(genreUuid -> {
+                movieEntity.addGenreUuid(genreUuid);
+            });
         }
-        return splitGenreList;
+    }
+
+    private static void addArtists(final MovieEntity movieEntity, final List<String> artists) {
+        if (!CollectionUtils.isEmpty(artists)) {
+            artists.forEach(artistUuid -> {
+                movieEntity.addArtistUuid(artistUuid);
+            });
+        }
     }
 
 }

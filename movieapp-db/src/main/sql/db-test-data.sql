@@ -5,7 +5,7 @@
 -- Version: 1.0
 -- Author: Thribhuvan Krishnamurthy
 
--- ********** Begin of Users setup **********
+-- ********** Begin of USERS setup **********
 
 INSERT INTO movieapp.USERS (ID, ROLE_ID, UUID, EMAIL, PASSWORD, SALT, FIRST_NAME, LAST_NAME,
 					MOBILE_PHONE, STATUS, FAILED_LOGIN_COUNT, LAST_PASSWORD_CHANGE_AT, CREATED_BY)
@@ -14,11 +14,11 @@ INSERT INTO movieapp.USERS (ID, ROLE_ID, UUID, EMAIL, PASSWORD, SALT, FIRST_NAME
 		'(111) 111-1111', 'ACTIVE', 0, CURRENT_TIMESTAMP, CURRENT_USER);
 
 		
--- ********** End of Users setup **********
+-- ********** End of USERS setup **********
 
--- ********** Begin of Movies setup **********
+-- ********** Begin of MOVIES setup **********
 
-INSERT INTO movieapp.MOVIES (ID, UUID, TITLE, GENRES, DURATION,
+INSERT INTO movieapp.MOVIES (ID, UUID, TITLE, DURATION,
                     STORYLINE,
                     POSTER_URL,
                     TRAILER_URL,
@@ -26,7 +26,7 @@ INSERT INTO movieapp.MOVIES (ID, UUID, TITLE, GENRES, DURATION,
                     RELEASE_AT,
                     STATUS, CENSOR_BOARD_RATING, CRITICS_RATING, CREATED_BY)
 		VALUES
-		(nextval('movieapp.movies_id_seq'), '7d174a25-ba31-45a8-85b4-b06ffc9d5f8f', 'Sanju', 'Drama', 162,
+		(nextval('movieapp.movies_id_seq'), '7d174a25-ba31-45a8-85b4-b06ffc9d5f8f', 'Sanju', 162,
 		'Coming from a family of cinematic legends, East Indian actor Sanjay Dutt reaches dizzying heights of success -- but also battles numerous addictions and other personal demons',
 		'https://upload.wikimedia.org/wikipedia/en/thumb/e/e5/Sanju_-_Theatrical_poster.jpg/220px-Sanju_-_Theatrical_poster.jpg',
 		'https://www.youtube.com/watch?v=1J76wN0TPI4',
@@ -34,7 +34,7 @@ INSERT INTO movieapp.MOVIES (ID, UUID, TITLE, GENRES, DURATION,
 		 date '2018-06-29',
 		'RELEASED', 'UA', 4.0, CURRENT_USER);
 
-INSERT INTO movieapp.MOVIES (ID, UUID, TITLE, GENRES, DURATION,
+INSERT INTO movieapp.MOVIES (ID, UUID, TITLE, DURATION,
                     STORYLINE,
                     POSTER_URL,
                     TRAILER_URL,
@@ -42,7 +42,7 @@ INSERT INTO movieapp.MOVIES (ID, UUID, TITLE, GENRES, DURATION,
                     RELEASE_AT,
                     STATUS, CENSOR_BOARD_RATING, CRITICS_RATING, CREATED_BY)
 		VALUES
-		(nextval('movieapp.movies_id_seq'), '8d174a25-ca31-55a8-95b4-c06ffc9d5f8f', 'Incredibles 2', 'Action,Adventure,Animation', 118,
+		(nextval('movieapp.movies_id_seq'), '8d174a25-ca31-55a8-95b4-c06ffc9d5f8f', 'Incredibles 2', 118,
 		'Helen is called on to lead a campaign to bring Supers back, while Bob navigates the day-to-day heroics of "normal" life at home with Violet, Dash, and baby Jack-Jack - whose superpowers are about to be discovered. Their mission is derailed, however, when a new villain emerges with a brilliant and dangerous plot that threatens everything. But the Parrs don''t shy away from a challenge, especially with Frozone by their side; that''s what makes this family so Incredible.',
 		'https://upload.wikimedia.org/wikipedia/en/2/27/The_Incredibles_2.jpg',
 		'https://www.youtube.com/watch?v=i5qOzqD9Rms',
@@ -50,9 +50,27 @@ INSERT INTO movieapp.MOVIES (ID, UUID, TITLE, GENRES, DURATION,
 		 date '2018-06-22',
 		'RELEASED', 'U', 4.0, CURRENT_USER);
 
--- ********** End of Movies setup **********
+-- ********** End of MOVIES setup **********
 
--- ********** Begin of Artists setup **********
+-- ********** Begin of MOVIE_GENRES setup **********
+INSERT INTO movieapp.MOVIE_GENRES (ID, MOVIE_ID, GENRE_ID, CREATED_BY)
+            VALUES
+		    (nextval('movieapp.movie_genres_id_seq'),
+            (select ID from movieapp.MOVIES where UUID = '7d174a25-ba31-45a8-85b4-b06ffc9d5f8f'),
+            (select ID from movieapp.GENRES where UUID = '1d174a25-ba31-45a8-85b4-b06ffc9d5f8f'), CURRENT_USER),
+            (nextval('movieapp.movie_genres_id_seq'),
+            (select ID from movieapp.MOVIES where UUID = '8d174a25-ca31-55a8-95b4-c06ffc9d5f8f'),
+            (select ID from movieapp.GENRES where UUID = '4d174a25-ba31-45a8-85b4-b06ffc9d5f8f'), CURRENT_USER),
+            (nextval('movieapp.movie_genres_id_seq'),
+            (select ID from movieapp.MOVIES where UUID = '8d174a25-ca31-55a8-95b4-c06ffc9d5f8f'),
+            (select ID from movieapp.GENRES where UUID = 'bb174a25-ba31-45a8-85b4-b06ffc9d5f8f'), CURRENT_USER),
+            (nextval('movieapp.movie_genres_id_seq'),
+            (select ID from movieapp.MOVIES where UUID = '8d174a25-ca31-55a8-95b4-c06ffc9d5f8f'),
+            (select ID from movieapp.GENRES where UUID = '5d174a25-ba31-45a8-85b4-b06ffc9d5f8f'), CURRENT_USER);
+
+-- ********** End of MOVIE_GENRES setup **********
+
+-- ********** Begin of ARTISTS setup **********
 
 INSERT INTO movieapp.ARTISTS (ID, UUID, FIRST_NAME, LAST_NAME, TYPE,
                     PROFILE_DESCRIPTION,
@@ -84,9 +102,9 @@ INSERT INTO movieapp.ARTISTS (ID, UUID, FIRST_NAME, LAST_NAME, TYPE,
 		'https://upload.wikimedia.org/wikipedia/commons/4/44/Rajkumar_Hirani_2014.jpg',
 		'https://en.wikipedia.org/wiki/Rajkumar_Hirani', CURRENT_USER);
 
--- ********** End of Artists setup **********
+-- ********** End of ARTISTS setup **********
 
--- ********** Begin of Movie_Artists setup **********
+-- ********** Begin of MOVIE_ARTISTS setup **********
 INSERT INTO movieapp.MOVIE_ARTISTS (ID, MOVIE_ID, ARTIST_ID, CREATED_BY)
             VALUES
 		    (nextval('movieapp.movie_artists_id_seq'),
@@ -99,4 +117,4 @@ INSERT INTO movieapp.MOVIE_ARTISTS (ID, MOVIE_ID, ARTIST_ID, CREATED_BY)
             (select ID from movieapp.MOVIES where UUID = '7d174a25-ba31-45a8-85b4-b06ffc9d5f8f'),
             (select ID from movieapp.ARTISTS where UUID = '9c174b25-cb31-66a8-98b4-d06ffc9d5f9f'), CURRENT_USER);
 
--- ********** End of Movie_Artists setup **********
+-- ********** End of MOVIE_ARTISTS setup **********

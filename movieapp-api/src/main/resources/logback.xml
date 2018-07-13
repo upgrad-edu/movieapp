@@ -11,10 +11,10 @@
 	</appender>
 
   	<appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<File>/work/upgrad/logs/proman-api.log</File>
+		<File>/work/upgrad/logs/movieapp-api.log</File>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 		    <!-- daily rollover -->
-			<FileNamePattern>proman-api.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<FileNamePattern>movieapp-api.%d{yyyy-MM-dd}.log</FileNamePattern>
 
 			<!-- keep 30 days' worth of history -->
 			<maxHistory>30</maxHistory>			
@@ -26,10 +26,10 @@
   	</appender>
   	
   	<appender name="errorRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<File>/work/upgrad/logs/proman-api-error.log</File>
+		<File>/work/upgrad/logs/movieapp-api-error.log</File>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 		    <!-- daily rollover -->
-			<FileNamePattern>proman-api-error.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<FileNamePattern>movieapp-api-error.%d{yyyy-MM-dd}.log</FileNamePattern>
 
 			<!-- keep 30 days' worth of history -->
 			<maxHistory>30</maxHistory>			
@@ -47,14 +47,14 @@
 		</filter>  
   	</appender>
 
-	<logger name="apps.proman" additivity="false">
+	<logger name="upgrad.movieapp" additivity="false">
 		<level value="DEBUG" />
 		<appender-ref ref="dailyRollingFileAppender"/>
 		<appender-ref ref="errorRollingFileAppender"/>
 		<appender-ref ref="consoleAppender" />
 	</logger>
 
-	<logger name="apps.proman" additivity="false">
+	<logger name="upgrad.movieapp" additivity="false">
 		<level value="ERROR" />
 		<appender-ref ref="errorRollingFileAppender"/>
 		<appender-ref ref="consoleAppender" />

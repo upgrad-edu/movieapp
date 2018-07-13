@@ -11,6 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
 import java.util.Date;
+import java.util.UUID;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -22,7 +23,7 @@ import upgrad.movieapp.service.common.exception.UnexpectedException;
  */
 public class JwtTokenProvider {
 
-    private static final String TOKEN_ISSUER = "https://proman.io";
+    private static final String TOKEN_ISSUER = "https://movieapp.com";
 
     private final Algorithm algorithm;
 
@@ -40,6 +41,7 @@ public class JwtTokenProvider {
         final Date expiresAt = new Date(expiresDateTime.getLong(ChronoField.INSTANT_SECONDS));
 
         return JWT.create().withIssuer(TOKEN_ISSUER) //
+                .withKeyId(UUID.randomUUID().toString())
                 .withAudience(userUuid) //
                 .withIssuedAt(issuedAt).withExpiresAt(expiresAt).sign(algorithm);
     }

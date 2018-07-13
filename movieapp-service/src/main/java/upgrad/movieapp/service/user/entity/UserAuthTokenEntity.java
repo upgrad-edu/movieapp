@@ -41,7 +41,7 @@ import upgrad.movieapp.service.common.entity.ext.EntityHashCodeBuilder;
         @NamedQuery(name = UserAuthTokenEntity.BY_ACCESS_TOKEN, //
                 query = "SELECT uat FROM UserAuthTokenEntity uat WHERE uat.accessToken = :accessToken"), //
         @NamedQuery(name = UserAuthTokenEntity.BY_USER, //
-                query = "SELECT uat FROM UserAuthTokenEntity uat WHERE uat.user.id = :userId"), //
+                query = "SELECT uat FROM UserAuthTokenEntity uat WHERE uat.user.id = :userId AND uat.logoutAt IS NULL AND uat.expiresAt > :currentAt"), //
 })
 public class UserAuthTokenEntity extends MutableEntity implements Identifier<Long>, Serializable {
 
@@ -61,12 +61,12 @@ public class UserAuthTokenEntity extends MutableEntity implements Identifier<Lon
     @JoinColumn(name = "USER_ID")
     private UserEntity user;
 
-     @Column(name = "ACCESS_TOKEN")
+    @Column(name = "ACCESS_TOKEN")
     @NotNull
     @Size(max = 500)
     private String accessToken;
 
-     @Column(name = "LOGIN_AT")
+    @Column(name = "LOGIN_AT")
     @NotNull
     private ZonedDateTime loginAt;
 
@@ -76,9 +76,6 @@ public class UserAuthTokenEntity extends MutableEntity implements Identifier<Lon
 
     @Column(name = "LOGOUT_AT")
     private ZonedDateTime logoutAt;
-
-    @Column(name = "LOGOUT_ACTION")
-    private int logoutAction;
 
     @Override
     public Long getId() {
@@ -123,14 +120,6 @@ public class UserAuthTokenEntity extends MutableEntity implements Identifier<Lon
 
     public void setLogoutAt(ZonedDateTime logoutTime) {
         this.logoutAt = logoutTime;
-    }
-
-    public int getLogoutAction() {
-        return logoutAction;
-    }
-
-    public void setLogoutAction(int logoutAction) {
-        this.logoutAction = logoutAction;
     }
 
     @Override

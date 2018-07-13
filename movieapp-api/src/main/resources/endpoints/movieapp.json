@@ -703,6 +703,14 @@
       ],
       "description": "Status of the task"
     },
+    "ArtistStatusType": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE"
+      ],
+      "description": "Status of an artist"
+    },
     "CensorBoardRatingType": {
       "type": "string",
       "enum": [

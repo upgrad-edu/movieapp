@@ -15,23 +15,17 @@ import upgrad.movieapp.service.common.exception.ErrorCode;
 /**
  * Error code for MOVIE module.
  */
-public enum MovieErrorCode implements ErrorCode {
+public enum ArtistErrorCode implements ErrorCode {
 
-    MVI_001("MVI-001", "Movie with identifier [{0}] does not exist"),
+    ART_001("ART-001", "Artist with identifier [{0}] does not exist"),
 
-    MVI_002("MVI-002", "Not a valid movie status. Supported statuses are [{0}]"),
-
-    MVI_003("MVI-003", "Release date must be in future"),
-
-    MVI_004("MVI-004", "Movie with identifier [{0}] cannot be updated as it is in DELETED status"),
-
-    MVI_005("MVI-005", "Genre with identifier [{0}] does not exist")
+    ART_002("ART-002", "Not a valid artist role. Supported roles are [{0}]"),
     ;
 
-    private static final Map<String, MovieErrorCode> LOOKUP = new HashMap<String, MovieErrorCode>();
+    private static final Map<String, ArtistErrorCode> LOOKUP = new HashMap<String, ArtistErrorCode>();
 
     static {
-        for (final MovieErrorCode enumeration : MovieErrorCode.values()) {
+        for (final ArtistErrorCode enumeration : ArtistErrorCode.values()) {
             LOOKUP.put(enumeration.getCode(), enumeration);
         }
     }
@@ -40,7 +34,7 @@ public enum MovieErrorCode implements ErrorCode {
 
     private final String defaultMessage;
 
-    private MovieErrorCode(final String code, final String defaultMessage) {
+    private ArtistErrorCode(final String code, final String defaultMessage) {
         this.code = code;
         this.defaultMessage = defaultMessage;
     }

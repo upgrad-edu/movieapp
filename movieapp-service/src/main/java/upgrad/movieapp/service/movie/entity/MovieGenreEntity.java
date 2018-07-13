@@ -10,21 +10,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import upgrad.movieapp.service.common.entity.Identifier;
 import upgrad.movieapp.service.common.entity.ImmutableEntity;
 
 @Entity
-@Table(name = "MOVIE_ARTISTS", schema = SCHEMA)
-@NamedQueries({
-        @NamedQuery(name = MovieArtistEntity.BY_MOVIE, query = "SELECT ma FROM MovieArtistEntity ma WHERE ma.movie.uuid = :movieUuid")
-})
-public class MovieArtistEntity extends ImmutableEntity implements Identifier<Integer>, Serializable {
-
-    public static final String BY_MOVIE = "MovieArtistEntity.byMovie";
+@Table(name = "MOVIE_GENRES", schema = SCHEMA)
+public class MovieGenreEntity extends ImmutableEntity implements Identifier<Integer>, Serializable {
 
     @Id
     @Column(name = "ID")
@@ -36,8 +29,8 @@ public class MovieArtistEntity extends ImmutableEntity implements Identifier<Int
     private MovieEntity movie;
 
     @ManyToOne
-    @JoinColumn(name = "ARTIST_ID")
-    private ArtistEntity artist;
+    @JoinColumn(name = "GENRE_ID")
+    private GenreEntity genre;
 
     @Override
     public Integer getId() {
@@ -53,12 +46,12 @@ public class MovieArtistEntity extends ImmutableEntity implements Identifier<Int
         this.movie = movie;
     }
 
-    public ArtistEntity getArtist() {
-        return artist;
+    public GenreEntity getGenre() {
+        return genre;
     }
 
-    public void setArtist(ArtistEntity artist) {
-        this.artist = artist;
+    public void setGenre(GenreEntity genre) {
+        this.genre = genre;
     }
 
 }

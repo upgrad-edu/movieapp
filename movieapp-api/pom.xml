@@ -171,6 +171,28 @@
                             </execution>
 
                             <execution>
+                                <id>genreadmin</id>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <inputSpec>${endpoints.dir}/genreadmin.json</inputSpec>
+                                    <language>${supported.language}</language>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>artistadmin</id>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <inputSpec>${endpoints.dir}/artistadmin.json</inputSpec>
+                                    <language>${supported.language}</language>
+                                </configuration>
+                            </execution>
+
+                            <execution>
                                 <id>movieadmin</id>
                                 <goals>
                                     <goal>generate</goal>

@@ -16,6 +16,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -28,13 +30,23 @@ import upgrad.movieapp.service.common.entity.MutableEntity;
 import upgrad.movieapp.service.common.entity.UniversalUniqueIdentifier;
 import upgrad.movieapp.service.common.entity.ext.EntityEqualsBuilder;
 import upgrad.movieapp.service.common.entity.ext.EntityHashCodeBuilder;
-import upgrad.movieapp.service.movie.model.ArtistRoleType;
 
 @Entity
 @Table(name = "ARTISTS", schema = SCHEMA)
+@NamedQueries({
+        @NamedQuery(name = ArtistEntity.COUNT_BY_ALL, query = "SELECT count(a.id) FROM ArtistEntity a"),
+        @NamedQuery(name = ArtistEntity.BY_ALL, query = "SELECT a FROM ArtistEntity a"),
+        @NamedQuery(name = ArtistEntity.COUNT_BY_TYPE, query = "SELECT count(a.id) FROM ArtistEntity a WHERE a.type IN (:types)"),
+        @NamedQuery(name = ArtistEntity.BY_TYPE, query = "SELECT a FROM ArtistEntity a WHERE a.type IN (:types)")
+})
 public class ArtistEntity extends MutableEntity implements Identifier<Long>, UniversalUniqueIdentifier<String>, Serializable {
 
     private static final long serialVersionUID = 7821286494206402080L;
+
+    public static final String COUNT_BY_ALL = "ArtistEntity.countByAll";
+    public static final String BY_ALL = "ArtistEntity.byAll";
+    public static final String COUNT_BY_TYPE = "ArtistEntity.countByType";
+    public static final String BY_TYPE = "ArtistEntity.byType";
 
     @Id
     @Column(name = "ID")
@@ -61,7 +73,7 @@ public class ArtistEntity extends MutableEntity implements Identifier<Long>, Uni
     private String type;
 
     @Column(name = "PROFILE_DESCRIPTION")
-    @Size(max = 500)
+    @Size(max = 2000)
     private String profileDescription;
 
     @Column(name = "PROFILE_PICTURE_URL")
@@ -71,6 +83,10 @@ public class ArtistEntity extends MutableEntity implements Identifier<Long>, Uni
     @Column(name = "WIKI_URL")
     @Size(max = 2000)
     private String wikiUrl;
+
+    @Column(name = "ACTIVE")
+    @NotNull
+    private boolean active;
 
     @Override
     public Long getId() {
@@ -128,6 +144,14 @@ public class ArtistEntity extends MutableEntity implements Identifier<Long>, Uni
 
     public void setWikiUrl(String wikiUrl) {
         this.wikiUrl = wikiUrl;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override
