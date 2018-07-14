@@ -49,7 +49,7 @@ public class BaseDaoImpl<E extends Entity> implements BaseDao<E> {
             final Class clazz = entityClass();
             return (E) entityManager.createQuery("SELECT e FROM " + clazz.getSimpleName()
                     + " e WHERE e.uuid = :uuid", clazz).setParameter("uuid", uuid).getSingleResult();
-        }catch(NoResultException exc) {
+        } catch (NoResultException exc) {
             return null;
         }
     }

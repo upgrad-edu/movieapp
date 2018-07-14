@@ -1,45 +1,35 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Genres Administration API",
+    "title": "Cities Data API",
     "version": "1.0.0",
-    "description": "## API of Genres Administration Services\n\nThis specification describes the endpoints, request/response model of the Genres Administration API. This API provides REST resources to manage genres of Movies application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```\n  https://movieapp.com/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Movies Application.\n\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Movies Application reserves the right to add new parameters without further notice (in request and response).\n  * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Movies Application reserves the right to enhance enumerations by new values.\n  * Movies Application reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nGenres Administration APIs can only be called by authorized users who has rights with required permissions to manage genres. These APIs can be used to list genres present in the database.\n## Release Notes \n### 1.0.0\n* Initial version\n"
+    "description": "## API of City Data Services\n\nThis specification describes the endpoints, request/response model of the Cities Data API. This API provides REST resources to manage cities of Movies application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```\n  https://movieapp.com/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Movies Application.\n\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Movies Application reserves the right to add new parameters without further notice (in request and response).\n  * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Movies Application reserves the right to enhance enumerations by new values.\n  * Movies Application reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nCities Data APIs can only be called by authorized users who has rights with required permissions to manage cities. These APIs can be used to list cities present in the database.\n## Release Notes \n### 1.0.0\n* Initial version\n"
   },
   "host": "movieapp.com",
   "schemes": [
     "http",
     "https"
   ],
-  "basePath": "/api/v1/admin/genres",
+  "basePath": "/api/v1/cities",
   "tags": [
     {
-      "name": "API#006 Genres",
-      "description": "All operations marked with 'API#006 Genres' are relevant to genre Administration use case"
+      "name": "API#007 Cities",
+      "description": "All operations marked with 'API#007 Cities' are relevant to city data use case"
     }
   ],
   "paths": {
     "/genres": {
       "get": {
-        "operationId": "getGenres",
+        "operationId": "getCities",
         "tags": [
-          "API#006 Genres"
+          "API#007 Cities"
         ],
-        "security": [
-          {
-            "Authorization": [
-
-            ]
-          }
-        ],
-        "summary": "Artist Administration - Get all genres",
-        "description": "API to get all genres of Movies application\n",
+        "summary": "City Data Services - Get all cities",
+        "description": "API to get all cities of Movies application\n",
         "produces": [
           "application/json"
         ],
         "parameters": [
-          {
-            "$ref": "#/parameters/Authorization"
-          },
           {
             "in": "query",
             "name": "page",
@@ -65,7 +55,7 @@
               }
             },
             "schema": {
-              "$ref": "#/definitions/GenresSummaryResponse"
+              "$ref": "#/definitions/CitiesSummaryResponse"
             }
           },
           "400": {
@@ -120,73 +110,51 @@
       }
     }
   },
-  "securityDefinitions": {
-    "Authorization": {
-      "type": "basic",
-      "description": "Bearer authentication (also called token authentication) is an HTTP authentication scheme that involves security tokens called bearer tokens. The name “Bearer authentication” can be understood as “give access to the bearer of this token.”\nThe bearer token is a cryptic string, usually generated by the server in response to a login request. The client must send this token in the Authorization header when making requests to protected resources:\n``` Authorization: Bearer <token>\n```\nSimilarly to Basic authentication, Bearer authentication should only be used over HTTPS (SSL).\nRead https://jwt.io/introduction/ for more information on JWT standard.\n"
-    }
-  },
-  "parameters": {
-    "Authorization": {
-      "name": "authorization",
-      "type": "string",
-      "in": "header",
-      "required": true,
-      "description": "Mandatory user credentials in bearer http authentication scheme format. Refer to the #/securityDefinitions for more information on this header."
-    }
-  },
   "definitions": {
-    "GenresSummaryResponse": {
+    "CitiesSummaryResponse": {
       "type": "object",
       "properties": {
         "total_count": {
           "type": "integer",
-          "description": "total number of genres present in the database"
+          "description": "total number of cities present in the database"
         },
-        "genres": {
+        "cities": {
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/GenreType"
+            "$ref": "#/definitions/CityType"
           },
-          "description": "List of genres"
+          "description": "List of cities"
         }
       },
       "required": [
         "total_count",
-        "genres"
+        "cities"
       ],
       "example": {
         "total_count": 2,
-        "genres": [
+        "cities": [
           {
-            "id": "1d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
-            "genre": "Drama",
-            "description": "Drama"
+            "code": "BLR",
+            "name": "Bengaluru"
           },
           {
-            "id": "2d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
-            "genre": "Romance",
-            "description": "Romance"
+            "code": "MUM",
+            "name": "Mumbai"
           }
         ]
       }
     },
-    "GenreType": {
+    "CityType": {
       "type": "object",
       "properties": {
-        "id": {
+        "code": {
           "type": "string",
-          "format": "uuid",
-          "description": "Unique identifier of the genre in a standard UUID format generated by API backend"
+          "description": "City code"
         },
-        "genre": {
+        "name": {
           "type": "string",
-          "description": "Title of the genre"
-        },
-        "description": {
-          "type": "string",
-          "description": "Description of the genre"
+          "description": "City name"
         }
       }
     },

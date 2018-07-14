@@ -1,0 +1,194 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Genres Data API",
+    "version": "1.0.0",
+    "description": "## API of Genres Data Services\n\nThis specification describes the endpoints, request/response model of the Genres API. This API provides REST resources to manage genres of Movies application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```\n  https://movieapp.com/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Movies Application.\n\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Movies Application reserves the right to add new parameters without further notice (in request and response).\n  * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Movies Application reserves the right to enhance enumerations by new values.\n  * Movies Application reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nGenres Data APIs can only be called by authorized users who has rights with required permissions to manage genres. These APIs can be used to list genres present in the database.\n## Release Notes \n### 1.0.0\n* Initial version\n"
+  },
+  "host": "movieapp.com",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "basePath": "/api/v1/genres",
+  "tags": [
+    {
+      "name": "API#006 Genres",
+      "description": "All operations marked with 'API#006 Genres' are relevant to genre data use case"
+    }
+  ],
+  "paths": {
+    "/genres": {
+      "get": {
+        "operationId": "getGenres",
+        "tags": [
+          "API#006 Genres"
+        ],
+        "summary": "Genre Data Services - Get all genres",
+        "description": "API to get all genres of Movies application\n",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "type": "integer",
+            "required": false,
+            "description": "query to set the position of the records to be fetched from"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "type": "integer",
+            "required": false,
+            "description": "query to limit the number of records per fetch"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - Fetched all genres",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/GenresSummaryResponse"
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST - server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, mandatory elements are missing)",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED - user has provided wrong credentials",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN - request has not been applied because client application has no permission to perform action",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR - server encountered an unexpected condition that prevented it from fulfilling the request.",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "GenresSummaryResponse": {
+      "type": "object",
+      "properties": {
+        "total_count": {
+          "type": "integer",
+          "description": "total number of genres present in the database"
+        },
+        "genres": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/GenreType"
+          },
+          "description": "List of genres"
+        }
+      },
+      "required": [
+        "total_count",
+        "genres"
+      ],
+      "example": {
+        "total_count": 2,
+        "genres": [
+          {
+            "id": "1d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
+            "genre": "Drama",
+            "description": "Drama"
+          },
+          {
+            "id": "2d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
+            "genre": "Romance",
+            "description": "Romance"
+          }
+        ]
+      }
+    },
+    "GenreType": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Unique identifier of the genre in a standard UUID format generated by API backend"
+        },
+        "genre": {
+          "type": "string",
+          "description": "Title of the genre"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the genre"
+        }
+      }
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Application specific standard error code"
+        },
+        "message": {
+          "type": "string",
+          "description": "Error message stating the reason"
+        },
+        "root_cause": {
+          "type": "string",
+          "description": "Root cause of the Error"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "example": {
+        "code": "GEN-001",
+        "message": "An unexpected error occurred. Please contact System Administrator"
+      }
+    }
+  }
+}

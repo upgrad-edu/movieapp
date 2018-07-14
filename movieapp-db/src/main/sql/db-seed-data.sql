@@ -50,3 +50,16 @@ INSERT INTO movieapp.GENRES (ID, UUID, GENRE, DESCRIPTION, CREATED_BY)
 		    (nextval('movieapp.genres_id_seq'), 'ee174a25-ba31-45a8-85b4-b06ffc9d5f8f', 'Historical', 'Historical', CURRENT_USER);
 
 -- ********** End of GENRES setup **********
+
+-- ********** Begin of CITIES setup **********
+INSERT INTO movieapp.CITIES (ID, CODE, NAME, CREATED_BY)
+            VALUES
+		    (nextval('movieapp.cities_id_seq'), 'BLR', 'Bengaluru', CURRENT_USER),
+		    (nextval('movieapp.cities_id_seq'), 'MUM', 'Mumbai', CURRENT_USER),
+		    (nextval('movieapp.cities_id_seq'), 'HYD', 'Hyderabad', CURRENT_USER),
+		    (nextval('movieapp.cities_id_seq'), 'DEL', 'New Delhi', CURRENT_USER),
+		    (nextval('movieapp.cities_id_seq'), 'KOL', 'Kolkata', CURRENT_USER),
+		    (nextval('movieapp.cities_id_seq'), 'CHN', 'Chennai', CURRENT_USER),
+		    (nextval('movieapp.cities_id_seq'), 'AHM', 'Ahmedabad', CURRENT_USER);
+
+-- ********** End of GENRES setup **********

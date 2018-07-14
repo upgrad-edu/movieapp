@@ -17,6 +17,8 @@ public class CacheConfiguration {
     public CacheManager cacheManager() {
         SimpleCacheManager cacheManager = new SimpleCacheManager();
         cacheManager.setCaches(Arrays.asList(
+                new ConcurrentMapCache("cities"),
+                new ConcurrentMapCache("city"),
                 new ConcurrentMapCache("genres"),
                 new ConcurrentMapCache("genre"),
                 new ConcurrentMapCache("artist")));

@@ -2,13 +2,12 @@ package upgrad.movieapp.api.controller;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static upgrad.movieapp.api.data.ResourceConstants.BASE_ADMIN_URL;
+import static upgrad.movieapp.api.data.ResourceConstants.BASE_URL;
 
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import upgrad.movieapp.api.controller.ext.ResponseBuilder;
@@ -19,15 +18,15 @@ import upgrad.movieapp.service.movie.business.GenreService;
 import upgrad.movieapp.service.movie.entity.GenreEntity;
 
 @RestController
-@RequestMapping(BASE_ADMIN_URL)
-public class GenreAdminController {
+@RequestMapping(BASE_URL)
+public class GenreDataController {
 
     @Autowired
     private GenreService genreService;
 
 
     @RequestMapping(method = GET, path = "/genres", produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<GenresSummaryResponse> getArtists(@RequestHeader("authorization") String accessToken) {
+    public ResponseEntity<GenresSummaryResponse> getGenres() {
 
         final SearchResult<GenreEntity> searchResult = genreService.findAllGenres();
         return ResponseBuilder.ok().payload(toGenresSummaryResponse(searchResult)).build();

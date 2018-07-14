@@ -177,12 +177,23 @@
                             </execution>
 
                             <execution>
-                                <id>genreadmin</id>
+                                <id>genredata</id>
                                 <goals>
                                     <goal>generate</goal>
                                 </goals>
                                 <configuration>
-                                    <inputSpec>${endpoints.dir}/genreadmin.json</inputSpec>
+                                    <inputSpec>${endpoints.dir}/genredata.json</inputSpec>
+                                    <language>${supported.language}</language>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>citydata</id>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <inputSpec>${endpoints.dir}/citydata.json</inputSpec>
                                     <language>${supported.language}</language>
                                 </configuration>
                             </execution>
