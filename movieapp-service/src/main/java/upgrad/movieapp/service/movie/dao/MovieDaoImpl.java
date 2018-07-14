@@ -3,7 +3,6 @@ package upgrad.movieapp.service.movie.dao;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -55,7 +54,10 @@ public class MovieDaoImpl extends BaseDaoImpl<MovieEntity> implements MovieDao {
             payloadQuery.orderBy(orderList);
         }
 
-        List<MovieEntity> payload = entityManager.createQuery(payloadQuery).getResultList();
+        final List<MovieEntity> payload = entityManager.createQuery(payloadQuery)
+                .setFirstResult(getOffset(searchQuery.getPage(), searchQuery.getLimit()))
+                .setMaxResults(searchQuery.getLimit())
+                .getResultList();
 
         final CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
         final Root<MovieEntity> countFrom = countQuery.from(MovieEntity.class);
@@ -65,14 +67,6 @@ public class MovieDaoImpl extends BaseDaoImpl<MovieEntity> implements MovieDao {
         final Integer totalCount = entityManager.createQuery(countQuery).getSingleResult().intValue();
 
         return new SearchResult(totalCount, payload);
-    }
-
-    private Set<String> movieStatusNames(final MovieStatus... movieStatuses) {
-        final Set<String> movieStatusNames = new HashSet<>();
-        for (MovieStatus movieStatus : movieStatuses) {
-            movieStatusNames.add(movieStatus.name());
-        }
-        return movieStatusNames;
     }
 
     private Predicate[] buildPredicates(final MovieSearchQuery searchQuery, final CriteriaBuilder builder, final Root<MovieEntity> root) {
@@ -125,10 +119,6 @@ public class MovieDaoImpl extends BaseDaoImpl<MovieEntity> implements MovieDao {
         }
 
         return predicates.toArray(new Predicate[]{});
-    }
-
-    private String like(final String text) {
-        return "%" + text + "%";
     }
 
 }

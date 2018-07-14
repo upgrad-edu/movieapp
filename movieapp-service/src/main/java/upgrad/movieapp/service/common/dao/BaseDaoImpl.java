@@ -58,6 +58,10 @@ public class BaseDaoImpl<E extends Entity> implements BaseDao<E> {
         return (page - 1) * limit;
     }
 
+    protected String like(final String text) {
+        return "%" + text + "%";
+    }
+
     private Class<?> entityClass() {
 
         final Type tType = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];

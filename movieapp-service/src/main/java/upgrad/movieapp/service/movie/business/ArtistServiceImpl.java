@@ -18,7 +18,7 @@ import upgrad.movieapp.service.movie.cache.ArtistCacheProvider;
 import upgrad.movieapp.service.movie.dao.ArtistDao;
 import upgrad.movieapp.service.movie.entity.ArtistEntity;
 import upgrad.movieapp.service.movie.entity.MovieEntity;
-import upgrad.movieapp.service.movie.model.ArtistRoleType;
+import upgrad.movieapp.service.movie.model.ArtistSearchQuery;
 
 @Service
 public class ArtistServiceImpl implements ArtistService {
@@ -33,13 +33,8 @@ public class ArtistServiceImpl implements ArtistService {
     private ArtistCacheProvider cacheProvider;
 
     @Override
-    public SearchResult<ArtistEntity> findArtists(int page, int limit) {
-        return artistDao.findArtists(page, limit);
-    }
-
-    @Override
-    public SearchResult<ArtistEntity> findArtists(int page, int limit, ArtistRoleType... roleTypes) {
-        return artistDao.findArtists(page, limit, roleTypes);
+    public SearchResult<ArtistEntity> findArtists(@NotNull ArtistSearchQuery searchQuery) {
+        return artistDao.findArtists(searchQuery);
     }
 
     @Override

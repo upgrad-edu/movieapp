@@ -5,13 +5,11 @@ import javax.validation.constraints.NotNull;
 import upgrad.movieapp.service.common.exception.ApplicationException;
 import upgrad.movieapp.service.common.model.SearchResult;
 import upgrad.movieapp.service.movie.entity.ArtistEntity;
-import upgrad.movieapp.service.movie.model.ArtistRoleType;
+import upgrad.movieapp.service.movie.model.ArtistSearchQuery;
 
 public interface ArtistService {
 
-    SearchResult<ArtistEntity> findArtists(int page, int limit);
-
-    SearchResult<ArtistEntity> findArtists(int page, int limit, ArtistRoleType... roleTypes);
+    SearchResult<ArtistEntity> findArtists(@NotNull ArtistSearchQuery searchQuery);
 
     ArtistEntity findArtistByUuid(@NotNull String artistUuid) throws ApplicationException;
 
