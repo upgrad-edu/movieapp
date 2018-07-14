@@ -45,12 +45,13 @@ public class MovieDaoImpl extends BaseDaoImpl<MovieEntity> implements MovieDao {
         Set<MovieSortBy> sortBy = searchQuery.getSortBy();
         if (CollectionUtils.isNotEmpty(sortBy)) {
             final List<Order> orderList = new ArrayList();
-            if (sortBy.contains(MovieSortBy.RATING)) {
-                orderList.add(builder.desc(from.get(MovieEntity_.rating)));
-            }
-            if (sortBy.contains(MovieSortBy.RELEASE_DATE)) {
-                orderList.add(builder.desc(from.get(MovieEntity_.releaseAt)));
-            }
+            sortBy.forEach(movieSortBy -> {
+                if (MovieSortBy.RATING == movieSortBy) {
+                    orderList.add(builder.desc(from.get(MovieEntity_.rating)));
+                } else if (MovieSortBy.RELEASE_DATE == movieSortBy) {
+                    orderList.add(builder.desc(from.get(MovieEntity_.releaseAt)));
+                }
+            });
             payloadQuery.orderBy(orderList);
         }
 

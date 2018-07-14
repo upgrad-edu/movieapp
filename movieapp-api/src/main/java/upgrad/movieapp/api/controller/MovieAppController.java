@@ -47,15 +47,15 @@ public class MovieAppController {
                                                            @RequestParam(value = "limit", required = false, defaultValue = "10") int limit,
                                                            @RequestParam(value = "title", required = false) String title,
                                                            @RequestParam(value = "status", required = false) String status,
-                                                           @RequestParam(value = "releasedate_from", required = false) String releaseDateFrom,
-                                                           @RequestParam(value = "releasedate_to", required = false) String releaseDateTo,
+                                                           @RequestParam(value = "start_date", required = false) String startDate,
+                                                           @RequestParam(value = "end_date", required = false) String endDate,
                                                            @RequestParam(value = "genre", required = false) String genre,
-                                                           @RequestParam(value = "rating_min", required = false) Float ratingMin,
-                                                           @RequestParam(value = "rating_max", required = false) Float ratingMax,
+                                                           @RequestParam(value = "min_rating", required = false) Float minRating,
+                                                           @RequestParam(value = "max_rating", required = false) Float maxRating,
                                                            @RequestParam(value = "sort", required = false) String sort) {
 
         final MovieSearchQuery movieSearchQuery = MovieTransformer.toSearchQuery(page, limit, title, status,
-                releaseDateFrom, releaseDateTo, genre, ratingMin, ratingMax, sort);
+                startDate, endDate, genre, minRating, maxRating, sort);
         final SearchResult<MovieEntity> searchResult = movieService.findMovies(movieSearchQuery);
         return ResponseBuilder.ok().payload(toMoviesSummaryResponse(page, limit, searchResult)).build();
     }

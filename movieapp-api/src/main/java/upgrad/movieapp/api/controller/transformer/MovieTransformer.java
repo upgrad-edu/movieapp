@@ -32,8 +32,8 @@ import upgrad.movieapp.service.movie.model.MovieStatus;
 
 public final class MovieTransformer {
 
-    public static MovieSearchQuery toSearchQuery(final int page, final int limit, final String title, final String status, final String releaseDateFrom,
-                                                 final String releaseDateTo, final String genre, final Float ratingMin, final Float ratingMax, final String sortBy) {
+    public static MovieSearchQuery toSearchQuery(final int page, final int limit, final String title, final String status, final String startDate,
+                                                 final String endDate, final String genre, final Float minRatng, final Float maxRating, final String sortBy) {
 
         final MovieSearchQuery searchQuery = new MovieSearchQuery(page, limit);
         if (StringUtils.isNotEmpty(title)) {
@@ -47,21 +47,21 @@ public final class MovieTransformer {
             }
             searchQuery.statuses(movieStatuses);
         }
-        if (StringUtils.isNotEmpty(releaseDateFrom)) {
-            searchQuery.releaseDateFrom(toDateTime(releaseDateFrom));
+        if (StringUtils.isNotEmpty(startDate)) {
+            searchQuery.releaseDateFrom(toDateTime(startDate));
         }
-        if (StringUtils.isNotEmpty(releaseDateTo)) {
-            searchQuery.releaseDateTo(toDateTime(releaseDateTo));
+        if (StringUtils.isNotEmpty(endDate)) {
+            searchQuery.releaseDateTo(toDateTime(endDate));
         }
         if (StringUtils.isNotEmpty(genre)) {
             final String[] genres = StringUtils.split(genre, ",");
             searchQuery.genres(new HashSet<>(Arrays.asList(genres)));
         }
-        if (ratingMin != null) {
-            searchQuery.ratingMin(ratingMin);
+        if (minRatng != null) {
+            searchQuery.ratingMin(minRatng);
         }
-        if (ratingMax != null) {
-            searchQuery.ratingMax(ratingMax);
+        if (maxRating != null) {
+            searchQuery.ratingMax(maxRating);
         }
         if (StringUtils.isNotEmpty(sortBy)) {
             final Set<MovieSortBy> movieSortBy = new HashSet<>();

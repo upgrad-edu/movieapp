@@ -160,32 +160,32 @@ paths:
            required: false
            description: query to filter the results based on specified status(es) (comma separated)
          - in: query
-           name: releasedate_from
+           name: start_date
            type: string
            required: false
-           description: query to filter the results based on specified offset of release date from (e.g. 2018-07-01)
+           description: query to filter the movies whose release date is equal or after the specified start date (e.g. 2018-07-01)
          - in: query
-           name: releasedate_to
+           name: end_date
            type: string
            required: false
-           description: query to filter the results based on specified offset of release date to (e.g. 2018-07-30)
+           description: query to filter the movies whose release date is equal or before the specified start date (e.g. 2018-07-30)
          - in: query
            name: genre
            type: string
            required: false
-           description: query to filter the results based on specified genre(s) (comma separated)
+           description: query to filter the movies based on specified genre(s) (comma separated)
          - in: query
-           name: rating_min
+           name: min_rating
            type: number
            format: float
            required: false
-           description: query to filter the results based on specified minimum rating range (e.g. 3.0)
+           description: query to filter the movies whose rating is greater than or equal to the specified value (e.g. 3.0)
          - in: query
-           name: rating_max
+           name: max_rating
            type: number
            format: float
            required: false
-           description: query to filter the results based on specified maximum rating range (e.g. 5.0)
+           description: query to filter the movies whose rating is lesser than or equal to the specified value (e.g. 5.0)
          - in: query
            name: sortBy
            type: string
