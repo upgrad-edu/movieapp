@@ -92,9 +92,14 @@ public class MovieDaoImpl extends BaseDaoImpl<MovieEntity> implements MovieDao {
             predicates.add(root.get(MovieEntity_.status).in(statuses));
         }
 
-        if (CollectionUtils.isNotEmpty(searchQuery.getGenres())) {
+        final Set<String> genres = searchQuery.getGenres();
+        if (CollectionUtils.isNotEmpty(genres)) {
             final ListJoin<MovieEntity, MovieGenreEntity> join = root.join(MovieEntity_.genres);
-            predicates.add(join.get(MovieGenreEntity_.genre).get(GenreEntity_.genre).in(searchQuery.getGenres()));
+
+            Set<String> genresLowerCase = genres.stream().map(genre -> {
+                return genre.toLowerCase();
+            }).collect(Collectors.toSet());
+            predicates.add(builder.lower(join.get(MovieGenreEntity_.genre).get(GenreEntity_.genre)).in(genresLowerCase));
         }
 
         if (searchQuery.getReleaseDateFrom() != null) {
