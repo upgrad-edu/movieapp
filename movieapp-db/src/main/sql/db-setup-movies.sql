@@ -38,12 +38,10 @@ CREATE TABLE IF NOT EXISTS movieapp.MOVIES (
     STORYLINE VARCHAR(2000) NOT NULL,
     POSTER_URL VARCHAR(2000) NOT NULL,
     TRAILER_URL VARCHAR(2000) NOT NULL,
-    OFFICIAL_WEBSITE_URL VARCHAR(2000),
     WIKI_URL VARCHAR(2000),
     RELEASE_AT TIMESTAMP NOT NULL,
     CENSOR_BOARD_RATING VARCHAR(3) NOT NULL,
-    CRITICS_RATING NUMERIC(2,1) DEFAULT 0,
-    USERS_RATING NUMERIC(2,1) DEFAULT 0,
+    RATING NUMERIC(2,1) DEFAULT 0,
     STATUS VARCHAR(30) NOT NULL,
     CREATED_BY VARCHAR(100) NOT NULL ,
     CREATED_AT TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -59,12 +57,10 @@ COMMENT ON COLUMN movieapp.MOVIES.DURATION IS 'Duration (in minutes) of the movi
 COMMENT ON COLUMN movieapp.MOVIES.STORYLINE IS 'Storyline of the movie';
 COMMENT ON COLUMN movieapp.MOVIES.POSTER_URL IS 'Poster url of the movie';
 COMMENT ON COLUMN movieapp.MOVIES.TRAILER_URL IS 'Poster url of the movie';
-COMMENT ON COLUMN movieapp.MOVIES.OFFICIAL_WEBSITE_URL IS 'Official website url of the movie';
 COMMENT ON COLUMN movieapp.MOVIES.WIKI_URL IS 'Wiki url of the movie';
 COMMENT ON COLUMN movieapp.MOVIES.RELEASE_AT IS 'Point in time when this movie will be release';
 COMMENT ON COLUMN movieapp.MOVIES.CENSOR_BOARD_RATING IS 'Rating of the movie issued by Censor Board - U, A, UA';
-COMMENT ON COLUMN movieapp.MOVIES.CRITICS_RATING IS 'Average rating provided by the film critics for the movie';
-COMMENT ON COLUMN movieapp.MOVIES.USERS_RATING IS 'Average rating provided by the users for the movie';
+COMMENT ON COLUMN movieapp.MOVIES.RATING IS 'Average rating provided by the film critics for the movie';
 COMMENT ON COLUMN movieapp.MOVIES.STATUS IS 'Status of the movie - PUBLISHED, RELEASED, CLOSED, DELETED';
 COMMENT ON COLUMN movieapp.MOVIES.CREATED_BY IS 'User who inserted this record';
 COMMENT ON COLUMN movieapp.MOVIES.CREATED_AT IS 'Point in time when this record was inserted';

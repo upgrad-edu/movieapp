@@ -24,7 +24,7 @@ INSERT INTO movieapp.MOVIES (ID, UUID, TITLE, DURATION,
                     TRAILER_URL,
                     WIKI_URL,
                     RELEASE_AT,
-                    STATUS, CENSOR_BOARD_RATING, CRITICS_RATING, CREATED_BY)
+                    STATUS, CENSOR_BOARD_RATING, RATING, CREATED_BY)
 		VALUES
 		(nextval('movieapp.movies_id_seq'), '7d174a25-ba31-45a8-85b4-b06ffc9d5f8f', 'Sanju', 162,
 		'Coming from a family of cinematic legends, East Indian actor Sanjay Dutt reaches dizzying heights of success -- but also battles numerous addictions and other personal demons',
@@ -40,7 +40,7 @@ INSERT INTO movieapp.MOVIES (ID, UUID, TITLE, DURATION,
                     TRAILER_URL,
                     WIKI_URL,
                     RELEASE_AT,
-                    STATUS, CENSOR_BOARD_RATING, CRITICS_RATING, CREATED_BY)
+                    STATUS, CENSOR_BOARD_RATING, RATING, CREATED_BY)
 		VALUES
 		(nextval('movieapp.movies_id_seq'), '8d174a25-ca31-55a8-95b4-c06ffc9d5f8f', 'Incredibles 2', 118,
 		'Helen is called on to lead a campaign to bring Supers back, while Bob navigates the day-to-day heroics of "normal" life at home with Violet, Dash, and baby Jack-Jack - whose superpowers are about to be discovered. Their mission is derailed, however, when a new villain emerges with a brilliant and dangerous plot that threatens everything. But the Parrs don''t shy away from a challenge, especially with Frozone by their side; that''s what makes this family so Incredible.',

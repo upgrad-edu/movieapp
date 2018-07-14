@@ -5,6 +5,8 @@ import static upgrad.movieapp.service.movie.exception.MovieErrorCode.*;
 import java.time.ZonedDateTime;
 import java.util.Set;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import upgrad.movieapp.service.common.model.SearchResult;
 import upgrad.movieapp.service.movie.dao.MovieDao;
 import upgrad.movieapp.service.movie.entity.ArtistEntity;
 import upgrad.movieapp.service.movie.entity.MovieEntity;
+import upgrad.movieapp.service.movie.model.MovieSearchQuery;
 import upgrad.movieapp.service.movie.model.MovieStatus;
 
 @Service
@@ -33,23 +36,8 @@ public class MovieServiceImpl implements MovieService {
     private ArtistService artistService;
 
     @Override
-    public SearchResult<MovieEntity> findMovies(int page, int limit) {
-        return movieDao.findMovies(page, limit);
-    }
-
-    @Override
-    public SearchResult<MovieEntity> findMovies(int page, int limit, MovieStatus... movieStatuses) {
-        return movieDao.findMovies(page, limit, movieStatuses);
-    }
-
-    @Override
-    public SearchResult<MovieEntity> findMovies(int page, int limit, int releaseDateOffset) {
-        return movieDao.findMovies(page, limit, DateTimeProvider.currentProgramTime().plusDays(releaseDateOffset));
-    }
-
-    @Override
-    public SearchResult<MovieEntity> findMovies(int page, int limit, MovieStatus movieStatus, int releaseDateOffset) {
-        return movieDao.findMovies(page, limit, movieStatus, DateTimeProvider.currentProgramTime().plusDays(releaseDateOffset));
+    public SearchResult<MovieEntity> findMovies(@NotNull MovieSearchQuery searchQuery) {
+        return movieDao.findMovies(searchQuery);
     }
 
     @Override
@@ -108,8 +96,8 @@ public class MovieServiceImpl implements MovieService {
         if (StringUtils.isNotEmpty(updatedMovie.getCensorBoardRating())) {
             existingMovie.setCensorBoardRating(updatedMovie.getCensorBoardRating());
         }
-        if (updatedMovie.getCriticsRating() != null) {
-            existingMovie.setCriticsRating(updatedMovie.getCriticsRating());
+        if (updatedMovie.getRating() != null) {
+            existingMovie.setRating(updatedMovie.getRating());
         }
         if (updatedMovie.getDuration() != null) {
             existingMovie.setDuration(updatedMovie.getDuration());
@@ -123,8 +111,6 @@ public class MovieServiceImpl implements MovieService {
 
         final Set<String> updatedGenreUuids = updatedMovie.getGenreUuids();
         if (CollectionUtils.isNotEmpty(updatedGenreUuids)) {
-            existingMovie.getGenres().clear();
-
             for (String updatedGenreUuid : updatedGenreUuids) {
                 existingMovie.addGenre(genreService.findGenre(updatedGenreUuid));
             }
@@ -132,8 +118,6 @@ public class MovieServiceImpl implements MovieService {
 
         final Set<String> updatedArtistUuids = updatedMovie.getArtistUuids();
         if (CollectionUtils.isNotEmpty(updatedArtistUuids)) {
-            existingMovie.getArtists().clear();
-
             for (String updatedArtistUuid : updatedArtistUuids) {
                 existingMovie.addArtist(artistService.findArtistByUuid(updatedArtistUuid));
             }

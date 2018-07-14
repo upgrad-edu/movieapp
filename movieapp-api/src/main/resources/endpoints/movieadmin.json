@@ -162,18 +162,58 @@
             "enum": [
               "PUBLISHED",
               "RELEASED",
-              "CLOSED",
               "DELETED"
             ],
             "required": false,
-            "description": "query to filter the results based on specified status"
+            "description": "query to filter the results based on specified status(es) (comma separated)"
           },
           {
             "in": "query",
-            "name": "release_date_offset",
-            "type": "integer",
+            "name": "releasedate_from",
+            "type": "string",
             "required": false,
-            "description": "query to filter the results based on specified offset of release date"
+            "description": "query to filter the results based on specified offset of release date from (e.g. 2018-07-01)"
+          },
+          {
+            "in": "query",
+            "name": "releasedate_to",
+            "type": "string",
+            "required": false,
+            "description": "query to filter the results based on specified offset of release date to (e.g. 2018-07-30)"
+          },
+          {
+            "in": "query",
+            "name": "genre",
+            "type": "string",
+            "required": false,
+            "description": "query to filter the results based on specified genre(s) (comma separated)"
+          },
+          {
+            "in": "query",
+            "name": "rating_min",
+            "type": "number",
+            "format": "float",
+            "required": false,
+            "description": "query to filter the results based on specified minimum rating range (e.g. 3.0)"
+          },
+          {
+            "in": "query",
+            "name": "rating_max",
+            "type": "number",
+            "format": "float",
+            "required": false,
+            "description": "query to filter the results based on specified maximum rating range (e.g. 5.0)"
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "type": "string",
+            "enum": [
+              "RATING",
+              "RELEASE_DATE"
+            ],
+            "required": false,
+            "description": "query to sort the results based on specified key(s)"
           }
         ],
         "responses": {
@@ -867,7 +907,7 @@
             "wiki_url": "www.wikipedia.com/samplemovie",
             "release_date": "2018-07-07",
             "censor_board_rating": "U",
-            "critics_rating": 4.0,
+            "rating": 4.0,
             "status": "RELEASED"
           },
           {
@@ -883,7 +923,7 @@
             "wiki_url": "www.wikipedia.com/anothersamplemovie",
             "release_date": "2018-08-07",
             "censor_board_rating": "U",
-            "critics_rating": 3.0,
+            "rating": 3.0,
             "status": "PUBLISHED"
           }
         ]
@@ -935,10 +975,10 @@
         "censor_board_rating": {
           "$ref": "#/definitions/CensorBoardRatingType"
         },
-        "critics_rating": {
+        "rating": {
           "type": "number",
           "format": "float",
-          "description": "Critics Rating of the movie"
+          "description": "Rating of the movie"
         },
         "status": {
           "$ref": "#/definitions/MovieStatusType"
@@ -961,7 +1001,7 @@
         "trailer_url",
         "release_date",
         "censor_board_rating",
-        "critics_rating",
+        "rating",
         "status"
       ],
       "example": {
@@ -977,7 +1017,7 @@
         "wiki_url": "www.wikipedia.com/samplemovie",
         "release_date": "2018-07-07",
         "censor_board_rating": "U",
-        "critics_rating": 4.0,
+        "rating": 4.0,
         "status": "RELEASED"
       }
     },
@@ -1072,10 +1112,10 @@
         "censor_board_rating": {
           "$ref": "#/definitions/CensorBoardRatingType"
         },
-        "critics_rating": {
+        "rating": {
           "type": "number",
           "format": "float",
-          "description": "Critics Rating of the movie"
+          "description": "Rating of the movie"
         },
         "artists": {
           "type": "array",
@@ -1094,7 +1134,7 @@
         "trailer_url",
         "release_date",
         "censor_board_rating",
-        "critics_rating",
+        "rating",
         "artists"
       ],
       "example": {
@@ -1110,7 +1150,7 @@
         "wiki_url": "www.wikipedia.com/samplemovie",
         "release_date": "2018-07-07",
         "censor_board_rating": "U",
-        "critics_rating": 4.0,
+        "rating": 4.0,
         "artists": [
           "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
           "8d174a25-ca31-55a8-95b4-c06ffc9d5f8d"
@@ -1179,10 +1219,10 @@
         "censor_board_rating": {
           "$ref": "#/definitions/CensorBoardRatingType"
         },
-        "critics_rating": {
+        "rating": {
           "type": "number",
           "format": "float",
-          "description": "Updated critics Rating of the movie"
+          "description": "Updated Rating of the movie"
         },
         "status": {
           "$ref": "#/definitions/MovieStatusType"
@@ -1207,22 +1247,12 @@
         "wiki_url": "www.wikipedia.com/samplemovie",
         "release_date": "2018-08-07",
         "censor_board_rating": "U",
-        "critics_rating": 3.0,
+        "rating": 3.0,
         "artists": [
           "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
           "8d174a25-ca31-55a8-95b4-c06ffc9d5f8d"
         ]
       }
-    },
-    "MovieStatusType": {
-      "type": "string",
-      "enum": [
-        "PUBLISHED",
-        "RELEASED",
-        "CLOSED",
-        "DELETED"
-      ],
-      "description": "Status of the movie"
     },
     "ArtistType": {
       "type": "object",
@@ -1311,6 +1341,15 @@
       "format": "full-date",
       "description": "Full date format"
     },
+    "MovieStatusType": {
+      "type": "string",
+      "enum": [
+        "PUBLISHED",
+        "RELEASED",
+        "DELETED"
+      ],
+      "description": "Status of the movie"
+    },
     "ArtistRoleType": {
       "type": "string",
       "enum": [
@@ -1339,6 +1378,14 @@
         "UA"
       ],
       "description": "Censor board rating"
+    },
+    "SortByType": {
+      "type": "string",
+      "enum": [
+        "RATING",
+        "RELEASE_DATE"
+      ],
+      "description": "Sort by fields"
     },
     "ErrorResponse": {
       "type": "object",

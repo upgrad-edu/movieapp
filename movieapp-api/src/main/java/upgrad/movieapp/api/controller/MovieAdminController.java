@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import upgrad.movieapp.api.controller.ext.ResponseBuilder;
+import upgrad.movieapp.api.controller.transformer.MovieTransformer;
 import upgrad.movieapp.api.exception.RestException;
 import upgrad.movieapp.api.model.ArtistsSummaryResponse;
 import upgrad.movieapp.api.model.CreateMovieRequest;
@@ -40,6 +41,7 @@ import upgrad.movieapp.service.movie.business.MovieService;
 import upgrad.movieapp.service.movie.entity.ArtistEntity;
 import upgrad.movieapp.service.movie.entity.MovieEntity;
 import upgrad.movieapp.service.movie.exception.MovieErrorCode;
+import upgrad.movieapp.service.movie.model.MovieSearchQuery;
 import upgrad.movieapp.service.movie.model.MovieStatus;
 
 @RestController
@@ -57,14 +59,18 @@ public class MovieAdminController {
     public ResponseEntity<MoviesSummaryResponse> getMovies(@RequestHeader("authorization") String accessToken,
                                                            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                                                            @RequestParam(value = "limit", required = false, defaultValue = "10") int limit,
-                                                           @RequestParam(value = "status", required = false) String status) {
+                                                           @RequestParam(value = "title", required = false) String title,
+                                                           @RequestParam(value = "status", required = false) String status,
+                                                           @RequestParam(value = "releasedate_from", required = false) String releaseDateFrom,
+                                                           @RequestParam(value = "releasedate_to", required = false) String releaseDateTo,
+                                                           @RequestParam(value = "genre", required = false) String genre,
+                                                           @RequestParam(value = "rating_min", required = false) Float ratingMin,
+                                                           @RequestParam(value = "rating_max", required = false) Float ratingMax,
+                                                           @RequestParam(value = "sort", required = false) String sort) {
 
-        final SearchResult<MovieEntity> searchResult;
-        if (StringUtils.isEmpty(status)) {
-            searchResult = movieService.findMovies(page, limit);
-        } else {
-            searchResult = movieService.findMovies(page, limit, toMovieStatus(status));
-        }
+        final MovieSearchQuery movieSearchQuery = MovieTransformer.toSearchQuery(page, limit, title, status,
+                releaseDateFrom, releaseDateTo, genre, ratingMin, ratingMax, sort);
+        final SearchResult<MovieEntity> searchResult = movieService.findMovies(movieSearchQuery);
         return ResponseBuilder.ok().payload(toMoviesSummaryResponse(page, limit, searchResult)).build();
     }
 
@@ -79,7 +85,7 @@ public class MovieAdminController {
 
     @RequestMapping(method = POST, path = "/movies", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<CreateMovieResponse> createMovie(@RequestHeader("authorization") String accessToken,
-                                                          @RequestBody final CreateMovieRequest newMovieRequest) throws ApplicationException {
+                                                           @RequestBody final CreateMovieRequest newMovieRequest) throws ApplicationException {
 
         final MovieEntity newMovie = toEntity(newMovieRequest);
         final MovieEntity createdMovie = movieService.createMovie(newMovie);
@@ -153,7 +159,7 @@ public class MovieAdminController {
         try {
             return MovieStatus.valueOf(MovieStatusType.valueOf(status).name());
         } catch (IllegalArgumentException exc) {
-            throw new RestException(MovieErrorCode.MVI_002, StringUtils.join(MovieStatusType.values(), ","));
+            throw new RestException(MovieErrorCode.MVI_002, status, StringUtils.join(MovieStatusType.values(), ","));
         }
     }
 

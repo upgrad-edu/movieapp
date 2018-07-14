@@ -1,22 +1,79 @@
 package upgrad.movieapp.api.controller.transformer;
 
+import static upgrad.movieapp.service.movie.exception.MovieErrorCode.MVI_002;
+import static upgrad.movieapp.service.movie.exception.MovieErrorCode.MVI_006;
+
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
+import upgrad.movieapp.api.exception.RestException;
 import upgrad.movieapp.api.model.CensorBoardRatingType;
 import upgrad.movieapp.api.model.CreateMovieRequest;
 import upgrad.movieapp.api.model.CreateMovieResponse;
 import upgrad.movieapp.api.model.MovieStatusType;
 import upgrad.movieapp.api.model.MovieSummaryType;
 import upgrad.movieapp.api.model.MoviesSummaryResponse;
+import upgrad.movieapp.api.model.SortByType;
 import upgrad.movieapp.api.model.UpdateMovieRequest;
 import upgrad.movieapp.service.common.data.DateTimeProvider;
 import upgrad.movieapp.service.common.model.SearchResult;
 import upgrad.movieapp.service.movie.entity.MovieEntity;
+import upgrad.movieapp.service.movie.model.MovieSearchQuery;
+import upgrad.movieapp.service.movie.model.MovieSortBy;
+import upgrad.movieapp.service.movie.model.MovieStatus;
 
 public final class MovieTransformer {
+
+    public static MovieSearchQuery toSearchQuery(final int page, final int limit, final String title, final String status, final String releaseDateFrom,
+                                                 final String releaseDateTo, final String genre, final Float ratingMin, final Float ratingMax, final String sortBy) {
+
+        final MovieSearchQuery searchQuery = new MovieSearchQuery(page, limit);
+        if (StringUtils.isNotEmpty(title)) {
+            searchQuery.title(title);
+        }
+        if (StringUtils.isNotEmpty(status)) {
+            final EnumSet<MovieStatus> movieStatuses = EnumSet.noneOf(MovieStatus.class);
+            final String[] statuses = StringUtils.split(status, ",");
+            for (String splitStatus : statuses) {
+                movieStatuses.add(toMovieStatus(splitStatus.toUpperCase()));
+            }
+            searchQuery.statuses(movieStatuses);
+        }
+        if (StringUtils.isNotEmpty(releaseDateFrom)) {
+            searchQuery.releaseDateFrom(toDateTime(releaseDateFrom));
+        }
+        if (StringUtils.isNotEmpty(releaseDateTo)) {
+            searchQuery.releaseDateTo(toDateTime(releaseDateTo));
+        }
+        if (StringUtils.isNotEmpty(genre)) {
+            final String[] genres = StringUtils.split(genre, ",");
+            searchQuery.genres(new HashSet<>(Arrays.asList(genres)));
+        }
+        if (ratingMin != null) {
+            searchQuery.ratingMin(ratingMin);
+        }
+        if (ratingMax != null) {
+            searchQuery.ratingMax(ratingMax);
+        }
+        if (StringUtils.isNotEmpty(sortBy)) {
+            final Set<MovieSortBy> movieSortBy = new HashSet<>();
+            final String[] sortByFields = StringUtils.split(sortBy, ",");
+            for (String sortByField : sortByFields) {
+                movieSortBy.add(toMovieSortBy(sortByField.toUpperCase()));
+            }
+            searchQuery.sortBy(movieSortBy);
+        }
+
+        return searchQuery;
+    }
 
     public static MoviesSummaryResponse toMoviesSummaryResponse(final int page, final int limit, final SearchResult<MovieEntity> searchResult) {
 
@@ -39,7 +96,7 @@ public final class MovieTransformer {
                 .wikiUrl(movieEntity.getWikiUrl())
                 .releaseDate(DateTimeProvider.format(movieEntity.getReleaseAt()))
                 .censorBoardRating(toCensorBoardRating(movieEntity.getCensorBoardRating()))
-                .criticsRating(movieEntity.getCriticsRating())
+                .rating(movieEntity.getRating())
                 .status(toStatus(movieEntity.getStatus()));
         movieEntity.getArtists().forEach(movieArtistEntity -> {
             movieSummaryType.addArtistsItem(ArtistTransformer.toArtistType(movieArtistEntity.getArtist()));
@@ -60,7 +117,7 @@ public final class MovieTransformer {
         if (movieRequest.getCensorBoardRating() != null) {
             movieEntity.setCensorBoardRating(movieRequest.getCensorBoardRating().name());
         }
-        movieEntity.setCriticsRating(movieRequest.getCriticsRating());
+        movieEntity.setRating(movieRequest.getRating());
         movieEntity.setDuration(movieRequest.getDuration());
         if (movieRequest.getReleaseDate() != null) {
             movieEntity.setReleaseAt(DateTimeProvider.parse(movieRequest.getReleaseDate()));
@@ -85,7 +142,7 @@ public final class MovieTransformer {
         if (movieRequest.getCensorBoardRating() != null) {
             movieEntity.setCensorBoardRating(movieRequest.getCensorBoardRating().name());
         }
-        movieEntity.setCriticsRating(movieRequest.getCriticsRating());
+        movieEntity.setRating(movieRequest.getRating());
         movieEntity.setDuration(movieRequest.getDuration());
         if (movieRequest.getReleaseDate() != null) {
             movieEntity.setReleaseAt(DateTimeProvider.parse(movieRequest.getReleaseDate()));
@@ -106,6 +163,26 @@ public final class MovieTransformer {
 
     private static MovieStatusType toStatus(final String status) {
         return MovieStatusType.valueOf(status);
+    }
+
+    private static MovieStatus toMovieStatus(final String status) {
+        try {
+            return MovieStatus.valueOf(status);
+        } catch (IllegalArgumentException exc) {
+            throw new RestException(MVI_002, status, StringUtils.join(MovieStatus.values(), ","));
+        }
+    }
+
+    private static MovieSortBy toMovieSortBy(final String sortByField) {
+        try {
+            return MovieSortBy.valueOf(SortByType.valueOf(sortByField).name());
+        } catch (IllegalArgumentException exc) {
+            throw new RestException(MVI_006, StringUtils.join(SortByType.values(), ","));
+        }
+    }
+
+    private static ZonedDateTime toDateTime(final String date) {
+        return DateTimeProvider.parse(date, DateTimeProvider.SIMPLE_DATE_FORMATTER);
     }
 
     private static CensorBoardRatingType toCensorBoardRating(final String censorBoardRating) {

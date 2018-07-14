@@ -19,7 +19,7 @@ public enum ArtistErrorCode implements ErrorCode {
 
     ART_001("ART-001", "Artist with identifier [{0}] does not exist"),
 
-    ART_002("ART-002", "Not a valid artist role. Supported roles are [{0}]"),
+    ART_002("ART-002", "[{0}] is not a valid artist role. Supported roles are [{1}]"),
     ;
 
     private static final Map<String, ArtistErrorCode> LOOKUP = new HashMap<String, ArtistErrorCode>();

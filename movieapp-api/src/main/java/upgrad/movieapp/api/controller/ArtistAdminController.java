@@ -5,6 +5,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static upgrad.movieapp.api.controller.transformer.ArtistTransformer.toArtistType;
 import static upgrad.movieapp.api.controller.transformer.ArtistTransformer.toArtistsSummaryResponse;
 import static upgrad.movieapp.api.data.ResourceConstants.BASE_ADMIN_URL;
+import static upgrad.movieapp.service.movie.exception.ArtistErrorCode.ART_002;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,6 @@ import upgrad.movieapp.service.common.model.SearchResult;
 import upgrad.movieapp.service.movie.business.ArtistService;
 import upgrad.movieapp.service.movie.business.MovieService;
 import upgrad.movieapp.service.movie.entity.ArtistEntity;
-import upgrad.movieapp.service.movie.exception.MovieErrorCode;
 import upgrad.movieapp.service.movie.model.ArtistRoleType;
 
 @RestController
@@ -99,7 +99,7 @@ public class ArtistAdminController {
         try {
             return ArtistRoleType.valueOf(roleType);
         } catch (IllegalArgumentException exc) {
-            throw new RestException(MovieErrorCode.MVI_002, StringUtils.join(MovieStatusType.values(), ","));
+            throw new RestException(ART_002, roleType, StringUtils.join(MovieStatusType.values(), ","));
         }
     }
 

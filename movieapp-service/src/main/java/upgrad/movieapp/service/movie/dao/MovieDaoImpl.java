@@ -1,63 +1,69 @@
 package upgrad.movieapp.service.movie.dao;
 
-import static upgrad.movieapp.service.movie.entity.MovieEntity.*;
-
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.ListJoin;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import upgrad.movieapp.service.common.dao.BaseDaoImpl;
 import upgrad.movieapp.service.common.model.SearchResult;
+import upgrad.movieapp.service.movie.entity.GenreEntity_;
 import upgrad.movieapp.service.movie.entity.MovieEntity;
+import upgrad.movieapp.service.movie.entity.MovieEntity_;
+import upgrad.movieapp.service.movie.entity.MovieGenreEntity;
+import upgrad.movieapp.service.movie.entity.MovieGenreEntity_;
+import upgrad.movieapp.service.movie.model.MovieSearchQuery;
+import upgrad.movieapp.service.movie.model.MovieSortBy;
 import upgrad.movieapp.service.movie.model.MovieStatus;
 
 @Repository
 public class MovieDaoImpl extends BaseDaoImpl<MovieEntity> implements MovieDao {
 
     @Override
-    public SearchResult<MovieEntity> findMovies(int page, int limit) {
-        final int totalCount = entityManager.createNamedQuery(COUNT_BY_ALL, Long.class).getSingleResult().intValue();
-        final List<MovieEntity> payload = entityManager.createNamedQuery(BY_ALL, MovieEntity.class).setFirstResult(getOffset(page, limit)).setMaxResults(limit).getResultList();
-        return new SearchResult(totalCount, payload);
-    }
+    public SearchResult<MovieEntity> findMovies(final MovieSearchQuery searchQuery) {
 
-    @Override
-    public SearchResult<MovieEntity> findMovies(int page, int limit, MovieStatus... movieStatuses) {
+        final CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        final CriteriaQuery<MovieEntity> payloadQuery = builder.createQuery(MovieEntity.class);
+        final Root<MovieEntity> from = payloadQuery.from(MovieEntity.class);
 
-        final Set<String> movieStatusNames = movieStatusNames(movieStatuses);
+        final Predicate[] payloadPredicates = buildPredicates(searchQuery, builder, from);
 
-        final int totalCount = entityManager.createNamedQuery(COUNT_BY_STATUS, Long.class)
-                .setParameter("status", movieStatusNames)
-                .getSingleResult().intValue();
-        final List<MovieEntity> payload = entityManager.createNamedQuery(BY_STATUS, MovieEntity.class)
-                .setParameter("status", movieStatusNames)
-                .setFirstResult(getOffset(page, limit)).setMaxResults(limit).getResultList();
-        return new SearchResult(totalCount, payload);
-    }
+        payloadQuery.select(from).where(payloadPredicates);
 
-    @Override
-    public SearchResult<MovieEntity> findMovies(int page, int limit, ZonedDateTime releaseAt) {
-        final int totalCount = entityManager.createNamedQuery(COUNT_BY_RELEASE_AT, Long.class)
-                .setParameter("releaseAt", releaseAt)
-                .getSingleResult().intValue();
-        final List<MovieEntity> payload = entityManager.createNamedQuery(BY_RELEASE_AT, MovieEntity.class)
-                .setParameter("releaseAt", releaseAt)
-                .setFirstResult(getOffset(page, limit)).setMaxResults(limit).getResultList();
-        return new SearchResult(totalCount, payload);
-    }
+        Set<MovieSortBy> sortBy = searchQuery.getSortBy();
+        if (CollectionUtils.isNotEmpty(sortBy)) {
+            final List<Order> orderList = new ArrayList();
+            if (sortBy.contains(MovieSortBy.RATING)) {
+                orderList.add(builder.desc(from.get(MovieEntity_.rating)));
+            }
+            if (sortBy.contains(MovieSortBy.RELEASE_DATE)) {
+                orderList.add(builder.desc(from.get(MovieEntity_.releaseAt)));
+            }
+            payloadQuery.orderBy(orderList);
+        }
 
-    @Override
-    public SearchResult<MovieEntity> findMovies(int page, int limit, MovieStatus movieStatus, ZonedDateTime releaseAt) {
-        final int totalCount = entityManager.createNamedQuery(COUNT_BY_STATUS_AND_RELEASE_AT, Long.class)
-                .setParameter("status", movieStatus.name())
-                .setParameter("releaseAt", releaseAt)
-                .getSingleResult().intValue();
-        final List<MovieEntity> payload = entityManager.createNamedQuery(BY_STATUS_AND_RELEASE_AT, MovieEntity.class)
-                .setParameter("status", movieStatus.name())
-                .setParameter("releaseAt", releaseAt)
-                .setFirstResult(getOffset(page, limit)).setMaxResults(limit).getResultList();
+        List<MovieEntity> payload = entityManager.createQuery(payloadQuery).getResultList();
+
+        final CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
+        final Root<MovieEntity> countFrom = countQuery.from(MovieEntity.class);
+
+        final Predicate[] countPredicates = buildPredicates(searchQuery, builder, countFrom);
+        countQuery.select(builder.count(countFrom)).where(countPredicates);
+        final Integer totalCount = entityManager.createQuery(countQuery).getSingleResult().intValue();
+
         return new SearchResult(totalCount, payload);
     }
 
@@ -67,6 +73,57 @@ public class MovieDaoImpl extends BaseDaoImpl<MovieEntity> implements MovieDao {
             movieStatusNames.add(movieStatus.name());
         }
         return movieStatusNames;
+    }
+
+    private Predicate[] buildPredicates(final MovieSearchQuery searchQuery, final CriteriaBuilder builder, final Root<MovieEntity> root) {
+
+        final List<Predicate> predicates = new ArrayList<>();
+
+        if (StringUtils.isNotEmpty(searchQuery.getTitle())) {
+            predicates.add(builder.like(builder.lower(root.get(MovieEntity_.title)), like(searchQuery.getTitle().toLowerCase())));
+        }
+
+        if (CollectionUtils.isNotEmpty(searchQuery.getStatuses())) {
+            final EnumSet<MovieStatus> movieStatuses = searchQuery.getStatuses();
+            final Set<String> statuses = movieStatuses.stream().map(movieStatus -> {
+                return movieStatus.name();
+            }).collect(Collectors.toSet());
+
+            predicates.add(root.get(MovieEntity_.status).in(statuses));
+        }
+
+        if (CollectionUtils.isNotEmpty(searchQuery.getGenres())) {
+            final ListJoin<MovieEntity, MovieGenreEntity> join = root.join(MovieEntity_.genres);
+            predicates.add(join.get(MovieGenreEntity_.genre).get(GenreEntity_.genre).in(searchQuery.getGenres()));
+        }
+
+        if (searchQuery.getReleaseDateFrom() != null) {
+            final ZonedDateTime releaseDateFrom = searchQuery.getReleaseDateFrom().withHour(0).withMinute(0).withSecond(0);
+            final Expression<ZonedDateTime> releaseAt = root.get(MovieEntity_.releaseAt);
+            predicates.add(builder.greaterThanOrEqualTo(releaseAt, releaseDateFrom));
+        }
+
+        if (searchQuery.getReleaseDateTo() != null) {
+            final ZonedDateTime releaseDateTo = searchQuery.getReleaseDateTo().withHour(23).withMinute(59).withSecond(59);
+            final Expression<ZonedDateTime> releaseAt = root.get(MovieEntity_.releaseAt);
+            predicates.add(builder.lessThanOrEqualTo(releaseAt, releaseDateTo));
+        }
+
+        if (searchQuery.getRatingMin() != null) {
+            final Expression<Float> rating = root.get(MovieEntity_.rating);
+            predicates.add(builder.greaterThanOrEqualTo(rating, searchQuery.getRatingMin()));
+        }
+
+        if (searchQuery.getRatingMax() != null) {
+            final Expression<Float> rating = root.get(MovieEntity_.rating);
+            predicates.add(builder.lessThanOrEqualTo(rating, searchQuery.getRatingMax()));
+        }
+
+        return predicates.toArray(new Predicate[]{});
+    }
+
+    private String like(final String text) {
+        return "%" + text + "%";
     }
 
 }

@@ -7,6 +7,7 @@ import static upgrad.movieapp.api.controller.transformer.ArtistTransformer.toArt
 import static upgrad.movieapp.api.controller.transformer.MovieTransformer.toMovieSummary;
 import static upgrad.movieapp.api.controller.transformer.MovieTransformer.toMoviesSummaryResponse;
 import static upgrad.movieapp.api.data.ResourceConstants.BASE_URL;
+import static upgrad.movieapp.service.movie.exception.MovieErrorCode.MVI_002;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import upgrad.movieapp.api.controller.ext.ResponseBuilder;
+import upgrad.movieapp.api.controller.transformer.MovieTransformer;
 import upgrad.movieapp.api.exception.RestException;
 import upgrad.movieapp.api.model.ArtistsSummaryResponse;
 import upgrad.movieapp.api.model.MovieStatusType;
@@ -27,8 +29,7 @@ import upgrad.movieapp.service.movie.business.ArtistService;
 import upgrad.movieapp.service.movie.business.MovieService;
 import upgrad.movieapp.service.movie.entity.ArtistEntity;
 import upgrad.movieapp.service.movie.entity.MovieEntity;
-import upgrad.movieapp.service.movie.model.MovieStatus;
-import upgrad.movieapp.service.user.exception.UserErrorCode;
+import upgrad.movieapp.service.movie.model.MovieSearchQuery;
 
 @RestController
 @RequestMapping(BASE_URL)
@@ -44,14 +45,18 @@ public class MovieAppController {
     @RequestMapping(method = GET, path = "/movies", produces = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<MoviesSummaryResponse> getMovies(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
                                                            @RequestParam(value = "limit", required = false, defaultValue = "10") int limit,
-                                                           @RequestParam(value = "status", required = false) String status) {
+                                                           @RequestParam(value = "title", required = false) String title,
+                                                           @RequestParam(value = "status", required = false) String status,
+                                                           @RequestParam(value = "releasedate_from", required = false) String releaseDateFrom,
+                                                           @RequestParam(value = "releasedate_to", required = false) String releaseDateTo,
+                                                           @RequestParam(value = "genre", required = false) String genre,
+                                                           @RequestParam(value = "rating_min", required = false) Float ratingMin,
+                                                           @RequestParam(value = "rating_max", required = false) Float ratingMax,
+                                                           @RequestParam(value = "sort", required = false) String sort) {
 
-        final SearchResult<MovieEntity> searchResult;
-        if (StringUtils.isEmpty(status)) {
-            searchResult = movieService.findMovies(page, limit, MovieStatus.RELEASED, MovieStatus.PUBLISHED);
-        } else {
-            searchResult = movieService.findMovies(page, limit, MovieStatus.valueOf(toEnum(status).name()));
-        }
+        final MovieSearchQuery movieSearchQuery = MovieTransformer.toSearchQuery(page, limit, title, status,
+                releaseDateFrom, releaseDateTo, genre, ratingMin, ratingMax, sort);
+        final SearchResult<MovieEntity> searchResult = movieService.findMovies(movieSearchQuery);
         return ResponseBuilder.ok().payload(toMoviesSummaryResponse(page, limit, searchResult)).build();
     }
 
@@ -84,7 +89,7 @@ public class MovieAppController {
         try {
             return MovieStatusType.valueOf(status);
         } catch (IllegalArgumentException exc) {
-            throw new RestException(UserErrorCode.USR_010, StringUtils.join(MovieStatusType.values(), ","));
+            throw new RestException(MVI_002, status, StringUtils.join(MovieStatusType.values(), ","));
         }
     }
 

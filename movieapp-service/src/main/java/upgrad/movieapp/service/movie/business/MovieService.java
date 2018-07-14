@@ -1,27 +1,19 @@
 package upgrad.movieapp.service.movie.business;
 
 import java.time.ZonedDateTime;
-import java.util.EnumSet;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
 
 import upgrad.movieapp.service.common.exception.ApplicationException;
 import upgrad.movieapp.service.common.model.SearchResult;
 import upgrad.movieapp.service.movie.entity.ArtistEntity;
-import upgrad.movieapp.service.movie.entity.GenreEntity;
 import upgrad.movieapp.service.movie.entity.MovieEntity;
+import upgrad.movieapp.service.movie.model.MovieSearchQuery;
 import upgrad.movieapp.service.movie.model.MovieStatus;
-import upgrad.movieapp.service.user.entity.UserEntity;
 
 public interface MovieService {
 
-    SearchResult<MovieEntity> findMovies(int page, int limit);
-
-    SearchResult<MovieEntity> findMovies(int page, int limit, @NotNull MovieStatus... movieStatuses);
-
-    SearchResult<MovieEntity> findMovies(int page, int limit, int releaseDateOffset);
-
-    SearchResult<MovieEntity> findMovies(int page, int limit, @NotNull MovieStatus movieStatus, int releaseDateOffset);
+    SearchResult<MovieEntity> findMovies(@NotNull MovieSearchQuery searchQuery);
 
     MovieEntity findMovieByUuid(@NotNull String movieUuid) throws ApplicationException;
 

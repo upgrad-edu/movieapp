@@ -7,10 +7,10 @@
  */
 package upgrad.movieapp.service.common.data;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 
 /**
  * Provider for date time objects.
@@ -18,7 +18,10 @@ import java.util.Calendar;
 public final class DateTimeProvider {
 
     private static final DateTimeProvider INSTANCE = new DateTimeProvider();
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+
+    public static final DateTimeFormatter DEFAULT_FORMATTER = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+    public static final DateTimeFormatter SIMPLE_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
 
     private DateTimeProvider() {
         // prohibit instantiation
@@ -32,19 +35,17 @@ public final class DateTimeProvider {
         return ZonedDateTime.now();
     }
 
-    public static ZonedDateTime fromTime(final long timeInMilliSecs) {
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(timeInMilliSecs);
-        return ZonedDateTime.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), //
-                calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND), 0, ZoneId.of("America/Indiana/Indianapolis"));
+    public static ZonedDateTime parse(final String dateTimeString) {
+        return ZonedDateTime.parse(dateTimeString, DEFAULT_FORMATTER);
     }
 
-    public static ZonedDateTime parse(final String dateTimeString) {
-        return ZonedDateTime.parse(dateTimeString, DATE_TIME_FORMATTER);
+    public static ZonedDateTime parse(final String dateTimeString, final DateTimeFormatter formatter) {
+        final LocalDate simpleDate = LocalDate.parse(dateTimeString, formatter);
+        return simpleDate.atStartOfDay(ZoneId.systemDefault());
     }
 
     public static String format(final ZonedDateTime zonedDateTime) {
-        return zonedDateTime.format(DATE_TIME_FORMATTER);
+        return zonedDateTime.format(DEFAULT_FORMATTER);
     }
 
 }

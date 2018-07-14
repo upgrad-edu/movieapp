@@ -16,8 +16,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -36,26 +34,7 @@ import upgrad.movieapp.service.common.entity.ext.EntityHashCodeBuilder;
 
 @Entity
 @Table(name = "MOVIES", schema = SCHEMA)
-@NamedQueries({
-        @NamedQuery(name = MovieEntity.COUNT_BY_ALL, query = "SELECT count(m.id) FROM MovieEntity m"),
-        @NamedQuery(name = MovieEntity.BY_ALL, query = "SELECT m FROM MovieEntity m"),
-        @NamedQuery(name = MovieEntity.COUNT_BY_STATUS, query = "SELECT count(m.id) FROM MovieEntity m WHERE m.status IN (:status)"),
-        @NamedQuery(name = MovieEntity.BY_STATUS, query = "SELECT m FROM MovieEntity m WHERE m.status IN (:status)"),
-        @NamedQuery(name = MovieEntity.COUNT_BY_RELEASE_AT, query = "SELECT count(m.id) FROM MovieEntity m WHERE m.releaseAt <= :releaseAt AND m.releaseAt >= :currentDate"),
-        @NamedQuery(name = MovieEntity.BY_RELEASE_AT, query = "SELECT m FROM MovieEntity m WHERE m.releaseAt <= :releaseAt AND m.releaseAt >= :currentDate"),
-        @NamedQuery(name = MovieEntity.COUNT_BY_STATUS_AND_RELEASE_AT, query = "SELECT count(m.id) FROM MovieEntity m WHERE m.status = :status AND m.releaseAt <= :releaseAt AND m.releaseAt >= :currentAt"),
-        @NamedQuery(name = MovieEntity.BY_STATUS_AND_RELEASE_AT, query = "SELECT m FROM MovieEntity m WHERE m.status = :status AND m.releaseAt <= :releaseAt AND m.releaseAt >= :currentAt")
-})
 public class MovieEntity extends MutableEntity implements Identifier<Integer>, UniversalUniqueIdentifier<String>, Serializable {
-
-    public static final String COUNT_BY_ALL = "MovieEntity.countByAll";
-    public static final String BY_ALL = "MovieEntity.byAll";
-    public static final String COUNT_BY_STATUS = "MovieEntity.countByStatus";
-    public static final String BY_STATUS = "MovieEntity.byStatus";
-    public static final String COUNT_BY_RELEASE_AT = "MovieEntity.countByReleaseAt";
-    public static final String BY_RELEASE_AT = "MovieEntity.byReleaseAt";
-    public static final String COUNT_BY_STATUS_AND_RELEASE_AT = "MovieEntity.countByStatusAndReleaseAt";
-    public static final String BY_STATUS_AND_RELEASE_AT = "MovieEntity.byStatusAndReleaseAt";
 
     @Id
     @Column(name = "ID")
@@ -90,10 +69,6 @@ public class MovieEntity extends MutableEntity implements Identifier<Integer>, U
     @Size(max = 2000)
     private String trailerUrl;
 
-    @Column(name = "OFFICIAL_WEBSITE_URL")
-    @Size(max = 2000)
-    private String websiteUrl;
-
     @Column(name = "WIKI_URL")
     @Size(max = 2000)
     private String wikiUrl;
@@ -105,19 +80,15 @@ public class MovieEntity extends MutableEntity implements Identifier<Integer>, U
     @Size(max = 3)
     private String censorBoardRating;
 
-    @Column(name = "CRITICS_RATING")
+    @Column(name = "RATING")
     @Digits(integer = 2, fraction = 2)
-    private Float criticsRating;
-
-    @Column(name = "USERS_RATING")
-    @Digits(integer = 2, fraction = 2)
-    private Float usersRating;
+    private Float rating;
 
     @Column(name = "STATUS")
     @Size(max = 30)
     private String status;
 
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
     @JoinColumn(name = "MOVIE_ID")
     private List<MovieGenreEntity> genres = new ArrayList<>();
 
@@ -181,14 +152,6 @@ public class MovieEntity extends MutableEntity implements Identifier<Integer>, U
         this.trailerUrl = trailerUrl;
     }
 
-    public String getWebsiteUrl() {
-        return websiteUrl;
-    }
-
-    public void setWebsiteUrl(String websiteUrl) {
-        this.websiteUrl = websiteUrl;
-    }
-
     public String getWikiUrl() {
         return wikiUrl;
     }
@@ -213,20 +176,12 @@ public class MovieEntity extends MutableEntity implements Identifier<Integer>, U
         this.censorBoardRating = censorBoardRating;
     }
 
-    public Float getCriticsRating() {
-        return criticsRating;
+    public Float getRating() {
+        return rating;
     }
 
-    public void setCriticsRating(Float criticsRating) {
-        this.criticsRating = criticsRating;
-    }
-
-    public Float getUsersRating() {
-        return usersRating;
-    }
-
-    public void setUsersRating(Float usersRating) {
-        this.usersRating = usersRating;
+    public void setRating(Float rating) {
+        this.rating = rating;
     }
 
     public String getStatus() {

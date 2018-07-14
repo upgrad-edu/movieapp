@@ -20,7 +20,7 @@ You need following softwares before running this application.
 
 A step by step guide that helps you get a development env running
 
-1. Checkout https://github.com/beingtechie/movies.git
+1. Checkout https://github.com/beingarchitect/movieapp.git
 2. Go to the folder where the above project has been checked out
 3. Ensure to change the password of postgres.
    - Run `sudo -iu postgres` command

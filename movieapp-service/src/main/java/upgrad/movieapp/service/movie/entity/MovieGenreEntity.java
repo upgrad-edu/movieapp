@@ -37,7 +37,6 @@ public class MovieGenreEntity extends ImmutableEntity implements Identifier<Inte
         return id;
     }
 
-
     public MovieEntity getMovie() {
         return movie;
     }

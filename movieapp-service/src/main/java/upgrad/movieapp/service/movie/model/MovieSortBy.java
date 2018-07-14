@@ -1,4 +1,4 @@
-package upgrad.movieapp.api.controller;
+package upgrad.movieapp.service.movie.model;
 
 public enum MovieSortBy {
 
