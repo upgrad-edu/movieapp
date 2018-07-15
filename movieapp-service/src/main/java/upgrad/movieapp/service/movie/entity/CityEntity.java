@@ -1,10 +1,4 @@
-/*
- * Copyright 2018-2019, https://beingtechie.io.
- *
- * File: UserEntity.java
- * Date: May 5, 2018
- * Author: Thribhuvan Krishnamurthy
- */
+
 package upgrad.movieapp.service.movie.entity;
 
 import static upgrad.movieapp.service.common.entity.Entity.SCHEMA;

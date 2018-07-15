@@ -3,18 +3,18 @@
   "info": {
     "title": "Artists Administration API",
     "version": "1.0.0",
-    "description": "## API of Artists Administration Services\n\nThis specification describes the endpoints, request/response model of the Artist Administration API. This API provides REST resources to manage artists of Movies application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```\n  https://movieapp.com/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Movies Application.\n\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Movies Application reserves the right to add new parameters without further notice (in request and response).\n  * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Movies Application reserves the right to enhance enumerations by new values.\n  * Movies Application reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nArtist Administration APIs can only be called by authorized users who has rights with required permissions to manage artists. These APIs can be used to create new artist, modify an existing artist, delete an existing artist.\n## Release Notes \n### 1.0.0\n* Initial version\n"
+    "description": "## API of Artists Administration Services\n\nThis specification describes the endpoints, request/response model of the Artist Administration API. This API provides REST resources to manage artists of Movies application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```\n  https://localhost:8080/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Movies Application.\n\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Movies Application reserves the right to add new parameters without further notice (in request and response).\n  * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Movies Application reserves the right to enhance enumerations by new values.\n  * Movies Application reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nArtist Administration APIs can only be called by authorized users who has rights with required permissions to manage artists. These APIs can be used to create new artist, modify an existing artist, delete an existing artist.\n## Release Notes \n### 1.0.0\n* Initial version\n"
   },
-  "host": "movieapp.com",
+  "host": "localhost:8080",
   "schemes": [
     "http",
     "https"
   ],
-  "basePath": "/api/v1/admin/artists",
+  "basePath": "/api/v1/admin",
   "tags": [
     {
-      "name": "API#005 Artists",
-      "description": "All operations marked with 'API#005 Artists' are relevant to artist Administration use case"
+      "name": "API#006 Artists",
+      "description": "All operations marked with 'API#006 Artists' are relevant to artist Administration use case"
     }
   ],
   "paths": {
@@ -22,7 +22,7 @@
       "post": {
         "operationId": "createArtist",
         "tags": [
-          "API#005 Artists"
+          "API#006 Artists"
         ],
         "security": [
           {
@@ -123,7 +123,7 @@
       "get": {
         "operationId": "getArtists",
         "tags": [
-          "API#005 Artists"
+          "API#006 Artists"
         ],
         "security": [
           {
@@ -231,7 +231,7 @@
       "get": {
         "operationId": "getArtist",
         "tags": [
-          "API#005 Artists"
+          "API#006 Artists"
         ],
         "security": [
           {
@@ -316,7 +316,7 @@
       "put": {
         "operationId": "updateArtist",
         "tags": [
-          "API#005 Artists"
+          "API#006 Artists"
         ],
         "security": [
           {
@@ -419,7 +419,7 @@
       "delete": {
         "operationId": "deleteArtist",
         "tags": [
-          "API#005 Artists"
+          "API#006 Artists"
         ],
         "security": [
           {
@@ -521,206 +521,6 @@
     }
   },
   "definitions": {
-    "MoviesSummaryResponse": {
-      "type": "object",
-      "properties": {
-        "page": {
-          "type": "integer",
-          "description": "page or position of the fetched movies"
-        },
-        "limit": {
-          "type": "integer",
-          "description": "number of movies fetched per this request"
-        },
-        "total_count": {
-          "type": "integer",
-          "description": "total number of movies in the database"
-        },
-        "movies": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/MovieSummaryType"
-          },
-          "description": "List of movies"
-        }
-      },
-      "required": [
-        "page",
-        "limit",
-        "total_count",
-        "movies"
-      ],
-      "example": {
-        "page": 1,
-        "limit": 10,
-        "total_count": 33,
-        "movies": [
-          {
-            "id": "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
-            "title": "Sample Movie",
-            "storyline": "This is a sample movie",
-            "genres": [
-              "Drama",
-              "Romantic"
-            ],
-            "duration": 120,
-            "poster_url": "www.samplemovie.com/poster",
-            "trailer_url": "www.samplemovie.com/trailer",
-            "wiki_url": "www.wikipedia.com/samplemovie",
-            "release_date": "2018-07-07",
-            "censor_board_rating": "U",
-            "critics_rating": 4.0,
-            "status": "RELEASED"
-          },
-          {
-            "id": "8d174a25-da31-55a8-85b4-c06ffc9d5f8f",
-            "title": "Another Sample Movie",
-            "storyline": "This is another sample movie",
-            "genres": [
-              "Comedy"
-            ],
-            "duration": 160,
-            "poster_url": "www.anothersamplemovie.com/poster",
-            "trailer_url": "www.anothersamplemovie.com/trailer",
-            "wiki_url": "www.wikipedia.com/anothersamplemovie",
-            "release_date": "2018-08-07",
-            "censor_board_rating": "U",
-            "critics_rating": 3.0,
-            "status": "PUBLISHED"
-          }
-        ]
-      }
-    },
-    "MovieSummaryType": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Unique identifier of the movie in a standard UUID format"
-        },
-        "title": {
-          "type": "string",
-          "description": "Title of the movie"
-        },
-        "storyline": {
-          "type": "string",
-          "description": "Storyline of the movie"
-        },
-        "genres": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Genres of the movie"
-        },
-        "duration": {
-          "type": "integer",
-          "description": "Duration (in minutes) of the movie"
-        },
-        "poster_url": {
-          "type": "string",
-          "description": "Poster URL of the movie"
-        },
-        "trailer_url": {
-          "type": "string",
-          "description": "Trailer URL of the movie"
-        },
-        "wiki_url": {
-          "type": "string",
-          "description": "Wiki URL of the movie"
-        },
-        "release_date": {
-          "description": "Release date of the project",
-          "$ref": "#/definitions/FullDateType"
-        },
-        "censor_board_rating": {
-          "$ref": "#/definitions/CensorBoardRatingType"
-        },
-        "critics_rating": {
-          "type": "number",
-          "format": "float",
-          "description": "Critics Rating of the movie"
-        },
-        "status": {
-          "$ref": "#/definitions/MovieStatusType"
-        },
-        "artists": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/ArtistType"
-          },
-          "description": "List of artists"
-        }
-      },
-      "required": [
-        "title",
-        "storyline",
-        "genres",
-        "duration",
-        "poster_url",
-        "trailer_url",
-        "release_date",
-        "censor_board_rating",
-        "critics_rating",
-        "status"
-      ],
-      "example": {
-        "title": "Sample Movie",
-        "storyline": "This is a sample movie",
-        "genres": [
-          "Drama",
-          "Romantic"
-        ],
-        "duration": 120,
-        "poster_url": "www.samplemovie.com/poster",
-        "trailer_url": "www.samplemovie.com/trailer",
-        "wiki_url": "www.wikipedia.com/samplemovie",
-        "release_date": "2018-07-07",
-        "censor_board_rating": "U",
-        "critics_rating": 4.0,
-        "status": "RELEASED"
-      }
-    },
-    "MovieOperationsRequest": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/MovieOperationRequest"
-      }
-    },
-    "MovieOperationRequest": {
-      "type": "object",
-      "properties": {
-        "op": {
-          "type": "string",
-          "description": "Type of operation",
-          "enum": [
-            "replace"
-          ]
-        },
-        "path": {
-          "type": "string",
-          "description": "Resource path whose state to be modified",
-          "enum": [
-            "status",
-            "release_date"
-          ]
-        },
-        "value": {
-          "type": "string",
-          "description": "New state value to be updated to the resource"
-        }
-      },
-      "example": [
-        {
-          "op": "replace",
-          "path": "status",
-          "value": "CLOSED"
-        }
-      ]
-    },
     "CreateArtistRequest": {
       "type": "object",
       "properties": {

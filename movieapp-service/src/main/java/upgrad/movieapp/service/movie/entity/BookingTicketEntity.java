@@ -10,11 +10,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -26,17 +25,10 @@ import upgrad.movieapp.service.common.entity.ext.EntityEqualsBuilder;
 import upgrad.movieapp.service.common.entity.ext.EntityHashCodeBuilder;
 
 @Entity
-@Table(name = "GENRES", schema = SCHEMA)
-@NamedQueries({
-        @NamedQuery(name = GenreEntity.COUNT_BY_ALL, query = "SELECT count(g.id) FROM GenreEntity g"),
-        @NamedQuery(name = GenreEntity.BY_ALL, query = "SELECT g FROM GenreEntity g")
-})
-public class GenreEntity extends ImmutableEntity implements Identifier<Long>, UniversalUniqueIdentifier<String>, Serializable {
+@Table(name = "BOOKING_TICKETS", schema = SCHEMA)
+public class BookingTicketEntity extends ImmutableEntity implements Identifier<Long>, UniversalUniqueIdentifier<String>, Serializable {
 
-    private static final long serialVersionUID = 7921286494206402080L;
-
-    public static final String COUNT_BY_ALL = "GenreEntity.countByAll";
-    public static final String BY_ALL = "GenreEntity.byAll";
+    private static final long serialVersionUID = 7932286494206403090L;
 
     @Id
     @Column(name = "ID")
@@ -47,14 +39,13 @@ public class GenreEntity extends ImmutableEntity implements Identifier<Long>, Un
     @Size(max = 36)
     private String uuid;
 
-    @Column(name = "GENRE")
-    @NotNull
-    @Size(max = 50)
-    private String genre;
+    @ManyToOne
+    @JoinColumn(name = "BOOKING_ID")
+    private ShowBookingEntity booking;
 
-    @Column(name = "DESCRIPTION")
-    @Size(max = 2000)
-    private String description;
+    @Column(name = "TICKET_NUMBER")
+    @Size(max = 3)
+    private String ticketNumber;
 
     @Override
     public Long getId() {
@@ -66,20 +57,20 @@ public class GenreEntity extends ImmutableEntity implements Identifier<Long>, Un
         return uuid;
     }
 
-    public String getGenre() {
-        return genre;
+    public ShowBookingEntity getBooking() {
+        return booking;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setBooking(ShowBookingEntity booking) {
+        this.booking = booking;
     }
 
-    public String getDescription() {
-        return description;
+    public String getTicketNumber() {
+        return ticketNumber;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setTicketNumber(String ticketNumber) {
+        this.ticketNumber = ticketNumber;
     }
 
     @Override

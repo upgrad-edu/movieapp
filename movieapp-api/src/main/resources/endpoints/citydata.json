@@ -3,18 +3,18 @@
   "info": {
     "title": "Cities Data API",
     "version": "1.0.0",
-    "description": "## API of City Data Services\n\nThis specification describes the endpoints, request/response model of the Cities Data API. This API provides REST resources to manage cities of Movies application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```\n  https://movieapp.com/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Movies Application.\n\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Movies Application reserves the right to add new parameters without further notice (in request and response).\n  * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Movies Application reserves the right to enhance enumerations by new values.\n  * Movies Application reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nCities Data APIs can only be called by authorized users who has rights with required permissions to manage cities. These APIs can be used to list cities present in the database.\n## Release Notes \n### 1.0.0\n* Initial version\n"
+    "description": "## API of City Data Services\n\nThis specification describes the endpoints, request/response model of the Cities Data API. This API provides REST resources to manage cities of Movies application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```\n  https://localhost:8080/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Movies Application.\n\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Movies Application reserves the right to add new parameters without further notice (in request and response).\n  * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Movies Application reserves the right to enhance enumerations by new values.\n  * Movies Application reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nCities Data APIs can only be called by authorized users who has rights with required permissions to manage cities. These APIs can be used to list cities present in the database.\n## Release Notes \n### 1.0.0\n* Initial version\n"
   },
-  "host": "movieapp.com",
+  "host": "localhost:8080",
   "schemes": [
     "http",
     "https"
   ],
-  "basePath": "/api/v1/cities",
+  "basePath": "/api/v1",
   "tags": [
     {
-      "name": "API#007 Cities",
-      "description": "All operations marked with 'API#007 Cities' are relevant to city data use case"
+      "name": "API#008 Cities",
+      "description": "All operations marked with 'API#008 Cities' are relevant to city data use case"
     }
   ],
   "paths": {
@@ -22,7 +22,7 @@
       "get": {
         "operationId": "getCities",
         "tags": [
-          "API#007 Cities"
+          "API#008 Cities"
         ],
         "summary": "City Data Services - Get all cities",
         "description": "API to get all cities of Movies application\n",

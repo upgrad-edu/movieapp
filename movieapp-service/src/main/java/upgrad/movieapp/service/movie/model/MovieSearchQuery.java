@@ -92,4 +92,5 @@ public class MovieSearchQuery extends SearchQuery {
         this.sortBy = sortBy;
         return this;
     }
+
 }

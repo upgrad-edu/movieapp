@@ -17,10 +17,8 @@ import java.time.format.DateTimeFormatter;
  */
 public final class DateTimeProvider {
 
-    private static final DateTimeProvider INSTANCE = new DateTimeProvider();
-
-    public static final DateTimeFormatter DEFAULT_FORMATTER = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-    public static final DateTimeFormatter SIMPLE_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public static final DateTimeFormatter DEFAULT_FORMAT = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+    public static final DateTimeFormatter SIMPLE_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 
     private DateTimeProvider() {
@@ -36,7 +34,7 @@ public final class DateTimeProvider {
     }
 
     public static ZonedDateTime parse(final String dateTimeString) {
-        return ZonedDateTime.parse(dateTimeString, DEFAULT_FORMATTER);
+        return ZonedDateTime.parse(dateTimeString, DEFAULT_FORMAT);
     }
 
     public static ZonedDateTime parse(final String dateTimeString, final DateTimeFormatter formatter) {
@@ -45,7 +43,11 @@ public final class DateTimeProvider {
     }
 
     public static String format(final ZonedDateTime zonedDateTime) {
-        return zonedDateTime.format(DEFAULT_FORMATTER);
+        return zonedDateTime.format(DEFAULT_FORMAT);
+    }
+
+    public static String format(final ZonedDateTime zonedDateTime, final DateTimeFormatter formatter) {
+        return zonedDateTime.format(formatter);
     }
 
 }

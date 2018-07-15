@@ -3,14 +3,14 @@
   "info": {
     "title": "Movies Application API",
     "version": "1.0.0",
-    "description": "## API of Movies Application\n\nThis specification describes the endpoints, request/response model for Movie Application. This API provides REST resources to manage project movies of Movies application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```\n  https://movieapp.com/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Movies Application.\n\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Movies Application reserves the right to add new parameters without further notice (in request and response).\n  * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Movies Application reserves the right to enhance enumerations by new values.\n  * Movies Application reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nMovie APIs are called by an authorized application to view data on movies, artists, theatres, shows and bookings.\n## Release Notes \n### 1.0.0\n* Initial version\n"
+    "description": "## API of Movies Application\n\nThis specification describes the endpoints, request/response model for Movie Application. This API provides REST resources to manage project movies of Movies application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```\n  http://localhost:8080/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Movies Application.\n\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Movies Application reserves the right to add new parameters without further notice (in request and response).\n  * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Movies Application reserves the right to enhance enumerations by new values.\n  * Movies Application reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nMovie APIs are called by an authorized application to view data on movies, artists, theatres, shows and bookings.\n## Release Notes \n### 1.0.0\n* Initial version\n"
   },
-  "host": "movieapp.com",
+  "host": "localhost:8080",
   "schemes": [
     "http",
     "https"
   ],
-  "basePath": "/api/v1/movies",
+  "basePath": "/api/v1",
   "tags": [
     {
       "name": "API#004 Movies",
@@ -24,22 +24,12 @@
         "tags": [
           "API#004 Movies"
         ],
-        "security": [
-          {
-            "Authorization": [
-
-            ]
-          }
-        ],
-        "summary": "Movie Management - Get all Movies",
+        "summary": "Movie Application - Get all Movies",
         "description": "API to get all movies of Movies application\n",
         "produces": [
           "application/json"
         ],
         "parameters": [
-          {
-            "$ref": "#/parameters/Authorization"
-          },
           {
             "in": "query",
             "name": "page",
@@ -185,13 +175,6 @@
         "tags": [
           "API#004 Movies"
         ],
-        "security": [
-          {
-            "Authorization": [
-
-            ]
-          }
-        ],
         "summary": "Movie Management - Get an existing Movie",
         "description": "API to get an existing Movie detalis of Movies application\n",
         "produces": [
@@ -200,9 +183,6 @@
         "parameters": [
           {
             "$ref": "#/parameters/MovieId"
-          },
-          {
-            "$ref": "#/parameters/Authorization"
           }
         ],
         "responses": {
@@ -272,29 +252,19 @@
         "tags": [
           "API#004 Movies"
         ],
-        "security": [
-          {
-            "Authorization": [
-
-            ]
-          }
-        ],
         "summary": "Movie Management - List of artists belonging to the Movie",
-        "description": "API to get an existing projects of the Movie\n",
+        "description": "API to get an existing artists of the Movie\n",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
             "$ref": "#/parameters/MovieId"
-          },
-          {
-            "$ref": "#/parameters/Authorization"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK - Fetched list of Movie projects",
+            "description": "OK - Fetched list of Movie artists",
             "headers": {
               "request-id": {
                 "type": "string",
@@ -348,14 +318,7 @@
       "get": {
         "operationId": "getMovieArtistDetails",
         "tags": [
-          "API#004 Movies"
-        ],
-        "security": [
-          {
-            "Authorization": [
-
-            ]
-          }
+          "API#005 Movies"
         ],
         "summary": "Movie Management - Get an existing project details of the Movie",
         "description": "API to get an existing Projects detalis of the Movie\n",
@@ -368,9 +331,6 @@
           },
           {
             "$ref": "#/parameters/ArtistId"
-          },
-          {
-            "$ref": "#/parameters/Authorization"
           }
         ],
         "responses": {
@@ -435,20 +395,7 @@
       }
     }
   },
-  "securityDefinitions": {
-    "Authorization": {
-      "type": "basic",
-      "description": "Bearer authentication (also called token authentication) is an HTTP authentication scheme that involves security tokens called bearer tokens. The name “Bearer authentication” can be understood as “give access to the bearer of this token.”\nThe bearer token is a cryptic string, usually generated by the server in response to a login request. The client must send this token in the Authorization header when making requests to protected resources:\n``` Authorization: Bearer <token>\n```\nSimilarly to Basic authentication, Bearer authentication should only be used over HTTPS (SSL).\nRead https://jwt.io/introduction/ for more information on JWT standard.\n"
-    }
-  },
   "parameters": {
-    "Authorization": {
-      "name": "authorization",
-      "type": "string",
-      "in": "header",
-      "required": true,
-      "description": "Mandatory user credentials in bearer http authentication scheme format. Refer to the #/securityDefinitions for more information on this header."
-    },
     "MovieId": {
       "name": "movie_id",
       "type": "string",
@@ -586,7 +533,7 @@
           "description": "Wiki URL of the movie"
         },
         "release_date": {
-          "description": "Release date of the project",
+          "description": "Release date of the movie",
           "$ref": "#/definitions/FullDateType"
         },
         "censor_board_rating": {

@@ -3,18 +3,18 @@
   "info": {
     "title": "Genres Data API",
     "version": "1.0.0",
-    "description": "## API of Genres Data Services\n\nThis specification describes the endpoints, request/response model of the Genres API. This API provides REST resources to manage genres of Movies application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```\n  https://movieapp.com/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Movies Application.\n\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Movies Application reserves the right to add new parameters without further notice (in request and response).\n  * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Movies Application reserves the right to enhance enumerations by new values.\n  * Movies Application reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nGenres Data APIs can only be called by authorized users who has rights with required permissions to manage genres. These APIs can be used to list genres present in the database.\n## Release Notes \n### 1.0.0\n* Initial version\n"
+    "description": "## API of Genres Data Services\n\nThis specification describes the endpoints, request/response model of the Genres API. This API provides REST resources to manage genres of Movies application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```\n  https://localhost:8080/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Movies Application.\n\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Movies Application reserves the right to add new parameters without further notice (in request and response).\n  * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Movies Application reserves the right to enhance enumerations by new values.\n  * Movies Application reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nGenres Data APIs can only be called by authorized users who has rights with required permissions to manage genres. These APIs can be used to list genres present in the database.\n## Release Notes \n### 1.0.0\n* Initial version\n"
   },
-  "host": "movieapp.com",
+  "host": "localhost:8080",
   "schemes": [
     "http",
     "https"
   ],
-  "basePath": "/api/v1/genres",
+  "basePath": "/api/v1",
   "tags": [
     {
-      "name": "API#006 Genres",
-      "description": "All operations marked with 'API#006 Genres' are relevant to genre data use case"
+      "name": "API#007 Genres",
+      "description": "All operations marked with 'API#007 Genres' are relevant to genre data use case"
     }
   ],
   "paths": {
@@ -22,7 +22,7 @@
       "get": {
         "operationId": "getGenres",
         "tags": [
-          "API#006 Genres"
+          "API#007 Genres"
         ],
         "summary": "Genre Data Services - Get all genres",
         "description": "API to get all genres of Movies application\n",

@@ -14,7 +14,7 @@ info:
 
 
     ```
-      https://movieapp.com/api/v1/
+      https://localhost:8080/api/v1/
     ```
 
 
@@ -44,22 +44,22 @@ info:
 
     * Initial version
 
-host: movieapp.com
+host: localhost:8080
 schemes:
   - http
   - https
-basePath: /api/v1/admin/artists
+basePath: /api/v1/admin
 tags:
-  - name: 'API#005 Artists'
+  - name: 'API#006 Artists'
     description: >-
-      All operations marked with 'API#005 Artists' are relevant to artist Administration use case
+      All operations marked with 'API#006 Artists' are relevant to artist Administration use case
 
 paths:
   /artists:
     post:
       operationId: createArtist
       tags:
-        - 'API#005 Artists'
+        - 'API#006 Artists'
       security:
         - Authorization: []
       summary: Artist Administration - Create new Artist
@@ -133,7 +133,7 @@ paths:
     get:
        operationId: getArtists
        tags:
-         - 'API#005 Artists'
+         - 'API#006 Artists'
        security:
          - Authorization: []
        summary: Artist Administration - Get all Artists
@@ -209,7 +209,7 @@ paths:
      get:
         operationId: getArtist
         tags:
-          - 'API#005 Artists'
+          - 'API#006 Artists'
         security:
           - Authorization: []
         summary: Artist Administration - Get an existing Artist
@@ -270,7 +270,7 @@ paths:
      put:
         operationId: updateArtist
         tags:
-          - 'API#005 Artists'
+          - 'API#006 Artists'
         security:
           - Authorization: []
         summary: Artist Administration - Update an existing Artist
@@ -345,7 +345,7 @@ paths:
      delete:
         operationId: deleteArtist
         tags:
-          - 'API#005 Artists'
+          - 'API#006 Artists'
         security:
           - Authorization: []
         summary: Artist Administration - Mark an existing Artist as INACTIVE
@@ -440,160 +440,6 @@ parameters:
       Unique identifier of Movie in a standard UUID format
 
 definitions:
-
-  MoviesSummaryResponse:
-    type: object
-    properties:
-      page:
-        type: integer
-        description: page or position of the fetched movies
-      limit:
-        type: integer
-        description: number of movies fetched per this request
-      total_count:
-        type: integer
-        description: total number of movies in the database
-      movies:
-        type: array
-        items:
-          type: object
-          $ref: '#/definitions/MovieSummaryType'
-        description: List of movies
-    required:
-      - page
-      - limit
-      - total_count
-      - movies
-    example:
-      page: 1
-      limit: 10
-      total_count: 33
-      movies:
-        - id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-          title: Sample Movie
-          storyline: This is a sample movie
-          genres:
-            - Drama
-            - Romantic
-          duration: 120
-          poster_url: www.samplemovie.com/poster
-          trailer_url: www.samplemovie.com/trailer
-          wiki_url: www.wikipedia.com/samplemovie
-          release_date: 2018-07-07
-          censor_board_rating: U
-          critics_rating: 4.0
-          status: RELEASED
-
-        - id: 8d174a25-da31-55a8-85b4-c06ffc9d5f8f
-          title: Another Sample Movie
-          storyline: This is another sample movie
-          genres:
-            - Comedy
-          duration: 160
-          poster_url: www.anothersamplemovie.com/poster
-          trailer_url: www.anothersamplemovie.com/trailer
-          wiki_url: www.wikipedia.com/anothersamplemovie
-          release_date: 2018-08-07
-          censor_board_rating: U
-          critics_rating: 3.0
-          status: PUBLISHED
-
-  MovieSummaryType:
-    type: object
-    properties:
-      id:
-        type: string
-        format: uuid
-        description: Unique identifier of the movie in a standard UUID format
-      title:
-        type: string
-        description: Title of the movie
-      storyline:
-        type: string
-        description: Storyline of the movie
-      genres:
-        type: array
-        items:
-          type: string
-        description: Genres of the movie
-      duration:
-        type: integer
-        description: Duration (in minutes) of the movie
-      poster_url:
-        type: string
-        description: Poster URL of the movie
-      trailer_url:
-        type: string
-        description: Trailer URL of the movie
-      wiki_url:
-        type: string
-        description: Wiki URL of the movie
-      release_date:
-        description: Release date of the project
-        $ref: '#/definitions/FullDateType'
-      censor_board_rating:
-        $ref: '#/definitions/CensorBoardRatingType'
-      critics_rating:
-        type: number
-        format: float
-        description: Critics Rating of the movie
-      status:
-        $ref: '#/definitions/MovieStatusType'
-      artists:
-        type: array
-        items:
-          type: object
-          $ref: '#/definitions/ArtistType'
-        description: List of artists
-    required:
-      - title
-      - storyline
-      - genres
-      - duration
-      - poster_url
-      - trailer_url
-      - release_date
-      - censor_board_rating
-      - critics_rating
-      - status
-    example:
-      title: Sample Movie
-      storyline: This is a sample movie
-      genres:
-        - Drama
-        - Romantic
-      duration: 120
-      poster_url: www.samplemovie.com/poster
-      trailer_url: www.samplemovie.com/trailer
-      wiki_url: www.wikipedia.com/samplemovie
-      release_date: 2018-07-07
-      censor_board_rating: U
-      critics_rating: 4.0
-      status: RELEASED
-
-  MovieOperationsRequest:
-    type: array
-    items:
-      $ref: '#/definitions/MovieOperationRequest'
-
-  MovieOperationRequest:
-    type: object
-    properties:
-      op:
-        type: string
-        description: Type of operation
-        enum: [replace]
-      path:
-        type: string
-        description: Resource path whose state to be modified
-        enum: [status, release_date]
-      value:
-        type: string
-        description: New state value to be updated to the resource
-    example:
-      - op: replace
-        path: status
-        value: CLOSED
 
   CreateArtistRequest:
     type: object

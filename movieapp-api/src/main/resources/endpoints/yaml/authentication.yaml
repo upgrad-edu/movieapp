@@ -15,7 +15,7 @@ info:
 
 
     ```
-      https://movieapp.com/api/v1/
+      https://localhost:8080/api/v1/
     ```
 
 
@@ -52,7 +52,7 @@ info:
 
     * Initial version
 
-host: movieapp.com
+host: localhost:8080
 schemes:
   - http
   - https
@@ -87,7 +87,7 @@ securityDefinitions:
 
       ```
 
-      POST https://movieapp.com/api/v1/auth/login HTTP/1.1
+      POST https://localhost:8080/api/v1/auth/login HTTP/1.1
 
       Authorization: Basic YW5kcmFwcF91czpqVEdhNUVKODR0
 

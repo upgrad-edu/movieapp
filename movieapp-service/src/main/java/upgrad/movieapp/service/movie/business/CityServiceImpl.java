@@ -19,7 +19,7 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public CityEntity findCity(String code) throws ApplicationException {
+    public CityEntity findCity(String code) {
         return cacheProvider.findCity(code);
     }
 }

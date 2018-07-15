@@ -14,7 +14,7 @@ info:
 
 
     ```
-      https://movieapp.com/api/v1/
+      https://localhost:8080/api/v1/
     ```
 
 
@@ -44,15 +44,15 @@ info:
 
     * Initial version
 
-host: movieapp.com
+host: localhost:8080
 schemes:
   - http
   - https
-basePath: /api/v1/genres
+basePath: /api/v1
 tags:
-  - name: 'API#006 Genres'
+  - name: 'API#007 Genres'
     description: >-
-      All operations marked with 'API#006 Genres' are relevant to genre data use case
+      All operations marked with 'API#007 Genres' are relevant to genre data use case
 
 paths:
   /genres:
@@ -60,7 +60,7 @@ paths:
     get:
        operationId: getGenres
        tags:
-         - 'API#006 Genres'
+         - 'API#007 Genres'
        summary: Genre Data Services - Get all genres
        description: >
          API to get all genres of Movies application

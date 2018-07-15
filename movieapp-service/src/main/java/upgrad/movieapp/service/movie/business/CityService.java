@@ -8,6 +8,6 @@ public interface CityService {
 
     SearchResult<CityEntity> findAllCities();
 
-    CityEntity findCity(final String code) throws ApplicationException;
+    CityEntity findCity(final String code) ;
 
 }

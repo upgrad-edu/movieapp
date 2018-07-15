@@ -27,8 +27,4 @@ public interface MovieService {
 
     void updateReleaseDate(@NotNull String movieUuid, ZonedDateTime newReleaseAt) throws ApplicationException;
 
-    void addArtists(@NotNull String movieUuid, Set<ArtistEntity> artists);
-
-    void removeArtists(@NotNull String movieUuid, Set<ArtistEntity> artists);
-
 }

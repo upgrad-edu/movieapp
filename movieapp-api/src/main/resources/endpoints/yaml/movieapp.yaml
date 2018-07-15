@@ -14,7 +14,7 @@ info:
 
 
     ```
-      https://movieapp.com/api/v1/
+      http://localhost:8080/api/v1/
     ```
 
 
@@ -43,11 +43,11 @@ info:
 
     * Initial version
 
-host: movieapp.com
+host: localhost:8080
 schemes:
   - http
   - https
-basePath: /api/v1/movies
+basePath: /api/v1
 tags:
   - name: 'API#004 Movies'
     description: >-
@@ -229,14 +229,14 @@ paths:
         - 'API#004 Movies'
       summary: Movie Management - List of artists belonging to the Movie
       description: >
-          API to get an existing projects of the Movie
+          API to get an existing artists of the Movie
       produces:
         - application/json
       parameters:
        - $ref: '#/parameters/MovieId'
       responses:
        '200':
-         description: OK - Fetched list of Movie projects
+         description: OK - Fetched list of Movie artists
          headers:
            request-id:
              type: string
@@ -279,7 +279,7 @@ paths:
      get:
         operationId: getMovieArtistDetails
         tags:
-          - 'API#004 Movies'
+          - 'API#005 Movies'
         summary: Movie Management - Get an existing project details of the Movie
         description: >
             API to get an existing Projects detalis of the Movie
@@ -452,7 +452,7 @@ definitions:
         type: string
         description: Wiki URL of the movie
       release_date:
-        description: Release date of the project
+        description: Release date of the movie
         $ref: '#/definitions/FullDateType'
       censor_board_rating:
         $ref: '#/definitions/CensorBoardRatingType'

@@ -8,6 +8,8 @@ import static upgrad.movieapp.api.controller.transformer.MovieTransformer.*;
 import static upgrad.movieapp.api.data.ResourceConstants.BASE_ADMIN_URL;
 import static upgrad.movieapp.api.model.MovieOperationRequest.PathEnum.RELEASE_DATE;
 import static upgrad.movieapp.api.model.MovieOperationRequest.PathEnum.STATUS;
+import static upgrad.movieapp.service.common.data.DateTimeProvider.SIMPLE_DATE_FORMAT;
+import static upgrad.movieapp.service.common.data.DateTimeProvider.parse;
 
 import java.util.Set;
 
@@ -33,7 +35,6 @@ import upgrad.movieapp.api.model.MovieStatusType;
 import upgrad.movieapp.api.model.MoviesSummaryResponse;
 import upgrad.movieapp.api.model.UpdateMovieRequest;
 import upgrad.movieapp.api.model.UserDetailsResponse;
-import upgrad.movieapp.service.common.data.DateTimeProvider;
 import upgrad.movieapp.service.common.exception.ApplicationException;
 import upgrad.movieapp.service.common.model.SearchResult;
 import upgrad.movieapp.service.movie.business.ArtistService;
@@ -111,7 +112,7 @@ public class MovieAdminController {
             if (STATUS == movieOperationRequest.getPath()) {
                 movieService.updateStatus(movieUuid, toMovieStatus(movieOperationRequest.getValue()));
             } else if (RELEASE_DATE == movieOperationRequest.getPath()) {
-                movieService.updateReleaseDate(movieUuid, DateTimeProvider.parse(movieOperationRequest.getValue()));
+                movieService.updateReleaseDate(movieUuid, parse(movieOperationRequest.getValue(), SIMPLE_DATE_FORMAT));
             }
         }
 
@@ -119,19 +120,9 @@ public class MovieAdminController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/movies/{id}")
-    public ResponseEntity deleteUser(@RequestHeader("authorization") String accessToken,
+    public ResponseEntity deleteMovie(@RequestHeader("authorization") String accessToken,
                                      @PathVariable("id") final String movieUuid) throws ApplicationException {
         movieService.deleteMovie(movieUuid);
-        return ResponseBuilder.ok().build();
-    }
-
-    @RequestMapping(method = POST, path = "/movies/{movieId}/artists", produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity addMovieArtists(@RequestHeader("authorization") String accessToken,
-                                          @PathVariable("movieId") final String movieUuid,
-                                          @RequestBody final Set<String> artistUuids)
-            throws ApplicationException {
-
-        SearchResult<ArtistEntity> movieArtists = artistService.findArtists(movieUuid);
         return ResponseBuilder.ok().build();
     }
 

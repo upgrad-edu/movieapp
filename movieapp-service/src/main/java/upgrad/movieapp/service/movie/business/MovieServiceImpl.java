@@ -166,14 +166,4 @@ public class MovieServiceImpl implements MovieService {
         return existingMovie;
     }
 
-    @Override
-    public void addArtists(String movieUuid, Set<ArtistEntity> artists) {
-
-    }
-
-    @Override
-    public void removeArtists(String movieUuid, Set<ArtistEntity> artists) {
-
-    }
-
 }
