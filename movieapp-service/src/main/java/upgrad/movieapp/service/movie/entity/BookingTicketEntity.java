@@ -20,13 +20,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import upgrad.movieapp.service.common.entity.Identifier;
 import upgrad.movieapp.service.common.entity.ImmutableEntity;
-import upgrad.movieapp.service.common.entity.UniversalUniqueIdentifier;
 import upgrad.movieapp.service.common.entity.ext.EntityEqualsBuilder;
 import upgrad.movieapp.service.common.entity.ext.EntityHashCodeBuilder;
 
 @Entity
 @Table(name = "BOOKING_TICKETS", schema = SCHEMA)
-public class BookingTicketEntity extends ImmutableEntity implements Identifier<Long>, UniversalUniqueIdentifier<String>, Serializable {
+public class BookingTicketEntity extends ImmutableEntity implements Identifier<Long>, Serializable {
 
     private static final long serialVersionUID = 7932286494206403090L;
 
@@ -34,10 +33,6 @@ public class BookingTicketEntity extends ImmutableEntity implements Identifier<L
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column(name = "UUID")
-    @Size(max = 36)
-    private String uuid;
 
     @ManyToOne
     @JoinColumn(name = "BOOKING_ID")
@@ -50,11 +45,6 @@ public class BookingTicketEntity extends ImmutableEntity implements Identifier<L
     @Override
     public Long getId() {
         return id;
-    }
-
-    @Override
-    public String getUuid() {
-        return uuid;
     }
 
     public ShowBookingEntity getBooking() {
@@ -86,12 +76,6 @@ public class BookingTicketEntity extends ImmutableEntity implements Identifier<L
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
-    }
-
-    @PrePersist
-    public void prePersist() {
-        this.uuid = UUID.randomUUID().toString();
-        super.prePersist();
     }
 
 }

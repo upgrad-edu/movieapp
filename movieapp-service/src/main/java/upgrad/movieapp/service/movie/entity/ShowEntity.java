@@ -4,6 +4,7 @@ package upgrad.movieapp.service.movie.entity;
 import static upgrad.movieapp.service.common.entity.Entity.SCHEMA;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,8 +55,11 @@ public class ShowEntity extends MutableEntity implements Identifier<Long>, Unive
     @JoinColumn(name = "THEATRE_ID")
     private TheatreEntity theatre;
 
-    @Column(name = "SHOW_DATETIME")
-    private ZonedDateTime timing;
+    @Column(name = "START_TIME")
+    private ZonedDateTime startTime;
+
+    @Column(name = "END_TIME")
+    private ZonedDateTime endTime;
 
     @Column(name = "LANG")
     @NotNull
@@ -63,15 +67,15 @@ public class ShowEntity extends MutableEntity implements Identifier<Long>, Unive
     private String language;
 
     @Column(name = "UNIT_PRICE")
-    @Digits(integer = 2, fraction = 2)
-    private Float unitPrice;
+    @Digits(integer = 6, fraction = 2)
+    @NotNull
+    private BigDecimal unitPrice;
 
     @Column(name = "TOTAL_SEATS")
-    @Digits(integer = 3, fraction = 0)
+    @NotNull
     private Integer totalSeats;
 
     @Column(name = "AVAILABLE_SEATS")
-    @Digits(integer = 3, fraction = 0)
     private Integer availableSeats;
 
     @Column(name = "ACTIVE")
@@ -108,12 +112,20 @@ public class ShowEntity extends MutableEntity implements Identifier<Long>, Unive
         this.theatre = theatre;
     }
 
-    public ZonedDateTime getTiming() {
-        return timing;
+    public ZonedDateTime getStartTime() {
+        return startTime;
     }
 
-    public void setTiming(ZonedDateTime timing) {
-        this.timing = timing;
+    public void setStartTime(ZonedDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public ZonedDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(ZonedDateTime endTime) {
+        this.endTime = endTime;
     }
 
     public String getLanguage() {
@@ -124,11 +136,11 @@ public class ShowEntity extends MutableEntity implements Identifier<Long>, Unive
         this.language = language;
     }
 
-    public Float getUnitPrice() {
+    public BigDecimal getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(Float unitPrice) {
+    public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
 

@@ -79,7 +79,7 @@ public final class TheatreTransformer {
         try {
             return TheatreStatusType.valueOf(status);
         } catch (IllegalArgumentException exc) {
-            throw new RestException(THR_003, StringUtils.join(TheatreStatusType.values(), ","));
+            throw new RestException(THR_003, status, StringUtils.join(TheatreStatusType.values(), ","));
         }
     }
 

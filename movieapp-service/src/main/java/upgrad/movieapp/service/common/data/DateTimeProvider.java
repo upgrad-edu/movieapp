@@ -8,6 +8,7 @@
 package upgrad.movieapp.service.common.data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,36 +18,45 @@ import java.time.format.DateTimeFormatter;
  */
 public final class DateTimeProvider {
 
-    public static final DateTimeFormatter DEFAULT_FORMAT = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-    public static final DateTimeFormatter SIMPLE_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
+    private static final DateTimeFormatter SIMPLE_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter SIMPLE_DATETIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter SIMPLE_TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
 
     private DateTimeProvider() {
         // prohibit instantiation
     }
 
     public static ZonedDateTime currentSystemTime() {
-        return ZonedDateTime.now();
+        return ZonedDateTime.now(ZoneId.systemDefault());
     }
 
     public static ZonedDateTime currentProgramTime() {
-        return ZonedDateTime.now();
+        return ZonedDateTime.now(ZoneId.systemDefault());
     }
 
-    public static ZonedDateTime parse(final String dateTimeString) {
-        return ZonedDateTime.parse(dateTimeString, DEFAULT_FORMAT);
-    }
-
-    public static ZonedDateTime parse(final String dateTimeString, final DateTimeFormatter formatter) {
-        final LocalDate simpleDate = LocalDate.parse(dateTimeString, formatter);
+    public static ZonedDateTime parseDate(final String dateString) {
+        final LocalDate simpleDate = LocalDate.parse(dateString, SIMPLE_DATE_FORMAT);
         return simpleDate.atStartOfDay(ZoneId.systemDefault());
     }
 
-    public static String format(final ZonedDateTime zonedDateTime) {
-        return zonedDateTime.format(DEFAULT_FORMAT);
+    public static ZonedDateTime parseDateTime(final String dateTimeString) {
+        final LocalDateTime simpleDateTime = LocalDateTime.parse(dateTimeString, SIMPLE_DATETIME_FORMAT);
+        return ZonedDateTime.of(simpleDateTime, ZoneId.systemDefault());
     }
 
-    public static String format(final ZonedDateTime zonedDateTime, final DateTimeFormatter formatter) {
+    public static String formatDate(final ZonedDateTime zonedDateTime) {
+        return zonedDateTime.format(SIMPLE_DATE_FORMAT);
+    }
+
+    public static String formatTime(final ZonedDateTime zonedDateTime) {
+        return zonedDateTime.format(SIMPLE_TIME_FORMAT);
+    }
+
+    public static String formatDateTime(final ZonedDateTime zonedDateTime) {
+        return zonedDateTime.format(SIMPLE_DATETIME_FORMAT);
+    }
+
+    public static String formatDateTime(final ZonedDateTime zonedDateTime, DateTimeFormatter formatter) {
         return zonedDateTime.format(formatter);
     }
 

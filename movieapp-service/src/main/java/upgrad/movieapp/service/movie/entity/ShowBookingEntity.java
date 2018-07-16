@@ -4,6 +4,7 @@ package upgrad.movieapp.service.movie.entity;
 import static upgrad.movieapp.service.common.entity.Entity.SCHEMA;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +17,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -33,9 +37,14 @@ import upgrad.movieapp.service.user.entity.UserEntity;
 
 @Entity
 @Table(name = "SHOW_BOOKINGS", schema = SCHEMA)
+@NamedQueries({
+        @NamedQuery(name = ShowBookingEntity.BY_BOOKING_REF, query = "select sb from ShowBookingEntity sb where sb.bookingReference = :bookingReference")
+})
 public class ShowBookingEntity extends MutableEntity implements Identifier<Long>, UniversalUniqueIdentifier<String>, Serializable {
 
-    private static final long serialVersionUID = 7932286494206403090L;
+    public static final String BY_BOOKING_REF = "ShowBookingEntity.byBookingReference";
+
+    private static final long serialVersionUID = 7932286494207403090L;
 
     @Id
     @Column(name = "ID")
@@ -54,15 +63,23 @@ public class ShowBookingEntity extends MutableEntity implements Identifier<Long>
     @JoinColumn(name = "SHOW_ID")
     private ShowEntity show;
 
+    @Column(name = "BOOKING_REF")
+    @Size(max = 30)
+    @NotNull
+    private String bookingReference;
+
     @Column(name = "TOTAL_SEATS")
     @Digits(integer = 3, fraction = 0)
+    @NotNull
     private Integer totalSeats;
 
     @Column(name = "TOTAL_PRICE")
-    @Digits(integer = 2, fraction = 2)
-    private Float totalPrice;
+    @Digits(integer = 8, fraction = 2)
+    @NotNull
+    private BigDecimal totalPrice;
 
     @Column(name = "BOOKING_AT")
+    @NotNull
     private ZonedDateTime bookingAt;
 
     @Column(name = "CANCELLED_AT")
@@ -70,10 +87,11 @@ public class ShowBookingEntity extends MutableEntity implements Identifier<Long>
 
     @Column(name = "STATUS")
     @Size(max = 30)
+    @NotNull
     private String status;
 
     @OneToMany(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "SHOW_BOOKING_ID")
+    @JoinColumn(name = "BOOKING_ID")
     private List<BookingTicketEntity> bookingTickets = new ArrayList<>();
 
     @Override
@@ -102,6 +120,14 @@ public class ShowBookingEntity extends MutableEntity implements Identifier<Long>
         this.show = show;
     }
 
+    public String getBookingReference() {
+        return bookingReference;
+    }
+
+    public void setBookingReference(String bookingReference) {
+        this.bookingReference = bookingReference;
+    }
+
     public Integer getTotalSeats() {
         return totalSeats;
     }
@@ -110,11 +136,11 @@ public class ShowBookingEntity extends MutableEntity implements Identifier<Long>
         this.totalSeats = totalSeats;
     }
 
-    public Float getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Float totalPrice) {
+    public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
 

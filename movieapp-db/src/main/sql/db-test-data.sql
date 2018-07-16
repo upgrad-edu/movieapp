@@ -118,3 +118,31 @@ INSERT INTO movieapp.MOVIE_ARTISTS (ID, MOVIE_ID, ARTIST_ID, CREATED_BY)
             (select ID from movieapp.ARTISTS where UUID = '9c174b25-cb31-66a8-98b4-d06ffc9d5f9f'), CURRENT_USER);
 
 -- ********** End of MOVIE_ARTISTS setup **********
+
+-- ********** Begin of THEATRES setup **********
+
+INSERT INTO movieapp.THEATRES (ID, UUID, NAME, POSTAL_ADDRESS, CITY_CODE, CREATED_BY)
+		VALUES
+		(nextval('movieapp.theatres_id_seq'), '7c174b25-bb31-46a8-87b4-c06ffc9d5f8f', 'PVR Cinemas', 'Worli, Mumbai', 'MUM', CURRENT_USER);
+
+INSERT INTO movieapp.THEATRES (ID, UUID, NAME, POSTAL_ADDRESS, CITY_CODE, CREATED_BY)
+		VALUES
+		(nextval('movieapp.theatres_id_seq'), '8c174b25-bb31-56a8-88b4-d06ffc9d5f89', 'Inox Cinemas', 'Mulund, Mumbai', 'MUM', CURRENT_USER);
+
+INSERT INTO movieapp.THEATRES (ID, UUID, NAME, POSTAL_ADDRESS, CITY_CODE, CREATED_BY)
+		VALUES
+		(nextval('movieapp.theatres_id_seq'), '9c174b25-cb31-66a8-98b4-d06ffc9d5f9f', 'PVR Cinemas', 'Koramangala, Bengaluru', 'BLR', CURRENT_USER);
+
+INSERT INTO movieapp.THEATRES (ID, UUID, NAME, POSTAL_ADDRESS, CITY_CODE, CREATED_BY)
+		VALUES
+		(nextval('movieapp.theatres_id_seq'), '9d174b25-cb31-66a8-98b4-d06ffc9d5f9f', 'Inox Cinemas', 'ORR, Bengaluru', 'BLR', CURRENT_USER);
+
+INSERT INTO movieapp.THEATRES (ID, UUID, NAME, POSTAL_ADDRESS, CITY_CODE, CREATED_BY)
+		VALUES
+		(nextval('movieapp.theatres_id_seq'), '9e174b25-cb31-66a8-98b4-d06ffc9d5f9f', 'Inox Cinemas', 'Connaught Place, New Delhi', 'DEL', CURRENT_USER);
+
+INSERT INTO movieapp.THEATRES (ID, UUID, NAME, POSTAL_ADDRESS, CITY_CODE, CREATED_BY)
+		VALUES
+		(nextval('movieapp.theatres_id_seq'), '9f174b25-cb31-66a8-98b4-d06ffc9d5f9f', 'Maxx Cinemas', 'Chandni Chowk, New Delhi', 'DEL', CURRENT_USER);
+
+-- ********** End of THEATRES setup **********

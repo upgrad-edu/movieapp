@@ -4,7 +4,6 @@ import static upgrad.movieapp.service.movie.exception.MovieErrorCode.*;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
-
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -18,7 +17,6 @@ import upgrad.movieapp.service.common.exception.ApplicationException;
 import upgrad.movieapp.service.common.exception.EntityNotFoundException;
 import upgrad.movieapp.service.common.model.SearchResult;
 import upgrad.movieapp.service.movie.dao.MovieDao;
-import upgrad.movieapp.service.movie.entity.ArtistEntity;
 import upgrad.movieapp.service.movie.entity.MovieEntity;
 import upgrad.movieapp.service.movie.model.MovieSearchQuery;
 import upgrad.movieapp.service.movie.model.MovieStatus;
@@ -49,9 +47,9 @@ public class MovieServiceImpl implements MovieService {
     @Transactional(propagation = Propagation.REQUIRED)
     public MovieEntity createMovie(MovieEntity newMovie) throws ApplicationException {
         newMovie.setStatus(MovieStatus.PUBLISHED.name());
-        if (newMovie.getReleaseAt().isBefore(DateTimeProvider.currentProgramTime())) {
-            throw new ApplicationException(MVI_003);
-        }
+//        if (newMovie.getReleaseAt().isBefore(DateTimeProvider.currentProgramTime())) {
+//            throw new ApplicationException(MVI_003);
+//        }
 
         for (String genreUUid : newMovie.getGenreUuids()) {
             newMovie.addGenre(genreService.findGenre(genreUUid));
@@ -69,9 +67,9 @@ public class MovieServiceImpl implements MovieService {
     public void updateMovie(String movieUuid, MovieEntity updatedMovie) throws ApplicationException {
 
         final ZonedDateTime releaseAt = updatedMovie.getReleaseAt();
-        if (releaseAt != null && releaseAt.isBefore(DateTimeProvider.currentProgramTime())) {
-            throw new ApplicationException(MVI_003);
-        }
+//        if (releaseAt != null && releaseAt.isBefore(DateTimeProvider.currentProgramTime())) {
+//            throw new ApplicationException(MVI_003);
+//        }
 
         final MovieEntity existingMovie = findExistingMovie(movieUuid);
         if (MovieStatus.DELETED == MovieStatus.valueOf(existingMovie.getStatus())) {

@@ -39,4 +39,6 @@ public interface ResourceConstants {
 
     String BEARER_AUTH_PREFIX = "Bearer ";
 
+    String AUTHORIZED_USER_UUID = "authorized-user-uuid";
+
 }

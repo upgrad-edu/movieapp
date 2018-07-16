@@ -3,7 +3,7 @@
   "info": {
     "title": "Movies Application API",
     "version": "1.0.0",
-    "description": "## API of Movies Application\n\nThis specification describes the endpoints, request/response model for Movie Application. This API provides REST resources to manage project movies of Movies application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```\n  http://localhost:8080/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Movies Application.\n\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Movies Application reserves the right to add new parameters without further notice (in request and response).\n  * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Movies Application reserves the right to enhance enumerations by new values.\n  * Movies Application reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nMovie APIs are called by an authorized application to view data on movies, artists, theatres, shows and bookings.\n## Release Notes \n### 1.0.0\n* Initial version\n"
+    "description": "## API of Movies Application\n\nThis specification describes the endpoints, request/response model for Movie Application. This API provides REST resources to manage  movies of Movies application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```\n  http://localhost:8080/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Movies Application.\n\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Movies Application reserves the right to add new parameters without further notice (in request and response).\n  * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Movies Application reserves the right to enhance enumerations by new values.\n  * Movies Application reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n\nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nMovie APIs are called by an authorized application to view data on movies, artists, theatres, shows and bookings.\n## Release Notes\n### 1.0.0\n* Initial version\n"
   },
   "host": "localhost:8080",
   "schemes": [
@@ -320,8 +320,8 @@
         "tags": [
           "API#005 Movies"
         ],
-        "summary": "Movie Management - Get an existing project details of the Movie",
-        "description": "API to get an existing Projects detalis of the Movie\n",
+        "summary": "Movie Management - Get an existing details of the Movie",
+        "description": "API to get an existing details of the Movie\n",
         "produces": [
           "application/json"
         ],
@@ -393,9 +393,609 @@
           }
         }
       }
+    },
+    "/movies/{movie_id}/shows": {
+      "get": {
+        "operationId": "getMovieShows",
+        "tags": [
+          "API#004 Movies"
+        ],
+        "summary": "Movie Application - List of shows belonging to the Movie",
+        "description": "API to get an existing shows of the Movie\n",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/MovieId"
+          },
+          {
+            "$ref": "#/parameters/Authorization"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "type": "integer",
+            "required": false,
+            "description": "query to set the position of the records to be fetched from"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "type": "integer",
+            "required": false,
+            "description": "query to limit the number of records per fetch"
+          },
+          {
+            "in": "query",
+            "name": "title",
+            "type": "string",
+            "required": false,
+            "description": "query to filter the results based on specified movie title"
+          },
+          {
+            "in": "query",
+            "name": "genre",
+            "type": "string",
+            "required": false,
+            "description": "query to filter the movies based on specified genre(s) (comma separated)"
+          },
+          {
+            "in": "query",
+            "name": "ticket_availability",
+            "type": "integer",
+            "required": false,
+            "description": "query to filter the movies based on the specified number of ticket availability"
+          },
+          {
+            "in": "query",
+            "name": "city_code",
+            "type": "string",
+            "required": false,
+            "description": "query to filter the results based on specified city code"
+          },
+          {
+            "in": "query",
+            "name": "language",
+            "type": "string",
+            "required": false,
+            "description": "query to filter the results based on specified language"
+          },
+          {
+            "in": "query",
+            "name": "start_time",
+            "type": "string",
+            "required": false,
+            "description": "query to filter the shows whose show timing is equal or after the specified start date time (e.g. 2018-07-01 11:30)"
+          },
+          {
+            "in": "query",
+            "name": "end_time",
+            "type": "string",
+            "required": false,
+            "description": "query to filter the shows whose show timing is equal or before the specified start date time (e.g. 2018-07-01 15:30)"
+          },
+          {
+            "in": "query",
+            "name": "min_price",
+            "type": "number",
+            "format": "double",
+            "required": false,
+            "description": "query to filter the shows whose unit price is greater than or equal to the specified value (e.g. 100.00)"
+          },
+          {
+            "in": "query",
+            "name": "max_price",
+            "type": "number",
+            "format": "double",
+            "required": false,
+            "description": "query to filter the shows whose unit price is lesser than or equal to the specified value (e.g. 300.00)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - fetched list of movie shows",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/MovieShowsSummaryResponse"
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST - server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, mandatory elements are missing)",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED - user has provided wrong credentials",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN - request has not been applied because client application has no permission to perform action",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR - server encountered an unexpected condition that prevented it from fulfilling the request.",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/movies/{movie_id}/shows/{show_id}": {
+      "get": {
+        "operationId": "getShowDetails",
+        "tags": [
+          "API#004 Movies"
+        ],
+        "summary": "Movie Application - Get an existing show details",
+        "description": "API to get an existing show details of Movies application\n",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/MovieId"
+          },
+          {
+            "$ref": "#/parameters/ShowId"
+          },
+          {
+            "$ref": "#/parameters/Authorization"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - fetched show details",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/MovieShowType"
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST - server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, mandatory elements are missing)",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED - user has provided wrong credentials",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN - request has not been applied because client application has no permission to perform action",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "404": {
+            "description": "NOT FOUND - Show (resource) does not exist",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR - server encountered an unexpected condition that prevented it from fulfilling the request.",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bookings": {
+      "post": {
+        "operationId": "bookShow",
+        "tags": [
+          "API#004 Movies"
+        ],
+        "security": [
+          {
+            "Authorization": [
+
+            ]
+          }
+        ],
+        "summary": "Movie Application - Book the show",
+        "description": "API to book the show\n",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/Authorization"
+          },
+          {
+            "in": "body",
+            "name": "ShowBookingRequest",
+            "description": "Request containing booking details",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BookingRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED - Show has been booked successfully by the customer",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              },
+              "location": {
+                "type": "string",
+                "description": "Location of the new resource which was created by this request"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BookingType"
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST - server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, mandatory elements are missing)",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED - user has provided wrong credentials",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN - request has not been applied because client application has no permission to perform action",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR - server encountered an unexpected condition that prevented it from fulfilling the request.",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getBookings",
+        "tags": [
+          "API#004 Movies"
+        ],
+        "security": [
+          {
+            "Authorization": [
+
+            ]
+          }
+        ],
+        "summary": "Movie Application - List of bookings belonging to the Customer",
+        "description": "API to get an existing bookings of the Customer\n",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/Authorization"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "type": "integer",
+            "required": false,
+            "description": "query to set the position of the records to be fetched from"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "type": "integer",
+            "required": false,
+            "description": "query to limit the number of records per fetch"
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "type": "string",
+            "enum": [
+              "CONFIRMED",
+              "CANCELLED"
+            ],
+            "required": false,
+            "description": "query to filter the results based on specified status"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - fetched list of bookings",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BookingsSummaryResponse"
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST - server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, mandatory elements are missing)",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED - user has provided wrong credentials",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN - request has not been applied because client application has no permission to perform action",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR - server encountered an unexpected condition that prevented it from fulfilling the request.",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bookings/{booking_id}": {
+      "get": {
+        "operationId": "getBookingDetails",
+        "tags": [
+          "API#004 Movies"
+        ],
+        "summary": "Movie Application - Get an existing booking details",
+        "description": "API to get an existing booking details of Movies application\n",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/BookingId"
+          },
+          {
+            "$ref": "#/parameters/Authorization"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - fetched booking details",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BookingType"
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST - server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, mandatory elements are missing)",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED - user has provided wrong credentials",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN - request has not been applied because client application has no permission to perform action",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "404": {
+            "description": "NOT FOUND - Booking (resource) does not exist",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR - server encountered an unexpected condition that prevented it from fulfilling the request.",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "cancelBooking",
+        "tags": [
+          "API#004 Movies"
+        ],
+        "security": [
+          {
+            "Authorization": [
+
+            ]
+          }
+        ],
+        "summary": "Movie Application - Mark an existing Booking as CANCELLED",
+        "description": "API to cancel an existing Booking\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/BookingId"
+          },
+          {
+            "$ref": "#/parameters/Authorization"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - Booking status has been set to CANCELLED",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST - server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, mandatory elements are missing)",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED - user has provided wrong credentials",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN - request has not been applied because client application has no permission to perform action",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "404": {
+            "description": "NOT FOUND - Booking (resource) does not exist",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR - server encountered an unexpected condition that prevented it from fulfilling the request.",
+            "headers": {
+              "request-id": {
+                "type": "string",
+                "description": "Used as correlation id while tracing for the request in the backend"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "parameters": {
+    "Authorization": {
+      "name": "authorization",
+      "type": "string",
+      "in": "header",
+      "required": true,
+      "description": "Mandatory user credentials in bearer http authentication scheme format. Refer to the #/securityDefinitions for more information on this header."
+    },
     "MovieId": {
       "name": "movie_id",
       "type": "string",
@@ -412,13 +1012,21 @@
       "required": true,
       "description": "Unique identifier of an Artist in a standard UUID format"
     },
-    "TaskId": {
-      "name": "task_id",
+    "ShowId": {
+      "name": "show_id",
       "type": "string",
       "format": "uuid",
       "in": "path",
       "required": true,
-      "description": "Unique identifier of Task in a standard UUID format"
+      "description": "Unique identifier of a Show in a standard UUID format"
+    },
+    "BookingId": {
+      "name": "booking_id",
+      "type": "string",
+      "format": "uuid",
+      "in": "path",
+      "required": true,
+      "description": "Unique identifier of a Booking in a standard UUID format"
     }
   },
   "definitions": {
@@ -663,6 +1271,319 @@
         ]
       }
     },
+    "MovieShowsSummaryResponse": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "integer",
+          "description": "page or position of the fetched shows"
+        },
+        "limit": {
+          "type": "integer",
+          "description": "number of shows fetched per this request"
+        },
+        "total_count": {
+          "type": "integer",
+          "description": "total number of shows in the movie"
+        },
+        "shows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/MovieShowType"
+          },
+          "description": "List of shows"
+        }
+      },
+      "required": [
+        "total_count",
+        "shows"
+      ],
+      "example": {
+        "total_count": 8,
+        "shows": [
+          {
+            "id": "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
+            "theatre": {
+              "id": "b66c889c-927f-48bc-b130-06d5e5abaa1d",
+              "name": "Inox Cinemas",
+              "postal_address": "Garuda Mall, Koramangala",
+              "city_code": "BLR",
+              "city": "Bengaluru",
+              "status": "ACTIVE"
+            },
+            "show_timing": "2018-08-21T14:30",
+            "language": "ENGLISH",
+            "unit_price": 200.0,
+            "total_seats": 125,
+            "available_seats": 75
+          },
+          {
+            "id": "8d174a25-ba31-45a8-85b4-b06ffc9d5f89",
+            "theatre": {
+              "id": "48076d24-bffa-4e51-bd91-e125e03671e3",
+              "name": "PVR Cinemas",
+              "postal_address": "Forum Mall, Koramangala",
+              "city_code": "BLR",
+              "city": "Bengaluru",
+              "status": "ACTIVE"
+            },
+            "show_timing": "2018-08-21T16:20",
+            "language": "ENGLISH",
+            "unit_price": 250.0,
+            "total_seats": 150,
+            "available_seats": 5
+          }
+        ]
+      }
+    },
+    "MovieShowType": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Unique identifier of the show in a standard UUID format"
+        },
+        "theatre": {
+          "type": "object",
+          "$ref": "#/definitions/TheatreSummaryType"
+        },
+        "show_timing": {
+          "$ref": "#/definitions/FullDateTimeType",
+          "description": "Show timing in yyyy-MM-ddTHH:MM format"
+        },
+        "language": {
+          "$ref": "#/definitions/LanguageType"
+        },
+        "unit_price": {
+          "$ref": "#/definitions/UnitPriceType"
+        },
+        "total_seats": {
+          "type": "integer",
+          "description": "Total number that this show can host"
+        },
+        "available_seats": {
+          "type": "integer",
+          "description": "Total available seats that this show still has"
+        },
+        "status": {
+          "$ref": "#/definitions/MovieShowStatusType"
+        }
+      }
+    },
+    "TheatreSummaryType": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Unique identifier of the theatre in a standard UUID format"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the theatre"
+        },
+        "postal_address": {
+          "type": "string",
+          "description": "Postal address of the theatre"
+        },
+        "city_code": {
+          "type": "string",
+          "description": "City code of the theatre"
+        },
+        "city": {
+          "type": "string",
+          "description": "City of the theatre"
+        },
+        "status": {
+          "$ref": "#/definitions/TheatreStatusType"
+        }
+      }
+    },
+    "BookingsSummaryResponse": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "integer",
+          "description": "page or position of the fetched bookings"
+        },
+        "limit": {
+          "type": "integer",
+          "description": "number of bookings fetched per this request"
+        },
+        "total_count": {
+          "type": "integer",
+          "description": "total number of bookings"
+        },
+        "bookings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/BookingType"
+          },
+          "description": "List of bookins"
+        }
+      },
+      "required": [
+        "total_count",
+        "bookins"
+      ],
+      "example": {
+        "total_count": 8,
+        "bookings": [
+          {
+            "id": "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
+            "reference_number": "abc123",
+            "movie_title": "Some movie title",
+            "show_timing": "2018-08-21 14:30",
+            "language": "ENGLISH",
+            "theatre": {
+              "id": "b66c889c-927f-48bc-b130-06d5e5abaa1d",
+              "name": "Inox Cinemas",
+              "postal_address": "Garuda Mall, Koramangala",
+              "city_code": "BLR",
+              "city": "Bengaluru",
+              "status": "ACTIVE"
+            },
+            "total_tickets": 2,
+            "total_price": 500.0,
+            "tickets": [
+              "J12",
+              "J13"
+            ],
+            "status": "CONFIRMED"
+          },
+          {
+            "id": "8d174a25-ba31-45a8-85b4-b06ffc9d5f89",
+            "reference_number": "abc123",
+            "movie_title": "Some movie title",
+            "show_timing": "2017-05-13 14:30",
+            "language": "ENGLISH",
+            "theatre": {
+              "id": "b66c889c-927f-48bc-b130-06d5e5abaa1d",
+              "name": "Inox Cinemas",
+              "postal_address": "Garuda Mall, Koramangala",
+              "city_code": "BLR",
+              "city": "Bengaluru",
+              "status": "ACTIVE"
+            },
+            "total_tickets": 2,
+            "total_price": 500.0,
+            "tickets": [
+              "A2",
+              "A3"
+            ],
+            "status": "CANCELLED"
+          }
+        ]
+      }
+    },
+    "BookingRequest": {
+      "type": "object",
+      "properties": {
+        "show_id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Unique identifier of the show in a standard UUID format"
+        },
+        "tickets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Selected ticket numbers for the show"
+        }
+      },
+      "required": [
+        "tickets"
+      ],
+      "example": {
+        "tickets": [
+          "J12",
+          "J13"
+        ]
+      }
+    },
+    "BookingType": {
+      "type": "object",
+      "properties": {
+        "reference_number": {
+          "type": "string",
+          "description": "Booking reference number"
+        },
+        "movie_title": {
+          "type": "string",
+          "description": "Movie title"
+        },
+        "show_timing": {
+          "$ref": "#/definitions/FullDateTimeType"
+        },
+        "language": {
+          "type": "string",
+          "description": "Language of the movie"
+        },
+        "theatre": {
+          "$ref": "#/definitions/TheatreSummaryType"
+        },
+        "total_tickets": {
+          "type": "integer",
+          "description": "Total number of tickets booked"
+        },
+        "total_price": {
+          "$ref": "#/definitions/UnitPriceType"
+        },
+        "tickets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Selected ticket numbers for the show"
+        },
+        "customer": {
+          "$ref": "#/definitions/BookingCustomerInfoType"
+        },
+        "status": {
+          "$ref": "#/definitions/BookingStatusType"
+        }
+      },
+      "required": [
+        "reference_number",
+        "movie_title",
+        "language",
+        "show_timing",
+        "theatre",
+        "total_price",
+        "total_tickets",
+        "tickets"
+      ]
+    },
+    "BookingCustomerInfoType": {
+      "type": "object",
+      "properties": {
+        "first_name": {
+          "type": "string",
+          "description": "First name of the new user"
+        },
+        "last_name": {
+          "type": "string",
+          "description": "Last name of the new user"
+        },
+        "email_address": {
+          "type": "string",
+          "description": "Email address of the new user"
+        },
+        "mobile_number": {
+          "type": "string",
+          "description": "Mobile number of the new user"
+        }
+      }
+    },
+    "FullDateTimeType": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Full date-time format (yyyy-MM-dd HH:mm)"
+    },
     "FullDateType": {
       "type": "string",
       "format": "full-date",
@@ -676,6 +1597,14 @@
         "DELETED"
       ],
       "description": "Status of the movie"
+    },
+    "TheatreStatusType": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE"
+      ],
+      "description": "Status of the theatre"
     },
     "ArtistRoleType": {
       "type": "string",
@@ -705,6 +1634,42 @@
         "UA"
       ],
       "description": "Censor board rating"
+    },
+    "MovieShowStatusType": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE"
+      ],
+      "description": "Status of the show"
+    },
+    "LanguageType": {
+      "type": "string",
+      "enum": [
+        "ENGLISH",
+        "HINDI",
+        "KANNADA",
+        "MARATHI",
+        "TELUGU",
+        "TAMIL",
+        "MALAYALAM",
+        "BENGALI",
+        "PUNJABI"
+      ],
+      "description": "Language of the movie to be mapped to this show"
+    },
+    "UnitPriceType": {
+      "type": "number",
+      "format": "double",
+      "description": "Unit price of the movie (for e.g. 200.00)"
+    },
+    "BookingStatusType": {
+      "type": "string",
+      "enum": [
+        "CONFIRMED",
+        "CANCELLED"
+      ],
+      "description": "Status of the booking"
     },
     "ErrorResponse": {
       "type": "object",

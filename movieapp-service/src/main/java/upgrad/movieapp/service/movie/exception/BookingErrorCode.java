@@ -13,20 +13,16 @@ import java.util.Map;
 import upgrad.movieapp.service.common.exception.ErrorCode;
 
 /**
- * Error code for THEATRE module.
+ * Error code for BOOKING module.
  */
-public enum TheatreErrorCode implements ErrorCode {
+public enum BookingErrorCode implements ErrorCode {
 
-    THR_001("THR-001", "Theatre with identifier [{0}] does not exist"),
+    BKG_001("BKG-001", "Booking with reference number [{0}] does not exist");
 
-    THR_002("THR-002", "City with code [{0}] does not exist"),
-
-    THR_003("THR-003", "[{0}] is not a valid status. Supported statuses are [{1}]"),;
-
-    private static final Map<String, TheatreErrorCode> LOOKUP = new HashMap<String, TheatreErrorCode>();
+    private static final Map<String, BookingErrorCode> LOOKUP = new HashMap<String, BookingErrorCode>();
 
     static {
-        for (final TheatreErrorCode enumeration : TheatreErrorCode.values()) {
+        for (final BookingErrorCode enumeration : BookingErrorCode.values()) {
             LOOKUP.put(enumeration.getCode(), enumeration);
         }
     }
@@ -35,7 +31,7 @@ public enum TheatreErrorCode implements ErrorCode {
 
     private final String defaultMessage;
 
-    private TheatreErrorCode(final String code, final String defaultMessage) {
+    private BookingErrorCode(final String code, final String defaultMessage) {
         this.code = code;
         this.defaultMessage = defaultMessage;
     }

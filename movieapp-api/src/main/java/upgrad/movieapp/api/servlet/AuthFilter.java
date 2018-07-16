@@ -12,11 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import upgrad.movieapp.api.data.ResourceConstants;
 import upgrad.movieapp.api.exception.RestErrorCode;
 import upgrad.movieapp.api.exception.UnauthorizedException;
 import upgrad.movieapp.api.controller.provider.BearerAuthDecoder;
 import upgrad.movieapp.service.common.exception.AuthorizationFailedException;
 import upgrad.movieapp.service.user.business.AuthTokenService;
+import upgrad.movieapp.service.user.entity.UserAuthTokenEntity;
 
 @WebFilter(filterName = "AuthFilter", urlPatterns = BASE_URL_PATTERN)
 public class AuthFilter extends ApiFilter {
@@ -41,7 +43,8 @@ public class AuthFilter extends ApiFilter {
             if (!pathInfo.contains("login")) {
                 final String accessToken = new BearerAuthDecoder(authorization).getAccessToken();
                 try {
-                    authTokenService.validateToken(accessToken);
+                    final UserAuthTokenEntity userAuthTokenEntity = authTokenService.validateToken(accessToken);
+                    servletRequest.setAttribute(AUTHORIZED_USER_UUID, userAuthTokenEntity.getUser().getUuid());
                 } catch (AuthorizationFailedException e) {
                     servletResponse.sendError(HttpStatus.UNAUTHORIZED.value(), e.getMessage());
                     return;

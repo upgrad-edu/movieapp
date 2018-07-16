@@ -1,10 +1,10 @@
 package upgrad.movieapp.api.controller.transformer;
 
-import static upgrad.movieapp.service.common.data.DateTimeProvider.*;
+import static upgrad.movieapp.service.common.data.DateTimeProvider.formatDate;
+import static upgrad.movieapp.service.common.data.DateTimeProvider.parseDate;
 import static upgrad.movieapp.service.movie.exception.MovieErrorCode.MVI_002;
 import static upgrad.movieapp.service.movie.exception.MovieErrorCode.MVI_006;
 
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -48,10 +48,10 @@ public final class MovieTransformer {
             searchQuery.statuses(movieStatuses);
         }
         if (StringUtils.isNotEmpty(startDate)) {
-            searchQuery.releaseDateFrom(toDateTime(startDate));
+            searchQuery.releaseDateFrom(parseDate(startDate));
         }
         if (StringUtils.isNotEmpty(endDate)) {
-            searchQuery.releaseDateTo(toDateTime(endDate));
+            searchQuery.releaseDateTo(parseDate(endDate));
         }
         if (StringUtils.isNotEmpty(genre)) {
             final String[] genres = StringUtils.split(genre, ",");
@@ -94,7 +94,7 @@ public final class MovieTransformer {
                 .posterUrl(movieEntity.getPosterUrl())
                 .trailerUrl(movieEntity.getTrailerUrl())
                 .wikiUrl(movieEntity.getWikiUrl())
-                .releaseDate(format(movieEntity.getReleaseAt(), SIMPLE_DATE_FORMAT))
+                .releaseDate(formatDate(movieEntity.getReleaseAt()))
                 .censorBoardRating(toCensorBoardRating(movieEntity.getCensorBoardRating()))
                 .rating(movieEntity.getRating())
                 .status(toStatus(movieEntity.getStatus()));
@@ -120,7 +120,7 @@ public final class MovieTransformer {
         movieEntity.setRating(movieRequest.getRating());
         movieEntity.setDuration(movieRequest.getDuration());
         if (movieRequest.getReleaseDate() != null) {
-            movieEntity.setReleaseAt(parse(movieRequest.getReleaseDate(), SIMPLE_DATE_FORMAT));
+            movieEntity.setReleaseAt(parseDate(movieRequest.getReleaseDate()));
         }
 
         addArtists(movieEntity, movieRequest.getArtists());
@@ -145,7 +145,7 @@ public final class MovieTransformer {
         movieEntity.setRating(movieRequest.getRating());
         movieEntity.setDuration(movieRequest.getDuration());
         if (movieRequest.getReleaseDate() != null) {
-            movieEntity.setReleaseAt(parse(movieRequest.getReleaseDate(), SIMPLE_DATE_FORMAT));
+            movieEntity.setReleaseAt(parseDate(movieRequest.getReleaseDate()));
         }
 
         if (movieRequest.getStatus() != null) {
@@ -179,10 +179,6 @@ public final class MovieTransformer {
         } catch (IllegalArgumentException exc) {
             throw new RestException(MVI_006, StringUtils.join(SortByType.values(), ","));
         }
-    }
-
-    private static ZonedDateTime toDateTime(final String date) {
-        return parse(date, SIMPLE_DATE_FORMAT);
     }
 
     private static CensorBoardRatingType toCensorBoardRating(final String censorBoardRating) {

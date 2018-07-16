@@ -157,6 +157,13 @@
           },
           {
             "in": "query",
+            "name": "title",
+            "type": "string",
+            "required": false,
+            "description": "query to filter the results based on specified movie title"
+          },
+          {
+            "in": "query",
             "name": "status",
             "type": "string",
             "enum": [
@@ -830,7 +837,7 @@
             ]
           }
         ],
-        "summary": "Theatre Administration - Add show to the movie",
+        "summary": "Movie Administration - Add show to the movie",
         "description": "API to create new show and map it to the movie\n",
         "consumes": [
           "application/json"
@@ -934,7 +941,7 @@
             ]
           }
         ],
-        "summary": "Theatre Administration - List of shows belonging to the Movie",
+        "summary": "Movie Administration - List of shows belonging to the Movie",
         "description": "API to get an existing shows of the Movie\n",
         "produces": [
           "application/json"
@@ -945,6 +952,96 @@
           },
           {
             "$ref": "#/parameters/Authorization"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "type": "integer",
+            "required": false,
+            "description": "query to set the position of the records to be fetched from"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "type": "integer",
+            "required": false,
+            "description": "query to limit the number of records per fetch"
+          },
+          {
+            "in": "query",
+            "name": "title",
+            "type": "string",
+            "required": false,
+            "description": "query to filter the results based on specified movie title"
+          },
+          {
+            "in": "query",
+            "name": "genre",
+            "type": "string",
+            "required": false,
+            "description": "query to filter the movies based on specified genre(s) (comma separated)"
+          },
+          {
+            "in": "query",
+            "name": "ticket_availability",
+            "type": "integer",
+            "required": false,
+            "description": "query to filter the movies based on the specified number of ticket availability"
+          },
+          {
+            "in": "query",
+            "name": "city_code",
+            "type": "string",
+            "required": false,
+            "description": "query to filter the results based on specified city code"
+          },
+          {
+            "in": "query",
+            "name": "language",
+            "type": "string",
+            "required": false,
+            "description": "query to filter the results based on specified language"
+          },
+          {
+            "in": "query",
+            "name": "start_time",
+            "type": "string",
+            "required": false,
+            "description": "query to filter the shows whose show timing is equal or after the specified start date time (e.g. 2018-07-01 11:30)"
+          },
+          {
+            "in": "query",
+            "name": "end_time",
+            "type": "string",
+            "required": false,
+            "description": "query to filter the shows whose show timing is equal or before the specified start date time (e.g. 2018-07-01 15:30)"
+          },
+          {
+            "in": "query",
+            "name": "min_price",
+            "type": "number",
+            "format": "double",
+            "required": false,
+            "description": "query to filter the shows whose unit price is greater than or equal to the specified value (e.g. 100.00)"
+          },
+          {
+            "in": "query",
+            "name": "max_price",
+            "type": "number",
+            "format": "double",
+            "required": false,
+            "description": "query to filter the shows whose unit price is lesser than or equal to the specified value (e.g. 300.00)"
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
+            "required": false,
+            "description": "query to filter the results based on specified status"
           }
         ],
         "responses": {
@@ -1012,7 +1109,7 @@
             ]
           }
         ],
-        "summary": "Theatre Administration - Get an existing show details",
+        "summary": "Movie Administration - Get an existing show details",
         "description": "API to get an existing show details of Movies application\n",
         "produces": [
           "application/json"
@@ -1206,7 +1303,7 @@
             ]
           }
         ],
-        "summary": "Theatre Administration - Mark an existing show as INACTIVE",
+        "summary": "Movie Administration - Mark an existing show as INACTIVE",
         "description": "API to deactivate an existing Show\n",
         "parameters": [
           {
@@ -1882,9 +1979,7 @@
           "$ref": "#/definitions/LanguageType"
         },
         "unit_price": {
-          "type": "number",
-          "format": "float",
-          "description": "Unit price of the movie (for e.g. 200.00)"
+          "$ref": "#/definitions/UnitPriceType"
         },
         "total_seats": {
           "type": "integer",
@@ -1893,6 +1988,9 @@
         "available_seats": {
           "type": "integer",
           "description": "Total available seats that this show still has"
+        },
+        "status": {
+          "$ref": "#/definitions/MovieShowStatusType"
         }
       }
     },
@@ -1901,7 +1999,7 @@
       "properties": {
         "theatre_id": {
           "type": "string",
-          "description": "Theatre mapped to this movie show"
+          "description": "Show mapped to this movie show"
         },
         "show_timing": {
           "$ref": "#/definitions/FullDateTimeType",
@@ -1911,9 +2009,7 @@
           "$ref": "#/definitions/LanguageType"
         },
         "unit_price": {
-          "type": "number",
-          "format": "float",
-          "description": "Unit price of the movie (for e.g. 200.00)"
+          "$ref": "#/definitions/UnitPriceType"
         },
         "total_seats": {
           "type": "integer",
@@ -1971,9 +2067,7 @@
           "$ref": "#/definitions/LanguageType"
         },
         "unit_price": {
-          "type": "number",
-          "format": "float",
-          "description": "Updated unit price of the movie (for e.g. 200.00)"
+          "$ref": "#/definitions/UnitPriceType"
         },
         "total_seats": {
           "type": "integer",
@@ -2112,6 +2206,11 @@
         "PUNJABI"
       ],
       "description": "Language of the movie to be mapped to this show"
+    },
+    "UnitPriceType": {
+      "type": "number",
+      "format": "double",
+      "description": "Unit price of the movie (for e.g. 200.00)"
     },
     "ErrorResponse": {
       "type": "object",

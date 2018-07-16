@@ -85,7 +85,7 @@ public class AuthTokenServiceImpl implements AuthTokenService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void validateToken(@NotNull String accessToken) throws AuthorizationFailedException {
+    public UserAuthTokenEntity validateToken(@NotNull String accessToken) throws AuthorizationFailedException {
         final UserAuthTokenEntity userAuthToken = userAuthDao.findToken(accessToken);
         final UserAuthTokenVerifier tokenVerifier = new UserAuthTokenVerifier(userAuthToken);
         if(tokenVerifier.isNotFound() || tokenVerifier.hasLoggedOut()) {
@@ -94,6 +94,7 @@ public class AuthTokenServiceImpl implements AuthTokenService {
         if(tokenVerifier.hasExpired()) {
             throw new AuthorizationFailedException(UserErrorCode.USR_006);
         }
+        return userAuthToken;
     }
 
 }

@@ -13,20 +13,22 @@ import java.util.Map;
 import upgrad.movieapp.service.common.exception.ErrorCode;
 
 /**
- * Error code for THEATRE module.
+ * Error code for SHOWS module.
  */
-public enum TheatreErrorCode implements ErrorCode {
+public enum ShowErrorCode implements ErrorCode {
 
-    THR_001("THR-001", "Theatre with identifier [{0}] does not exist"),
+    SHW_001("SHW-001", "Show with identifier [{0}] does not exist"),
 
-    THR_002("THR-002", "City with code [{0}] does not exist"),
+    SHW_002("SHW-002", "[{0}] is not a valid status. Supported statuses are [{1}]"),
 
-    THR_003("THR-003", "[{0}] is not a valid status. Supported statuses are [{1}]"),;
+    SHW_003("SHW-003", "For the movie [{0}] in theatre [{1}], show timing [{2}] on [{3}] conflicts with the other show timings"),
 
-    private static final Map<String, TheatreErrorCode> LOOKUP = new HashMap<String, TheatreErrorCode>();
+    SHW_004("SHW-004", "[{0}] is not a valid language. Supported languages are [{1}]"),;
+
+    private static final Map<String, ShowErrorCode> LOOKUP = new HashMap<String, ShowErrorCode>();
 
     static {
-        for (final TheatreErrorCode enumeration : TheatreErrorCode.values()) {
+        for (final ShowErrorCode enumeration : ShowErrorCode.values()) {
             LOOKUP.put(enumeration.getCode(), enumeration);
         }
     }
@@ -35,7 +37,7 @@ public enum TheatreErrorCode implements ErrorCode {
 
     private final String defaultMessage;
 
-    private TheatreErrorCode(final String code, final String defaultMessage) {
+    private ShowErrorCode(final String code, final String defaultMessage) {
         this.code = code;
         this.defaultMessage = defaultMessage;
     }
