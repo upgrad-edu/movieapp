@@ -1,12 +1,15 @@
 package upgrad.movieapp.service.movie.business;
 
+import static upgrad.movieapp.service.movie.exception.BookingErrorCode.BKG_003;
+import static upgrad.movieapp.service.movie.exception.BookingErrorCode.BKG_004;
+
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
+import java.util.List;
 import java.util.Set;
 
-import javax.validation.constraints.NotNull;
-
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -42,19 +45,30 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public ShowBookingEntity bookMovieShow(final String showUuid, final String customerUuid,
-                                           final Set<String> ticketNumbers) throws ApplicationException {
+    public ShowBookingEntity bookShow(final String showUuid, final String customerUuid,
+                                      final Set<String> ticketNumbers) throws ApplicationException {
 
         final UserEntity userEntity = userService.findUserByUuid(customerUuid);
         final ShowEntity showEntity = showService.findShowByUuid(showUuid);
+        final int totalTickets = ticketNumbers.size();
 
         final ShowBookingEntity bookingEntity;
         synchronized (this) {
+            final Integer availableSeats = showEntity.getAvailableSeats();
+            if (availableSeats == 0 || availableSeats < totalTickets) {
+                throw new ApplicationException(BookingErrorCode.BKG_005, availableSeats);
+            }
+
+            final List<String> bookedTickets = bookingDao.findBookedTickets(showUuid, ticketNumbers);
+            if (CollectionUtils.isNotEmpty(bookedTickets)) {
+                throw new ApplicationException(BKG_004, bookedTickets);
+            }
+
             bookingEntity = new ShowBookingEntity();
             bookingEntity.setShow(showEntity);
             bookingEntity.setCustomer(userEntity);
 
-            final int totalTickets = ticketNumbers.size();
+
             bookingEntity.setTotalSeats(totalTickets);
             bookingEntity.setTotalPrice(showEntity.getUnitPrice().multiply(new BigDecimal(totalTickets)));
 
@@ -71,7 +85,6 @@ public class BookingServiceImpl implements BookingService {
             });
 
             bookingDao.create(bookingEntity);
-
             showService.updateTicketsAvailability(showEntity, totalTickets);
         }
 
@@ -90,16 +103,23 @@ public class BookingServiceImpl implements BookingService {
 
         synchronized (this) {
             bookingDao.update(bookingEntity);
-
-            final ShowEntity showEntity = bookingEntity.getShow();
-            showService.updateTicketsAvailability(showEntity, -bookingEntity.getTotalSeats());
+            showService.revertTicketsAvailability(bookingEntity.getShow(), bookingEntity.getTotalSeats());
         }
 
     }
 
     @Override
     public SearchResult<ShowBookingEntity> findBookings(final BookingSearchQuery searchQuery) {
-        return null;
+        return bookingDao.findBookings(searchQuery);
+    }
+
+    @Override
+    public ShowBookingEntity findByUuid(final String customerUuid, final String bookingUuid) throws ApplicationException {
+        final ShowBookingEntity booking = bookingDao.findByCustomer(customerUuid, bookingUuid);
+        if (booking == null) {
+            throw new EntityNotFoundException(BKG_003, bookingUuid);
+        }
+        return booking;
     }
 
     private String generateBookingReference(final ZonedDateTime bookingAt) {

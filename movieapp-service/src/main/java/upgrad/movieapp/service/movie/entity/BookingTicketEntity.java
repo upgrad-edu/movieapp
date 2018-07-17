@@ -4,7 +4,6 @@ package upgrad.movieapp.service.movie.entity;
 import static upgrad.movieapp.service.common.entity.Entity.SCHEMA;
 
 import java.io.Serializable;
-import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -25,7 +25,13 @@ import upgrad.movieapp.service.common.entity.ext.EntityHashCodeBuilder;
 
 @Entity
 @Table(name = "BOOKING_TICKETS", schema = SCHEMA)
+@NamedQueries({
+        @NamedQuery(name = BookingTicketEntity.BY_SHOW_AND_TICKET_NUMBERS, query = "SELECT bt.ticketNumber FROM BookingTicketEntity bt WHERE bt.ticketNumber IN (:ticketNumbers) " +
+                " AND bt.booking.show.uuid = :showUuid AND bt.booking.status = 'CONFIRMED'")
+})
 public class BookingTicketEntity extends ImmutableEntity implements Identifier<Long>, Serializable {
+
+    public static final String BY_SHOW_AND_TICKET_NUMBERS = "BookingTicketEntity.byShowAndTicketNumbers";
 
     private static final long serialVersionUID = 7932286494206403090L;
 

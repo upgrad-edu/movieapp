@@ -17,7 +17,15 @@ import upgrad.movieapp.service.common.exception.ErrorCode;
  */
 public enum BookingErrorCode implements ErrorCode {
 
-    BKG_001("BKG-001", "Booking with reference number [{0}] does not exist");
+    BKG_001("BKG-001", "Booking with reference number [{0}] does not exist"),
+
+    BKG_002("BKG-002", "[{0}] is not a valid booking status. Supported statuses are [{1}]"),
+
+    BKG_003("BKG-003", "Booking with identifier [{0}] does not exist"),
+
+    BKG_004("BKG-004", "Tickets {0} already booked"),
+
+    BKG_005("BKG-005", "Shortage of seats availability. Available number of seats [{0}]"),;
 
     private static final Map<String, BookingErrorCode> LOOKUP = new HashMap<String, BookingErrorCode>();
 

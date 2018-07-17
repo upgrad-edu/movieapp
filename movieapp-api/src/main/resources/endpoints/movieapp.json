@@ -1508,6 +1508,11 @@
     "BookingType": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Unique identifier of the booking in a standard UUID format"
+        },
         "reference_number": {
           "type": "string",
           "description": "Booking reference number"
@@ -1540,7 +1545,7 @@
           },
           "description": "Selected ticket numbers for the show"
         },
-        "customer": {
+        "booked_by": {
           "$ref": "#/definitions/BookingCustomerInfoType"
         },
         "status": {

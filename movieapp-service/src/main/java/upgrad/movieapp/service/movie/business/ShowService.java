@@ -23,4 +23,6 @@ public interface ShowService {
 
     void updateTicketsAvailability(@NotNull ShowEntity bookedShow, @NotNull Integer totalBookedTickets);
 
+    void revertTicketsAvailability(@NotNull ShowEntity bookedShow, @NotNull Integer totalBookedTickets);
+
 }

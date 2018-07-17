@@ -38,11 +38,13 @@ import upgrad.movieapp.service.user.entity.UserEntity;
 @Entity
 @Table(name = "SHOW_BOOKINGS", schema = SCHEMA)
 @NamedQueries({
-        @NamedQuery(name = ShowBookingEntity.BY_BOOKING_REF, query = "select sb from ShowBookingEntity sb where sb.bookingReference = :bookingReference")
+        @NamedQuery(name = ShowBookingEntity.BY_BOOKING_REF, query = "SELECT sb FROM ShowBookingEntity sb WHERE sb.bookingReference = :bookingReference"),
+        @NamedQuery(name = ShowBookingEntity.BY_CUSTOMER_AND_UUID, query = "SELECT sb FROM ShowBookingEntity sb WHERE sb.uuid = :bookingUuid AND sb.customer.uuid = :customerUuid")
 })
 public class ShowBookingEntity extends MutableEntity implements Identifier<Long>, UniversalUniqueIdentifier<String>, Serializable {
 
     public static final String BY_BOOKING_REF = "ShowBookingEntity.byBookingReference";
+    public static final String BY_CUSTOMER_AND_UUID = "ShowBookingEntity.byCustomerAndUuid";
 
     private static final long serialVersionUID = 7932286494207403090L;
 

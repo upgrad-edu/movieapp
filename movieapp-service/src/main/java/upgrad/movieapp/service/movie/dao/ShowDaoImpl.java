@@ -36,6 +36,7 @@ public class ShowDaoImpl extends BaseDaoImpl<ShowEntity> implements ShowDao {
 
     @Override
     public SearchResult<ShowEntity> findShows(final ShowSearchQuery searchQuery) {
+
         final CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         final CriteriaQuery<ShowEntity> payloadQuery = builder.createQuery(ShowEntity.class);
         final Root<ShowEntity> from = payloadQuery.from(ShowEntity.class);

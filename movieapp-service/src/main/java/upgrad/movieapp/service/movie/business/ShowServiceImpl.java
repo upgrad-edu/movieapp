@@ -5,8 +5,6 @@ import static upgrad.movieapp.service.common.data.DateTimeProvider.formatTime;
 
 import java.time.ZonedDateTime;
 
-import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -133,7 +131,14 @@ public class ShowServiceImpl implements ShowService {
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
     public void updateTicketsAvailability(final ShowEntity bookedShow, final Integer totalBookedTickets) {
-        bookedShow.setAvailableSeats(bookedShow.getTotalSeats() - totalBookedTickets);
+        bookedShow.setAvailableSeats(bookedShow.getAvailableSeats() - totalBookedTickets);
+        showDao.updateTicketsAvailability(bookedShow);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void revertTicketsAvailability(final ShowEntity bookedShow, final Integer totalBookedTickets) {
+        bookedShow.setAvailableSeats(bookedShow.getAvailableSeats() + totalBookedTickets);
         showDao.updateTicketsAvailability(bookedShow);
     }
 
