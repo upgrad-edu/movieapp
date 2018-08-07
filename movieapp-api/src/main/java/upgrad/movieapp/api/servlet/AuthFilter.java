@@ -29,6 +29,11 @@ public class AuthFilter extends ApiFilter {
     @Override
     public void doFilter(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
+        if (servletRequest.getMethod().equalsIgnoreCase("OPTIONS")) {
+            servletResponse.setStatus(HttpServletResponse.SC_ACCEPTED);
+            return;
+        }
+
         final String pathInfo = servletRequest.getRequestURI();
         if (pathInfo.contains("admin") || pathInfo.contains("login") || pathInfo.contains("bookings")) {
             final String authorization = servletRequest.getHeader(HEADER_AUTHORIZATION);

@@ -29,14 +29,10 @@ public class CorsFilter extends ApiFilter {
 
         if (httpRequest.getMethod().equalsIgnoreCase("OPTIONS")) {
             httpResponse.setStatus(HttpServletResponse.SC_ACCEPTED);
-        } else {
-            chain.doFilter(httpRequest, httpResponse);
+            return;
         }
-    }
 
-    @Override
-    public void destroy() {
-        // do nothing
+        chain.doFilter(httpRequest, httpResponse);
     }
 
 }

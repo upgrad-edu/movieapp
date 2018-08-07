@@ -15,9 +15,15 @@ import javax.servlet.http.HttpServletResponse;
 public class RequestContextFilter extends ApiFilter {
 
     @Override
-    public void doFilter(HttpServletRequest httpRequest, HttpServletResponse httpResponse, FilterChain filterChain) throws IOException, ServletException {
-        httpResponse.addHeader(HEADER_REQUEST_ID, UUID.randomUUID().toString());
-        filterChain.doFilter(httpRequest, httpResponse);
+    public void doFilter(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
+        if (servletRequest.getMethod().equalsIgnoreCase("OPTIONS")) {
+            servletResponse.setStatus(HttpServletResponse.SC_ACCEPTED);
+            return;
+        }
+
+        servletResponse.addHeader(HEADER_REQUEST_ID, UUID.randomUUID().toString());
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
 }

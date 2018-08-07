@@ -24,13 +24,7 @@ public abstract class ApiFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         final HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         final HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
-
-        if (httpRequest.getMethod().equalsIgnoreCase("OPTIONS")) {
-            httpResponse.setStatus(200);
-        }
-        else {
-            doFilter(httpRequest, httpResponse, filterChain);
-        }
+        doFilter(httpRequest, httpResponse, filterChain);
     }
 
     @Override
