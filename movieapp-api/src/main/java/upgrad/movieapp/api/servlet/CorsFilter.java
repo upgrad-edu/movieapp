@@ -36,7 +36,7 @@ public class CorsFilter extends ApiFilter {
         httpResponse.setHeader("Access-Control-Expose-Headers", "access-token, request-id, location");
 
         if (httpRequest.getMethod().equalsIgnoreCase("OPTIONS")) {
-            httpResponse.setStatus(200);
+            httpResponse.setStatus(HttpServletResponse.SC_ACCEPTED);
         } else {
             chain.doFilter(httpRequest, httpResponse);
         }
