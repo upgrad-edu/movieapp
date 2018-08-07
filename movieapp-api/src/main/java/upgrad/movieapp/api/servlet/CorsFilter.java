@@ -1,11 +1,3 @@
-/* 
- * Copyright 2017-2018, Redux Software. 
- * 
- * File: CorsFilter.java
- * Date: Oct 23, 2017
- * Author: P7107311
- * URL: www.redux.com
-*/
 package upgrad.movieapp.api.servlet;
 
 import static upgrad.movieapp.api.data.ResourceConstants.BASE_URL_PATTERN;
