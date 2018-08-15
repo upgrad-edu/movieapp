@@ -175,6 +175,11 @@ paths:
            required: false
            description: query to filter the movies whose release date is equal or before the specified start date (e.g. 2018-07-30)
          - in: query
+           name: artist_name
+           type: string
+           required: false
+           description: query to filter the results based on specified artist name
+         - in: query
            name: genre
            type: string
            required: false

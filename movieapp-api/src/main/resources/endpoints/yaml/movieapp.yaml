@@ -49,16 +49,16 @@ schemes:
   - https
 basePath: /api/v1
 tags:
-  - name: 'API#004 Movies'
+  - name: 'API#005 Movies'
     description: >-
-      All operations marked with 'API#004 Movies' are relevant to movie management use case
+      All operations marked with 'API#005 Movies' are relevant to movie management use case
 
 paths:
   /movies:
     get:
        operationId: getMovies
        tags:
-         - 'API#004 Movies'
+         - 'API#005 Movies'
        summary: Movie Application - Get all Movies
        description: >
          API to get all movies of Movies application
@@ -91,6 +91,11 @@ paths:
            type: string
            required: false
            description: query to filter the movies whose release date is equal or before the specified start date (e.g. 2018-07-30)
+         - in: query
+           name: artist_name
+           type: string
+           required: false
+           description: query to filter the results based on specified artist name
          - in: query
            name: genre
            type: string
@@ -165,7 +170,7 @@ paths:
      get:
         operationId: getMovie
         tags:
-          - 'API#004 Movies'
+          - 'API#005 Movies'
         summary: Movie Management - Get an existing Movie
         description: >
             API to get an existing Movie detalis of Movies application
@@ -226,7 +231,7 @@ paths:
     get:
       operationId: getMovieArtists
       tags:
-        - 'API#004 Movies'
+        - 'API#005 Movies'
       summary: Movie Management - List of artists belonging to the Movie
       description: >
           API to get an existing artists of the Movie
@@ -341,7 +346,7 @@ paths:
     get:
       operationId: getMovieShows
       tags:
-        - 'API#004 Movies'
+        - 'API#005 Movies'
       summary: Movie Application - List of shows belonging to the Movie
       description: >
           API to get an existing shows of the Movie
@@ -453,7 +458,7 @@ paths:
      get:
         operationId: getShowDetails
         tags:
-          - 'API#004 Movies'
+          - 'API#005 Movies'
         summary: Movie Application - Get an existing show details
         description: >
             API to get an existing show details of Movies application
@@ -511,12 +516,78 @@ paths:
                type: string
                description: Used as correlation id while tracing for the request in the backend
 
+  /coupons:
+
+    get:
+      operationId: getCoupons
+      tags:
+        - 'API#005 Movies'
+      security:
+        - Authorization: []
+      summary: Movie Application - List of coupons available
+      description: >
+          API to get an existing coupons available in the database
+      produces:
+        - application/json
+      parameters:
+         - $ref: '#/parameters/Authorization'
+         - in: query
+           name: page
+           type: integer
+           required: false
+           description: query to set the position of the records to be fetched from
+         - in: query
+           name: limit
+           type: integer
+           required: false
+           description: query to limit the number of records per fetch
+      responses:
+       '200':
+         description: OK - fetched list of coupons
+         headers:
+           request-id:
+             type: string
+             description: Used as correlation id while tracing for the request in the backend
+         schema:
+           $ref: '#/definitions/CouponsSummaryResponse'
+       '400':
+         description: >-
+           BAD REQUEST - server cannot or will not process the request due to
+           something that is perceived to be a client error (e.g., malformed
+           request syntax, mandatory elements are missing)
+         headers:
+           request-id:
+             type: string
+             description: Used as correlation id while tracing for the request in the backend
+       '401':
+         description: UNAUTHORIZED - user has provided wrong credentials
+         headers:
+           request-id:
+             type: string
+             description: Used as correlation id while tracing for the request in the backend
+       '403':
+         description: >-
+           FORBIDDEN - request has not been applied because client application
+           has no permission to perform action
+         headers:
+           request-id:
+             type: string
+             description: Used as correlation id while tracing for the request in the backend
+       '500':
+         description: >-
+           INTERNAL SERVER ERROR - server encountered an unexpected condition
+           that prevented it from fulfilling the request.
+         headers:
+           request-id:
+             type: string
+             description: Used as correlation id while tracing for the request in the backend
+
   /bookings:
 
     post:
       operationId: bookShow
       tags:
-        - 'API#004 Movies'
+        - 'API#005 Movies'
       security:
         - Authorization: []
       summary: Movie Application - Book the show
@@ -590,7 +661,7 @@ paths:
     get:
       operationId: getBookings
       tags:
-        - 'API#004 Movies'
+        - 'API#005 Movies'
       security:
         - Authorization: []
       summary: Movie Application - List of bookings belonging to the Customer
@@ -662,7 +733,7 @@ paths:
      get:
         operationId: getBookingDetails
         tags:
-          - 'API#004 Movies'
+          - 'API#005 Movies'
         summary: Movie Application - Get an existing booking details
         description: >
             API to get an existing booking details of Movies application
@@ -722,7 +793,7 @@ paths:
      delete:
         operationId: cancelBooking
         tags:
-          - 'API#004 Movies'
+          - 'API#005 Movies'
         security:
           - Authorization: []
         summary: Movie Application - Mark an existing Booking as CANCELLED
@@ -1123,6 +1194,50 @@ definitions:
       city: Bengaluru
       status: ACTIVE
 
+  CouponsSummaryResponse:
+    type: object
+    properties:
+      page:
+        type: integer
+        description: page or position of the fetched coupons
+      limit:
+        type: integer
+        description: number of coupons fetched per this request
+      total_count:
+        type: integer
+        description: total number of coupons
+      bookings:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/CouponType'
+        description: List of coupons
+    required:
+      - total_count
+      - coupons
+    example:
+      total_count: 8
+      coupons:
+        - code: abc123
+          value: 10
+          description: 10% discount
+        - code: xyz123
+          value: 12
+          description: 12% discount
+
+  CouponType:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Coupon code
+      value:
+        type: integer
+        description: Value of coupon
+      description:
+        type: string
+        description: Description of the coupon
+
   BookingsSummaryResponse:
     type: object
     properties:
@@ -1191,6 +1306,9 @@ definitions:
         type: string
         format: uuid
         description: Unique identifier of the show in a standard UUID format
+      coupon_code:
+        type: string
+        description: Coupon code applied while booking
       tickets:
         type: array
         items:
@@ -1198,8 +1316,11 @@ definitions:
         description: Selected ticket numbers for the show
 
     required:
+      - show_id
       - tickets
     example:
+      show_id: b66c889c-927f-48bc-b130-06d5e5abaa1d
+      coupon_code: abc123
       tickets:
         - J12
         - J13
@@ -1217,6 +1338,9 @@ definitions:
       movie_title:
         type: string
         description: Movie title
+      coupon_code:
+        type: string
+        description: Coupon code
       show_timing:
         $ref: '#/definitions/FullDateTimeType'
       language:

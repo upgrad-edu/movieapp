@@ -1,0 +1,317 @@
+swagger: '2.0'
+info:
+  title: Artists Data API
+  version: 1.0.0
+  description: >
+    ## API of Artists Data Services
+
+
+    This specification describes the endpoints, request/response model of the Artist Data API.
+    This API provides REST resources to manage artists of Movies application.
+
+
+    The resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:
+
+
+    ```
+      https://localhost:8080/api/v1/
+    ```
+
+
+    ## API usage guidelines
+
+
+    This section describes general rules and guidelines for using REST based
+    services offered by Movies Application.
+
+      * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.
+      * Movies Application reserves the right to add new parameters without further notice (in request and response).
+      * Movies Application reserves the right to add new error codes without further notice. Movies Application will thereby stick to the HTTP STATUS CODES as defined by W3C.
+      * Movies Application reserves the right to enhance enumerations by new values.
+      * Movies Application reserves the right to increase the "maxItem" settings of arrays without further notice.
+      
+    Each consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))
+
+
+    ## Business definitions
+
+    Artist Data APIs can be used to list artists present in the database.
+
+    ## Release Notes 
+
+    ### 1.0.0
+
+    * Initial version
+
+host: localhost:8080
+schemes:
+  - http
+  - https
+basePath: /api/v1/artists
+tags:
+  - name: 'API#010 Artists'
+    description: >-
+      All operations marked with 'API#010 Artists' are relevant to artist data use case
+
+paths:
+  /artists:
+
+    get:
+       operationId: getArtists
+       tags:
+         - 'API#010 Artists'
+       summary: Artist Data - Get all Artists
+       description: >
+         API to get all artists of Movies application
+       produces:
+         - application/json
+       parameters:
+         - in: query
+           name: page
+           type: integer
+           required: false
+           description: query to set the position of the records to be fetched from
+         - in: query
+           name: limit
+           type: integer
+           required: false
+           description: query to limit the number of records per fetch
+         - in: query
+           name: name
+           type: string
+           required: false
+           description: query to filter the results based on specified name
+       responses:
+         '200':
+           description: OK - Fetched all artists
+           headers:
+             request-id:
+               type: string
+               description: Used as correlation id while tracing for the request in the backend
+           schema:
+             $ref: '#/definitions/ArtistsSummaryResponse'
+         '400':
+            description: >-
+              BAD REQUEST - server cannot or will not process the request due to something that is perceived to be a
+              client error (e.g., malformed request syntax, mandatory elements are missing)
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+         '401':
+            description: UNAUTHORIZED - user has provided wrong credentials
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+         '403':
+            description: >-
+              FORBIDDEN - request has not been applied because client application has no permission to perform action
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+         '422':
+            description: >-
+              UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+            schema:
+              $ref: '#/definitions/ErrorResponse'
+         '500':
+            description: >-
+              INTERNAL SERVER ERROR - server encountered an unexpected condition that prevented it from fulfilling the request.
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+
+  /artists/{artist_id}:
+     get:
+        operationId: getArtist
+        tags:
+          - 'API#010 Artists'
+        summary: Artist Data - Get an existing Artist
+        description: >
+            API to get an existing artist detalis of Movies application
+        produces:
+          - application/json
+        parameters:
+          - $ref: '#/parameters/ArtistId'
+        responses:
+         '200':
+           description: OK - Fetched artist details
+           headers:
+             request-id:
+               type: string
+               description: Used as correlation id while tracing for the request in the backend
+           schema:
+             $ref: '#/definitions/ArtistType'
+         '400':
+           description: >-
+             BAD REQUEST - server cannot or will not process the request due to
+             something that is perceived to be a client error (e.g., malformed
+             request syntax, mandatory elements are missing)
+           headers:
+             request-id:
+               type: string
+               description: Used as correlation id while tracing for the request in the backend
+         '401':
+           description: UNAUTHORIZED - user has provided wrong credentials
+           headers:
+             request-id:
+               type: string
+               description: Used as correlation id while tracing for the request in the backend
+         '403':
+           description: >-
+             FORBIDDEN - request has not been applied because client application
+             has no permission to perform action
+           headers:
+             request-id:
+               type: string
+               description: Used as correlation id while tracing for the request in the backend
+         '404':
+           description: >-
+             NOT FOUND - Artist (resource) does not exist
+           headers:
+             request-id:
+               type: string
+               description: Used as correlation id while tracing for the request in the backend
+         '500':
+           description: >-
+             INTERNAL SERVER ERROR - server encountered an unexpected condition
+             that prevented it from fulfilling the request.
+           headers:
+             request-id:
+               type: string
+               description: Used as correlation id while tracing for the request in the backend
+
+
+securityDefinitions:
+  Authorization:
+    type: basic
+    description: >
+      Bearer authentication (also called token authentication) is an HTTP authentication scheme that involves
+      security tokens called bearer tokens. The name “Bearer authentication” can be understood as “give access
+      to the bearer of this token.”
+
+      The bearer token is a cryptic string, usually generated by the server in response to a login request. The
+      client must send this token in the Authorization header when making requests to protected resources:
+
+      ```
+      Authorization: Bearer <token>
+
+      ```
+
+      Similarly to Basic authentication, Bearer authentication should only be used over HTTPS (SSL).
+
+      Read https://jwt.io/introduction/ for more information on JWT standard.
+
+parameters:
+  ArtistId:
+    name: artist_id
+    type: string
+    format: uuid
+    in: path
+    required: true
+    description: >-
+      Unique identifier of Movie in a standard UUID format
+
+definitions:
+
+  ArtistType:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: Unique identifier of the movie artist in a standard UUID format generated by API backend
+      first_name:
+        type: string
+        description: First name of an artist
+      last_name:
+        type: string
+        description: Last name of an artist
+      role_type:
+        description: Role of an artist
+        $ref: '#/definitions/ArtistRoleType'
+      profile_description:
+        type: string
+        description: Profile description of an artist
+      profile_url:
+        type: string
+        description: Profile URL of an artist
+      wiki_url:
+        type: string
+        description: Wikipedia URL of an artist
+      status:
+        description: Status of an artist
+        $ref: '#/definitions/ArtistStatusType'
+
+  ArtistsSummaryResponse:
+    type: object
+    properties:
+      page:
+        type: integer
+        description: page or position of the fetched artists
+      limit:
+        type: integer
+        description: number of artists fetched per this request
+      total_count:
+        type: integer
+        description: total number of artists in the database
+      artists:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/ArtistType'
+        description: List of artists
+    required:
+      - total_count
+      - artists
+    example:
+      total_count: 8
+      artists:
+        - id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+          first_name: Movie
+          last_name: Director
+          role_rype: DIRECTOR
+          profile_description: Director of the movie
+          profile_url: www.artistsprofile.com/director
+          wiki_url: www.wikipedia.com/director
+
+  FullDateType:
+    type: string
+    format: full-date
+    description: Full date format
+
+  ArtistStatusType:
+    type: string
+    enum: [ACTIVE, INACTIVE]
+    description: Status of an artist
+
+  ArtistRoleType:
+    type: string
+    enum: [DIRECTOR, PRODUCER, ACTOR, CINEMATOGRAPHER, MUSICIAN, STUNTMAN]
+    description: Status of the task
+
+  ErrorResponse:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Application specific standard error code
+      message:
+        type: string
+        description: Error message stating the reason
+      root_cause:
+        type: string
+        description: Root cause of the Error
+    required:
+      - code
+      - message
+    example:
+      code: ART-001
+      message: Artist with identifier does not exist

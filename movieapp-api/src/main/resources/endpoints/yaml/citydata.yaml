@@ -35,8 +35,7 @@ info:
 
     ## Business definitions
 
-    Cities Data APIs can only be called by authorized users who has rights with required permissions to manage cities.
-    These APIs can be used to list cities present in the database.
+    Cities Data APIs can be used to list cities present in the database.
 
     ## Release Notes 
 

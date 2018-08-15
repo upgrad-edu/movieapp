@@ -199,6 +199,17 @@
                             </execution>
 
                             <execution>
+                                <id>artistdata</id>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <inputSpec>${endpoints.dir}/artistdata.json</inputSpec>
+                                    <language>${supported.language}</language>
+                                </configuration>
+                            </execution>
+
+                            <execution>
                                 <id>artistadmin</id>
                                 <goals>
                                     <goal>generate</goal>

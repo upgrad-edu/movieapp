@@ -157,8 +157,15 @@
           },
           {
             "in": "query",
+            "name": "name",
+            "type": "string",
+            "required": false,
+            "description": "query to filter the results based on specified name"
+          },
+          {
+            "in": "query",
             "name": "type",
-            "$ref": "#/definitions/ArtistRoleType",
+            "type": "string",
             "required": false,
             "description": "query to filter the results based on specified role type"
           }

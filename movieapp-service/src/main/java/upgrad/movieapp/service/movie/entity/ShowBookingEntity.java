@@ -70,6 +70,10 @@ public class ShowBookingEntity extends MutableEntity implements Identifier<Long>
     @NotNull
     private String bookingReference;
 
+    @Column(name = "COUPON_CODE")
+    @Size(max = 10)
+    private String couponCode;
+
     @Column(name = "TOTAL_SEATS")
     @Digits(integer = 3, fraction = 0)
     @NotNull
@@ -128,6 +132,14 @@ public class ShowBookingEntity extends MutableEntity implements Identifier<Long>
 
     public void setBookingReference(String bookingReference) {
         this.bookingReference = bookingReference;
+    }
+
+    public String getCouponCode() {
+        return couponCode;
+    }
+
+    public void setCouponCode(String couponCode) {
+        this.couponCode = couponCode;
     }
 
     public Integer getTotalSeats() {

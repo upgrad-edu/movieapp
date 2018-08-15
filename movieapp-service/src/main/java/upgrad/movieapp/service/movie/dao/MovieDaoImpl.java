@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.ListJoin;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
@@ -19,7 +20,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import upgrad.movieapp.service.common.dao.BaseDaoImpl;
 import upgrad.movieapp.service.common.model.SearchResult;
+import upgrad.movieapp.service.movie.entity.ArtistEntity;
+import upgrad.movieapp.service.movie.entity.ArtistEntity_;
 import upgrad.movieapp.service.movie.entity.GenreEntity_;
+import upgrad.movieapp.service.movie.entity.MovieArtistEntity;
+import upgrad.movieapp.service.movie.entity.MovieArtistEntity_;
 import upgrad.movieapp.service.movie.entity.MovieEntity;
 import upgrad.movieapp.service.movie.entity.MovieEntity_;
 import upgrad.movieapp.service.movie.entity.MovieGenreEntity;
@@ -40,7 +45,7 @@ public class MovieDaoImpl extends BaseDaoImpl<MovieEntity> implements MovieDao {
 
         final Predicate[] payloadPredicates = buildPredicates(searchQuery, builder, from);
 
-        payloadQuery.select(from).where(payloadPredicates);
+        payloadQuery.select(from).distinct(true).where(payloadPredicates);
 
         Set<MovieSortBy> sortBy = searchQuery.getSortBy();
         if (CollectionUtils.isNotEmpty(sortBy)) {
@@ -64,7 +69,7 @@ public class MovieDaoImpl extends BaseDaoImpl<MovieEntity> implements MovieDao {
         final Root<MovieEntity> countFrom = countQuery.from(MovieEntity.class);
 
         final Predicate[] countPredicates = buildPredicates(searchQuery, builder, countFrom);
-        countQuery.select(builder.count(countFrom)).where(countPredicates);
+        countQuery.select(builder.countDistinct(countFrom)).where(countPredicates);
         final Integer totalCount = entityManager.createQuery(countQuery).getSingleResult().intValue();
 
         return new SearchResult(totalCount, payload);
@@ -95,6 +100,14 @@ public class MovieDaoImpl extends BaseDaoImpl<MovieEntity> implements MovieDao {
                 return genre.toLowerCase();
             }).collect(Collectors.toSet());
             predicates.add(builder.lower(join.get(MovieGenreEntity_.genre).get(GenreEntity_.genre)).in(genresLowerCase));
+        }
+
+        if(StringUtils.isNotEmpty(searchQuery.getArtistName())) {
+            final Join<MovieArtistEntity, ArtistEntity> join = root.join(MovieEntity_.artists).join(MovieArtistEntity_.artist);
+            final Predicate firstNamePredicate = builder.like(builder.lower(join.get(ArtistEntity_.firstName)), like(searchQuery.getArtistName().toLowerCase()));
+            final Predicate lastNamePredicate = builder.like(builder.lower(join.get(ArtistEntity_.lastName)), like(searchQuery.getArtistName().toLowerCase()));
+            predicates.add(builder.or(firstNamePredicate, lastNamePredicate));
+
         }
 
         if (searchQuery.getReleaseDateFrom() != null) {
