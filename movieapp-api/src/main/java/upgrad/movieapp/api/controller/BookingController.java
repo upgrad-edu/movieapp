@@ -7,6 +7,8 @@ import static upgrad.movieapp.api.data.ResourceConstants.BASE_URL;
 
 import java.util.HashSet;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +26,8 @@ import upgrad.movieapp.api.model.BookingsSummaryResponse;
 import upgrad.movieapp.service.common.exception.ApplicationException;
 import upgrad.movieapp.service.common.model.SearchResult;
 import upgrad.movieapp.service.movie.business.BookingService;
+import upgrad.movieapp.service.movie.business.CouponService;
+import upgrad.movieapp.service.movie.entity.CouponEntity;
 import upgrad.movieapp.service.movie.entity.ShowBookingEntity;
 import upgrad.movieapp.service.movie.model.BookingSearchQuery;
 
@@ -34,16 +38,27 @@ public class BookingController {
     @Autowired
     private BookingService bookingService;
 
+    @Autowired
+    private CouponService couponService;
+
+    @Autowired
+    private HttpServletRequest request;
+
+    @RequestMapping(method = GET, path = "/coupons", produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<BookingsSummaryResponse> getCoupons(@RequestHeader("authorization") String accessToken)
+            throws ApplicationException {
+        return ResponseBuilder.ok().payload(BookingTransformer.toCouponsSummaryResponse(couponService.findAllCoupons())).build();
+    }
+
     @RequestMapping(method = GET, path = "/bookings", produces = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<BookingsSummaryResponse> getBookings(@RequestHeader("authorization") String accessToken,
-                                                               @RequestAttribute(AUTHORIZED_USER_UUID) final String customerUuid,
                                                                @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                                                                @RequestParam(value = "limit", required = false, defaultValue = "10") int limit,
                                                                @RequestParam(value = "booking_ref", required = false) String bookingRef,
                                                                @RequestParam(value = "status", required = false) String status)
             throws ApplicationException {
 
-        final BookingSearchQuery searchQuery = BookingTransformer.toSearchQuery(page, limit, customerUuid, bookingRef, status);
+        final BookingSearchQuery searchQuery = BookingTransformer.toSearchQuery(page, limit, (String)request.getAttribute(AUTHORIZED_USER_UUID), bookingRef, status);
         final SearchResult<ShowBookingEntity> bookings = bookingService.findBookings(searchQuery);
         return ResponseBuilder.ok().payload(BookingTransformer.toBookingsSummaryResponse(page, limit, bookings)).build();
     }
@@ -59,10 +74,10 @@ public class BookingController {
 
     @RequestMapping(method = POST, path = "/bookings", produces = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<BookingType> book(@RequestHeader("authorization") String accessToken,
-                                                    @RequestAttribute(AUTHORIZED_USER_UUID) final String customerUuid,
-                                                    @RequestBody final BookingRequest bookingRequest) throws ApplicationException {
+                                            @RequestAttribute(AUTHORIZED_USER_UUID) final String customerUuid,
+                                            @RequestBody final BookingRequest bookingRequest) throws ApplicationException {
 
-        final ShowBookingEntity bookingEntity = bookingService.bookShow(bookingRequest.getShowId().toString(), customerUuid, new HashSet<>(bookingRequest.getTickets()));
+        final ShowBookingEntity bookingEntity = bookingService.bookShow(bookingRequest.getShowId().toString(), customerUuid, new HashSet<>(bookingRequest.getTickets()), bookingRequest.getCouponCode());
         return ResponseBuilder.created().payload(BookingTransformer.toBookingType(bookingEntity)).build();
     }
 

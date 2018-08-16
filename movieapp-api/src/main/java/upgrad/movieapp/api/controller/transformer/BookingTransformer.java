@@ -13,8 +13,11 @@ import upgrad.movieapp.api.model.BookingCustomerInfoType;
 import upgrad.movieapp.api.model.BookingStatusType;
 import upgrad.movieapp.api.model.BookingType;
 import upgrad.movieapp.api.model.BookingsSummaryResponse;
+import upgrad.movieapp.api.model.CouponType;
+import upgrad.movieapp.api.model.CouponsSummaryResponse;
 import upgrad.movieapp.service.common.data.DateTimeProvider;
 import upgrad.movieapp.service.common.model.SearchResult;
+import upgrad.movieapp.service.movie.entity.CouponEntity;
 import upgrad.movieapp.service.movie.entity.ShowBookingEntity;
 import upgrad.movieapp.service.movie.model.BookingSearchQuery;
 import upgrad.movieapp.service.movie.model.BookingStatus;
@@ -59,6 +62,7 @@ public final class BookingTransformer {
         final BookingType bookingResponse = new BookingType()
                 .id(UUID.fromString(bookingEntity.getUuid()))
                 .referenceNumber(bookingEntity.getBookingReference())
+                .couponCode(bookingEntity.getCouponCode())
                 .movieTitle(bookingEntity.getShow().getMovie().getTitle())
                 .showTiming(DateTimeProvider.formatDateTime(bookingEntity.getShow().getStartTime()))
                 .language(bookingEntity.getShow().getLanguage())
@@ -70,6 +74,16 @@ public final class BookingTransformer {
                 .status(BookingStatusType.fromValue(bookingEntity.getStatus()));
 
         return bookingResponse;
+    }
+
+    public static CouponsSummaryResponse toCouponsSummaryResponse(final SearchResult<CouponEntity> searchResult) {
+
+        final CouponsSummaryResponse bookingsSummaryResponse = new CouponsSummaryResponse().totalCount(searchResult.getTotalCount());
+        for (CouponEntity couponEntity : searchResult.getPayload()) {
+            bookingsSummaryResponse.addCouponsItem(new CouponType().code(couponEntity.getCode()).value(couponEntity.getDiscountPercentage()).description(couponEntity.getDescription()));
+        }
+
+        return bookingsSummaryResponse;
     }
 
     private static BookingCustomerInfoType toBookingCustomerInfo(final UserEntity customerEntity) {

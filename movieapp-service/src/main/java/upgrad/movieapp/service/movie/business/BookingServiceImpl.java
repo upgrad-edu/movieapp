@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -20,6 +21,7 @@ import upgrad.movieapp.service.common.exception.EntityNotFoundException;
 import upgrad.movieapp.service.common.model.SearchResult;
 import upgrad.movieapp.service.movie.dao.BookingDao;
 import upgrad.movieapp.service.movie.entity.BookingTicketEntity;
+import upgrad.movieapp.service.movie.entity.CouponEntity;
 import upgrad.movieapp.service.movie.entity.ShowBookingEntity;
 import upgrad.movieapp.service.movie.entity.ShowEntity;
 import upgrad.movieapp.service.movie.exception.BookingErrorCode;
@@ -43,10 +45,13 @@ public class BookingServiceImpl implements BookingService {
     @Autowired
     private BookingDao bookingDao;
 
+    @Autowired
+    private CouponService couponService;
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public ShowBookingEntity bookShow(final String showUuid, final String customerUuid,
-                                      final Set<String> ticketNumbers) throws ApplicationException {
+                                      final Set<String> ticketNumbers, final String couponCode) throws ApplicationException {
 
         final UserEntity userEntity = userService.findUserByUuid(customerUuid);
         final ShowEntity showEntity = showService.findShowByUuid(showUuid);
@@ -68,9 +73,15 @@ public class BookingServiceImpl implements BookingService {
             bookingEntity.setShow(showEntity);
             bookingEntity.setCustomer(userEntity);
 
+            BigDecimal totalPrice = showEntity.getUnitPrice().multiply(new BigDecimal(totalTickets));
+            if(StringUtils.isNotEmpty(couponCode)) {
+                final CouponEntity couponEntity = couponService.findCoupon(couponCode);
+                final Integer discountPercentage = couponEntity.getDiscountPercentage();
+                totalPrice = totalPrice.subtract(totalPrice.multiply(new BigDecimal(discountPercentage)).divide(new BigDecimal(100)));
+            }
 
             bookingEntity.setTotalSeats(totalTickets);
-            bookingEntity.setTotalPrice(showEntity.getUnitPrice().multiply(new BigDecimal(totalTickets)));
+            bookingEntity.setTotalPrice(totalPrice);
 
             final ZonedDateTime bookingAt = DateTimeProvider.currentProgramTime();
             bookingEntity.setBookingAt(bookingAt);

@@ -21,6 +21,8 @@ public class CacheConfiguration {
                 new ConcurrentMapCache("city"),
                 new ConcurrentMapCache("genres"),
                 new ConcurrentMapCache("genre"),
+                new ConcurrentMapCache("coupons"),
+                new ConcurrentMapCache("coupon"),
                 new ConcurrentMapCache("artist")));
         return cacheManager;
     }

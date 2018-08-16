@@ -1500,19 +1500,11 @@
     "CouponsSummaryResponse": {
       "type": "object",
       "properties": {
-        "page": {
-          "type": "integer",
-          "description": "page or position of the fetched coupons"
-        },
-        "limit": {
-          "type": "integer",
-          "description": "number of coupons fetched per this request"
-        },
         "total_count": {
           "type": "integer",
           "description": "total number of coupons"
         },
-        "bookings": {
+        "coupons": {
           "type": "array",
           "items": {
             "type": "object",

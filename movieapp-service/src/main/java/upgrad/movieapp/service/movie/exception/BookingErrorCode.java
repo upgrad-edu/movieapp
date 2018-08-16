@@ -25,7 +25,10 @@ public enum BookingErrorCode implements ErrorCode {
 
     BKG_004("BKG-004", "Tickets {0} already booked"),
 
-    BKG_005("BKG-005", "Shortage of seats availability. Available number of seats [{0}]"),;
+    BKG_005("BKG-005", "Shortage of seats availability. Available number of seats [{0}]"),
+
+    BKG_006("BKG-006", "Invalid coupon code [{0}]"),
+    ;
 
     private static final Map<String, BookingErrorCode> LOOKUP = new HashMap<String, BookingErrorCode>();
 

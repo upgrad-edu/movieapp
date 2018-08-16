@@ -63,3 +63,12 @@ INSERT INTO movieapp.CITIES (ID, CODE, NAME, CREATED_BY)
 		    (nextval('movieapp.cities_id_seq'), 'AHM', 'Ahmedabad', CURRENT_USER);
 
 -- ********** End of GENRES setup **********
+
+-- ********** Begin of COUPONS setup **********
+INSERT INTO movieapp.COUPONS (ID, CODE, DISCOUNT_PERCENTAGE, DESCRIPTION, CREATED_BY)
+            VALUES
+		    (nextval('movieapp.coupons_id_seq'), 'OFFER10PC', 10, '10% discount on the booking', CURRENT_USER),
+		    (nextval('movieapp.coupons_id_seq'), 'OFFER25PC', 25, '25% discount on the booking', CURRENT_USER),
+		    (nextval('movieapp.coupons_id_seq'), 'OFFER50PC', 50, '50% discount on the booking', CURRENT_USER);
+
+-- ********** End of COUPONS setup **********

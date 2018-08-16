@@ -35,7 +35,7 @@ public class AuthFilter extends ApiFilter {
         }
 
         final String pathInfo = servletRequest.getRequestURI();
-        if (pathInfo.contains("admin") || pathInfo.contains("login") || pathInfo.contains("bookings")) {
+        if (pathInfo.contains("admin") || pathInfo.contains("login") || pathInfo.contains("bookings") || pathInfo.contains("coupons")) {
             final String authorization = servletRequest.getHeader(HEADER_AUTHORIZATION);
             if (StringUtils.isEmpty(authorization)) {
                 throw new UnauthorizedException(RestErrorCode.ATH_001);
