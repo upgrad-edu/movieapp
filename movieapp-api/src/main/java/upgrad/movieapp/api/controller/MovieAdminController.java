@@ -79,13 +79,13 @@ public class MovieAdminController {
                                                            @RequestParam(value = "start_date", required = false) String startDate,
                                                            @RequestParam(value = "end_date", required = false) String endDate,
                                                            @RequestParam(value = "genre", required = false) String genre,
-                                                           @RequestParam(value = "artist_name", required = false) String artistName,
+                                                           @RequestParam(value = "artists", required = false) String artists,
                                                            @RequestParam(value = "min_rating", required = false) Float minRating,
                                                            @RequestParam(value = "max_rating", required = false) Float maxRating,
                                                            @RequestParam(value = "sort", required = false) String sort) {
 
         final MovieSearchQuery movieSearchQuery = MovieTransformer.toSearchQuery(page, limit, title, status,
-                startDate, endDate, genre, artistName, minRating, maxRating, sort);
+                startDate, endDate, genre, artists  , minRating, maxRating, sort);
         final SearchResult<MovieEntity> searchResult = movieService.findMovies(movieSearchQuery);
         return ResponseBuilder.ok().payload(toMoviesSummaryResponse(page, limit, searchResult)).build();
     }

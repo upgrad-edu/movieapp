@@ -13,9 +13,9 @@ package upgrad.movieapp.api.data;
  */
 public interface ResourceConstants {
 
-    String BASE_URL_PATTERN = "/*";
-
     String BASE_URL = "/v1";
+
+    String BASE_URL_PATTERN = BASE_URL + "/*";
 
     String BASE_ADMIN_URL = "/v1/admin";
 

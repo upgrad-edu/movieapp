@@ -11,7 +11,7 @@
 	</appender>
 
   	<appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<File>/work/upgrad/logs/movieapp-api.log</File>
+		<File>${user.home}/logs/movieapp-api.log</File>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 		    <!-- daily rollover -->
 			<FileNamePattern>movieapp-api.%d{yyyy-MM-dd}.log</FileNamePattern>
@@ -26,7 +26,7 @@
   	</appender>
   	
   	<appender name="errorRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<File>/work/upgrad/logs/movieapp-api-error.log</File>
+		<File>${user.home}/logs/movieapp-api-error.log</File>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 		    <!-- daily rollover -->
 			<FileNamePattern>movieapp-api-error.%d{yyyy-MM-dd}.log</FileNamePattern>

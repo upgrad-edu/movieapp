@@ -21,7 +21,7 @@ public class CorsFilter extends ApiFilter {
     public void doFilter(final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final FilterChain chain) throws IOException, ServletException {
 
         httpResponse.setHeader("Access-Control-Allow-Origin", "*");
-        httpResponse.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, PATCH, DELETE");
+        httpResponse.setHeader("Access-Control-Allow-Methods", "HEAD, POST, PUT, GET, PATCH, DELETE");
         httpResponse.setHeader("Access-Control-Max-Age", "3600");
         httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
         httpResponse.setHeader("Access-Control-Allow-Headers", "Content-Type, X-Requested-With, accept, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, X-FORWARDED-FOR, authorization");

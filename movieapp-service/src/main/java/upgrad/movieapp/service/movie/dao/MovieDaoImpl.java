@@ -102,12 +102,15 @@ public class MovieDaoImpl extends BaseDaoImpl<MovieEntity> implements MovieDao {
             predicates.add(builder.lower(join.get(MovieGenreEntity_.genre).get(GenreEntity_.genre)).in(genresLowerCase));
         }
 
-        if(StringUtils.isNotEmpty(searchQuery.getArtistName())) {
+        final Set<String> artists = searchQuery.getArtists();
+        if (CollectionUtils.isNotEmpty(artists)) {
             final Join<MovieArtistEntity, ArtistEntity> join = root.join(MovieEntity_.artists).join(MovieArtistEntity_.artist);
-            final Predicate firstNamePredicate = builder.like(builder.lower(join.get(ArtistEntity_.firstName)), like(searchQuery.getArtistName().toLowerCase()));
-            final Predicate lastNamePredicate = builder.like(builder.lower(join.get(ArtistEntity_.lastName)), like(searchQuery.getArtistName().toLowerCase()));
-            predicates.add(builder.or(firstNamePredicate, lastNamePredicate));
-
+            final List<Predicate> artistPredicates = new ArrayList<>();
+            artists.forEach(artist -> {
+                artistPredicates.add(builder.like(builder.lower(join.get(ArtistEntity_.firstName)), like(artist.toLowerCase())));
+                artistPredicates.add(builder.like(builder.lower(join.get(ArtistEntity_.lastName)), like(artist.toLowerCase())));
+            });
+            predicates.add(builder.or(artistPredicates.toArray(new Predicate[]{})));
         }
 
         if (searchQuery.getReleaseDateFrom() != null) {

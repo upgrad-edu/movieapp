@@ -78,6 +78,7 @@
             <version>1.5.18</version>
         </dependency>
 
+        <!-- Required from java 10 onwards due to modularization -->
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>

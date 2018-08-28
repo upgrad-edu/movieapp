@@ -33,7 +33,7 @@ import upgrad.movieapp.service.movie.model.MovieStatus;
 public final class MovieTransformer {
 
     public static MovieSearchQuery toSearchQuery(final int page, final int limit, final String title, final String status, final String startDate,
-                                                 final String endDate, final String genre, final String artistName, final Float minRatng, final Float maxRating,
+                                                 final String endDate, final String genre, final String artists, final Float minRatng, final Float maxRating,
                                                  final String sortBy) {
 
         final MovieSearchQuery searchQuery = new MovieSearchQuery(page, limit);
@@ -58,8 +58,13 @@ public final class MovieTransformer {
             final String[] genres = StringUtils.split(genre, ",");
             searchQuery.genres(new HashSet<>(Arrays.asList(genres)));
         }
-        if(StringUtils.isNotEmpty(artistName)) {
-            searchQuery.artistName(artistName);
+        if(StringUtils.isNotEmpty(artists)) {
+            final String[] artistNames = StringUtils.split(artists, ",");
+            final Set<String> artistSet = new HashSet<>();
+            for (String artistName: artistNames) {
+                artistSet.add(artistName);
+            }
+            searchQuery.artists(artistSet);
         }
         if (minRatng != null) {
             searchQuery.ratingMin(minRatng);

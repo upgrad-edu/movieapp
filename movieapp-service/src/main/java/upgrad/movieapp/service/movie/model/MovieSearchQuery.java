@@ -11,7 +11,7 @@ public class MovieSearchQuery extends SearchQuery {
     private String title;
     private EnumSet<MovieStatus> statuses;
     private Set<String> genres;
-    private String artistName;
+    private Set<String> artists;
     private Float ratingMin;
     private Float ratingMax;
     private ZonedDateTime releaseDateFrom;
@@ -49,12 +49,12 @@ public class MovieSearchQuery extends SearchQuery {
         return this;
     }
 
-    public String getArtistName() {
-        return artistName;
+    public Set<String> getArtists() {
+        return artists;
     }
 
-    public MovieSearchQuery artistName(String artistName) {
-        this.artistName = artistName;
+    public MovieSearchQuery artists(Set<String> artists) {
+        this.artists = artists;
         return this;
     }
 
