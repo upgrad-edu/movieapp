@@ -35,8 +35,9 @@ A step by step guide that helps you get a development env running
    1. datasource.password in movies-api/src/main/resources/application.yaml
    2. database.password in movies-db/src/main/config/localhost.properties
    ```
-5. Build the project using `mvn clean install -DskipTests`. First time build will consume time as it downloads all dependencies.
-6. Go to `movies-db` module and build the project using maven command `mvn install -Psetup,data` to setup the database schema called movies, tables, privileges, seed data such as groups, roles and permissions.
+5. Build and deploy the application by running `./deploy.sh` that does build, setup database and start server. Or you can follow the steps below to deploy them individually.
+6. Build the project using maven command `mvn clean install -DskipTests`. First time build will consume time as it downloads all dependencies.
+7. Go to `movies-db` module and build the project using maven command `mvn install -Psetup,data` to setup the database schema called movies, tables, privileges, seed data such as groups, roles and permissions.
 Following are the predefined roles:
    - Administrator (101)
    - Customer (102) - All signed up users are assigned with this role by default
@@ -45,14 +46,14 @@ Following are the predefined roles:
     Note: test-data profile is optional but this will setup an admin user with username as admin@movieapp.com and default password as movieapp@123
     ```
 
-7. After the db setup, go to `movies-api` module and then run command `mvn spring-boot:run`. If everything is fine, then API backend
+8. After the db setup, go to `movies-api` module and then run command `mvn spring-boot:run`. If everything is fine, then API backend
 application should be up and running on 8080 using the context `api`
 
     ```
     2018-06-16 16:42:53.806 - [INFO ] - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path '/api'
     ```
 
-8. Access the following healthcheck url `http://localhost:8080/api/actuator/health` that should result in following
+9. Access the following healthcheck url `http://localhost:8080/api/actuator/health` that should result in following
 output
 
     ```
@@ -61,7 +62,7 @@ output
     }
     ```
 
-9. Try accessing implemented API endpoints using swagger-ui, a plugin configured in the application.
+10. Try accessing implemented API endpoints using swagger-ui, a plugin configured in the application.
 Open `http://localhost:8080/api/swagger-ui.html` in a browser and you should see all API endpoint implementation.
 
 > Best wishes!

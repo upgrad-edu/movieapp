@@ -80,13 +80,13 @@ public class MovieDaoImpl extends BaseDaoImpl<MovieEntity> implements MovieDao {
         final List<Predicate> predicates = new ArrayList<>();
 
         if (StringUtils.isNotEmpty(searchQuery.getTitle())) {
-            predicates.add(builder.like(builder.lower(root.get(MovieEntity_.title)), like(searchQuery.getTitle().toLowerCase())));
+            predicates.add(builder.like(builder.lower(root.get(MovieEntity_.title)), like(searchQuery.getTitle().trim().toLowerCase())));
         }
 
         if (CollectionUtils.isNotEmpty(searchQuery.getStatuses())) {
             final EnumSet<MovieStatus> movieStatuses = searchQuery.getStatuses();
             final Set<String> statuses = movieStatuses.stream().map(movieStatus -> {
-                return movieStatus.name();
+                return movieStatus.name().trim();
             }).collect(Collectors.toSet());
 
             predicates.add(root.get(MovieEntity_.status).in(statuses));
@@ -97,7 +97,7 @@ public class MovieDaoImpl extends BaseDaoImpl<MovieEntity> implements MovieDao {
             final ListJoin<MovieEntity, MovieGenreEntity> join = root.join(MovieEntity_.genres);
 
             Set<String> genresLowerCase = genres.stream().map(genre -> {
-                return genre.toLowerCase();
+                return genre.toLowerCase().trim();
             }).collect(Collectors.toSet());
             predicates.add(builder.lower(join.get(MovieGenreEntity_.genre).get(GenreEntity_.genre)).in(genresLowerCase));
         }
@@ -107,8 +107,11 @@ public class MovieDaoImpl extends BaseDaoImpl<MovieEntity> implements MovieDao {
             final Join<MovieArtistEntity, ArtistEntity> join = root.join(MovieEntity_.artists).join(MovieArtistEntity_.artist);
             final List<Predicate> artistPredicates = new ArrayList<>();
             artists.forEach(artist -> {
-                artistPredicates.add(builder.like(builder.lower(join.get(ArtistEntity_.firstName)), like(artist.toLowerCase())));
-                artistPredicates.add(builder.like(builder.lower(join.get(ArtistEntity_.lastName)), like(artist.toLowerCase())));
+                artistPredicates.add(builder.like(builder.lower(
+                        builder.concat(join.get(ArtistEntity_.firstName), join.get(ArtistEntity_.lastName))),
+                        artist.trim().toLowerCase().replaceAll(" ", ""), '%'));
+                artistPredicates.add(builder.like(builder.lower(join.get(ArtistEntity_.firstName)), artist.trim().toLowerCase().replace(" ", ""), '%'));
+                artistPredicates.add(builder.like(builder.lower(join.get(ArtistEntity_.lastName)), artist.trim().toLowerCase().replace(" ", ""), '%'));
             });
             predicates.add(builder.or(artistPredicates.toArray(new Predicate[]{})));
         }
