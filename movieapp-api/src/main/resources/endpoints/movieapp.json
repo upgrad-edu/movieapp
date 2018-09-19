@@ -636,7 +636,7 @@
     },
     "/coupons": {
       "get": {
-        "operationId": "getCoupons",
+        "operationId": "getCoupon by coupon code",
         "tags": [
           "API#005 Movies"
         ],
@@ -647,8 +647,8 @@
             ]
           }
         ],
-        "summary": "Movie Application - List of coupons available",
-        "description": "API to get an existing coupons available in the database\n",
+        "summary": "Movie Application - Coupon from Coupon code",
+        "description": "API to get an existing coupon from coupon code available in the database\n",
         "produces": [
           "application/json"
         ],
@@ -673,7 +673,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK - fetched list of coupons",
+            "description": "OK - fetched coupons",
             "headers": {
               "request-id": {
                 "type": "string",
@@ -1500,22 +1500,22 @@
     "CouponsSummaryResponse": {
       "type": "object",
       "properties": {
-        "total_count": {
-          "type": "integer",
-          "description": "total number of coupons"
+        "code": {
+          "type": "string",
+          "description": "coupon code"
         },
-        "coupons": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/CouponType"
-          },
-          "description": "List of coupons"
+        "value": {
+          "type": "integer",
+          "description": "value of the coupon"
+        },
+        "description": {
+          "type": "string",
+          "description": "description of the coupon"
         }
       },
       "required": [
-        "total_count",
-        "coupons"
+        "couponCode",
+        "couponValue"
       ],
       "example": {
         "total_count": 8,

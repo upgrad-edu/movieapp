@@ -44,10 +44,10 @@ public class BookingController {
     @Autowired
     private HttpServletRequest request;
 
-    @RequestMapping(method = GET, path = "/coupons", produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<BookingsSummaryResponse> getCoupons(@RequestHeader("authorization") String accessToken)
-            throws ApplicationException {
-        return ResponseBuilder.ok().payload(BookingTransformer.toCouponsSummaryResponse(couponService.findAllCoupons())).build();
+    @RequestMapping(method = GET, path = "/coupons/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<BookingsSummaryResponse> getCoupons(@RequestHeader("authorization") String accessToken,
+                                                              @PathVariable("id") final String couponId) throws ApplicationException {
+        return ResponseBuilder.ok().payload(BookingTransformer.toCouponsSummaryResponse(couponService.findCoupon(couponId))).build();
     }
 
     @RequestMapping(method = GET, path = "/bookings", produces = APPLICATION_JSON_UTF8_VALUE)

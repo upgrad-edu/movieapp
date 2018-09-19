@@ -76,12 +76,11 @@ public final class BookingTransformer {
         return bookingResponse;
     }
 
-    public static CouponsSummaryResponse toCouponsSummaryResponse(final SearchResult<CouponEntity> searchResult) {
+    public static CouponsSummaryResponse toCouponsSummaryResponse(final CouponEntity couponEntity) {
 
-        final CouponsSummaryResponse bookingsSummaryResponse = new CouponsSummaryResponse().totalCount(searchResult.getTotalCount());
-        for (CouponEntity couponEntity : searchResult.getPayload()) {
-            bookingsSummaryResponse.addCouponsItem(new CouponType().code(couponEntity.getCode()).value(couponEntity.getDiscountPercentage()).description(couponEntity.getDescription()));
-        }
+        final CouponsSummaryResponse bookingsSummaryResponse = new CouponsSummaryResponse().code(couponEntity.getCode());
+        bookingsSummaryResponse.description(couponEntity.getDescription());
+        bookingsSummaryResponse.value(couponEntity.getDiscountPercentage());
 
         return bookingsSummaryResponse;
     }
