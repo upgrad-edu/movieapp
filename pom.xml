@@ -37,7 +37,16 @@
 				<module>movieapp-service</module>
 				<module>movieapp-api</module>
 			</modules>
+			<build>
+				</build>
 		</profile>
 	</profiles>
+	<dependencies>
+		<dependency>
+            <groupId>com.jolira</groupId>
+            <artifactId>onejar-maven-plugin</artifactId>
+            <version>1.4.4</version>
+        </dependency>
+	</dependencies>
 
 </project>

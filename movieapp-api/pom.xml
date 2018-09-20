@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -78,7 +78,6 @@
             <version>1.5.18</version>
         </dependency>
 
-        <!-- Required from java 10 onwards due to modularization -->
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
@@ -257,7 +256,37 @@
                         </executions>
 
                     </plugin>
+
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>repackage</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <!-- <configuration>
+                            <mainClass>upgrad.movieapp.api.MoviesRestApplication</mainClass>
+                        </configuration> -->
+                    </plugin>
+
+                    <!-- <plugin>
+                        <groupId>com.jolira</groupId>
+                        <artifactId>onejar-maven-plugin</artifactId>
+                        <version>1.4.4</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>one-jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin> -->
+
                 </plugins>
+
             </build>
         </profile>
     </profiles>
