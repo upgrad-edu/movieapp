@@ -19,7 +19,7 @@ public class PasswordCryptographyProviderTest {
 
     private final PasswordCryptographyProvider cryptographyProvider = new PasswordCryptographyProvider();
 
-    @Test
+    
     public void test1() {
 
         String[] output = cryptographyProvider.encrypt(RAW_PASSWORD);
@@ -31,7 +31,7 @@ public class PasswordCryptographyProviderTest {
 
     }
 
-    @Test
+    
     public void test2() {
 
         String[] output = cryptographyProvider.encrypt(RAW_PASSWORD);
@@ -43,7 +43,7 @@ public class PasswordCryptographyProviderTest {
 
     }
 
-    @Test
+    
     public void test3() {
 
         String[] output = cryptographyProvider.encrypt(RAW_PASSWORD);
