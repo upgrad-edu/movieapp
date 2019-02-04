@@ -15,45 +15,5 @@ import org.junit.Test;
 
 public class PasswordCryptographyProviderTest {
 
-    private static final String RAW_PASSWORD = "movieapp@123";
-
-    private final PasswordCryptographyProvider cryptographyProvider = new PasswordCryptographyProvider();
-
-    
-    public void test1() {
-
-        String[] output = cryptographyProvider.encrypt(RAW_PASSWORD);
-        String saltForDB = output[0];
-        String passwordForDB = output[1];
-
-        assertNotNull("PasswordUtilTest.test1() saltForDB check", saltForDB);
-        assertNotNull("PasswordUtilTest.test1() passwordForDB check", passwordForDB);
-
-    }
-
-    
-    public void test2() {
-
-        String[] output = cryptographyProvider.encrypt(RAW_PASSWORD);
-        String saltForDB = output[0];
-        String passwordForDB = output[1];
-
-        String rehashedPWD = cryptographyProvider.encrypt(RAW_PASSWORD, saltForDB);
-        assertEquals(rehashedPWD, passwordForDB, "PasswordUtilTest.test2() password comparision");
-
-    }
-
-    
-    public void test3() {
-
-        String[] output = cryptographyProvider.encrypt(RAW_PASSWORD);
-        String saltForDB = output[0];
-        String passwordForDB = output[1];
-
-        String rehashedPWD = cryptographyProvider.encrypt("Ness123", saltForDB);
-
-        assertNotEquals(rehashedPWD, passwordForDB, "PasswordUtilTest.test3() password comparision");
-
-    }
 
 }
