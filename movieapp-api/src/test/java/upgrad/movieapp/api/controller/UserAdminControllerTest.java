@@ -21,7 +21,7 @@ public class UserAdminControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @Test
+    
     public void getUser() throws Exception {
         UserDetailsResponse userDetailsResponse = mock();
 
