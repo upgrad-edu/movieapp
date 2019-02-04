@@ -33,7 +33,7 @@ public class UserAdminControllerIntegrationTest {
         this.base = new URL("http://localhost:" + port + "/api/v1/users");
     }
 
-    @Test
+    
     public void getUser() throws Exception {
         final ResponseEntity<UserDetailsResponse> response = template.getForEntity(base.toString() + "/7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",UserDetailsResponse.class);
         assertEquals(HttpStatus.OK,response.getStatusCode());
