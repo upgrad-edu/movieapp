@@ -26,7 +26,7 @@ A step by step guide that helps you get a development env running
 4. Ensure to change the password of postgres.
    - Run `sudo -iu postgres` command
    - Run `psql` in postgres user shell
-   - Alter default password by running `ALTER USER postgres WITH ENCRYPTED PASSWORD 'postgres@123'`;
+   - Alter default password by running `ALTER USER postgres WITH ENCRYPTED PASSWORD 'postgres123'`;
    - Confirm the password by entering the command in user shell `postgres=# \password`
 
     ```
