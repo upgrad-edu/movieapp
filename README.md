@@ -47,13 +47,13 @@ Following are the predefined roles:
     ```
 
 8. After the db setup, go to `movies-api` module and then run command `mvn spring-boot:run`. If everything is fine, then API backend
-application should be up and running on 8080 using the context `api`
+application should be up and running on 8085 using the context `api`
 
     ```
-    2018-06-16 16:42:53.806 - [INFO ] - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path '/api'
+    2018-06-16 16:42:53.806 - [INFO ] - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8085 (http) with context path '/api'
     ```
 
-9. Access the following healthcheck url `http://localhost:8080/api/actuator/health` that should result in following
+9. Access the following healthcheck url `http://localhost:8085/api/actuator/health` that should result in following
 output
 
     ```
@@ -63,6 +63,6 @@ output
     ```
 
 10. Try accessing implemented API endpoints using swagger-ui, a plugin configured in the application.
-Open `http://localhost:8080/api/swagger-ui.html` in a browser and you should see all API endpoint implementation.
+Open `http://localhost:8085/api/swagger-ui.html` in a browser and you should see all API endpoint implementation.
 
 > Best wishes!
