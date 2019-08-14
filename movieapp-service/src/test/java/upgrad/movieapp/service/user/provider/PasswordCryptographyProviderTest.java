@@ -39,7 +39,7 @@ public class PasswordCryptographyProviderTest {
         String passwordForDB = output[1];
 
         String rehashedPWD = cryptographyProvider.encrypt(RAW_PASSWORD, saltForDB);
-        assertEquals(rehashedPWD, passwordForDB, "PasswordUtilTest.test2() password comparision");
+        assertEquals(rehashedPWD, passwordForDB);
 
     }
 
