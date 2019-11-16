@@ -1,33 +1,33 @@
-package upgrad.movieapp.rnd;
+// package upgrad.movieapp.rnd;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+// import java.util.Collection;
+// import java.util.HashSet;
+// import java.util.Set;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.junit.Before;
-import org.junit.Test;
+// import org.apache.commons.collections.CollectionUtils;
+// import org.junit.Before;
+// import org.junit.Test;
 
-public class CollectionsTest {
+// public class CollectionsTest {
 
-    private final Set<String> existingSet = new HashSet<>();
+//     private final Set<String> existingSet = new HashSet<>();
 
-    @Before
-    public void setup() {
-        existingSet.add("a");
-        existingSet.add("b");
-        existingSet.add("c");
-    }
+//     @Before
+//     public void setup() {
+//         existingSet.add("a");
+//         existingSet.add("b");
+//         existingSet.add("c");
+//     }
 
-    @Test
-    public void checkDisjunction() {
+//     @Test
+//     public void checkDisjunction() {
 
-        final Set<String> newSet = new HashSet<>();
-        //newSet.add("d");
-        //newSet.add("c");
+//         final Set<String> newSet = new HashSet<>();
+//         //newSet.add("d");
+//         //newSet.add("c");
 
-        Collection disjunction = CollectionUtils.disjunction(existingSet, newSet);
-        disjunction.size();
-    }
+//         Collection disjunction = CollectionUtils.disjunction(existingSet, newSet);
+//         disjunction.size();
+//     }
 
-}
+// }
